@@ -216,5 +216,14 @@
         <file>resources/ydhyImage/shezhixitongshezhigongnengshezhishuxing.svg</file>
         <file>resources/ydhyImage/yonghu.svg</file>
         <file>resources/lianjie.svg</file>
+        <file>resources/ydhyImage/_canshu_canshushezhi.svg</file>
+        <file>resources/ydhyImage/banbenhao.svg</file>
+        <file>resources/ydhyImage/banbenpitchon.svg</file>
+        <file>resources/ydhyImage/banbenxinxi.svg</file>
+        <file>resources/ydhyImage/banbenxinxi_1.svg</file>
+        <file>resources/ydhyImage/canshu_1.svg</file>
+        <file>resources/ydhyImage/canshupeizhi.svg</file>
+        <file>resources/ydhyImage/canshushezhi.svg</file>
+        <file>resources/ydhyImage/lianjie.svg</file>
     </qresource>
 </RCC>

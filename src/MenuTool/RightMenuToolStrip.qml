@@ -7,9 +7,11 @@ import QGroundControl.FlightDisplay 1.0
 ToolStrip{
     id:     _root
     title:  qsTr("菜单")
-    signal displayRightMenulist
+    signal displayPreFlightChecklist
     RightMenuToolStripList{
        id:rightMenuToolStripList
+
+//       onDisplayPreFlightChecklist: _root.displayPreFlightChecklist()
     }
    model:rightMenuToolStripList.model  
 }

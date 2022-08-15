@@ -1,6 +1,11 @@
 <RCC>
     <qresource prefix="/unittest">
         <file alias="FactSystemTest.qml">src/FactSystem/FactSystemTest.qml</file>
+        <file>src/MenuTool/DataTableView.qml</file>
+        <file>src/MenuTool/FlightMsgPage.qml</file>
+        <file>src/MenuTool/RightMenuToolStrip.qml</file>
+        <file>src/MenuTool/RightMenuToolStripList.qml</file>
+        <file>src/MenuTool/UserMsgInfoView.qml</file>
     </qresource>
     <qresource prefix="/toolbar">
         <file alias="ArmedIndicator.qml">src/ui/toolbar/ArmedIndicator.qml</file>

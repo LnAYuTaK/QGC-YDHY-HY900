@@ -79,6 +79,7 @@ Rectangle {
             Layout.preferredHeight: viewButtonRow.height
             icon.source:           "/res/resources/WindowsYDHY.svg"
             logo:                   true
+            onClicked:    mainWindow.showRightToolStrip()
         }
 
         MainStatusIndicator {
@@ -114,17 +115,7 @@ Rectangle {
         }
     }
     //-------------------------------------------------------------------------
-   QGCToolBarButton {
-       id:                     menuToolBar
-       Layout.preferredHeight: viewButtonRow.height
-       anchors.right:          parent.right
-       anchors.top:            parent.top
-       anchors.bottom:         parent.bottom
-       anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.66
-       icon.source:           "/qmlimages/resources/ydhyImage/shezhi_7.svg"
-       logo:                   true
-       onClicked:              mainWindow.showRightToolStrip()
-   }
+
 //-- Branding Logo
 //显示固件厂家图标
 //    Image {

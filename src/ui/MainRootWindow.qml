@@ -21,6 +21,8 @@ import QGroundControl.ScreenTools   1.0
 import QGroundControl.FlightDisplay 1.0
 import QGroundControl.FlightMap     1.0
 import QGroundControl.MenuTool      1.0
+import QGroundControl.FlightDisplay 1.0
+import QGroundControl.FlightMap     1.0
 
 /// @brief Native QML top level window
 /// All properties defined here are visible to all QML pages.
@@ -31,8 +33,11 @@ ApplicationWindow {
     minimumHeight:  ScreenTools.isMobile ? Screen.height : Math.min(ScreenTools.defaultFontPixelWidth * 50, Screen.height)
     visible:        true
 
+    //全局的导航栏访问属性
+     property var _rightMenutoolstrip :    rightMenutoolstrip
+
+
     //全局定义方便取用  //不规范需要更改
-    //property var  dataController:      toolbar.dataController
 
     Component.onCompleted: {
         //-- Full screen on mobile or tiny screens
@@ -135,10 +140,29 @@ ApplicationWindow {
         planView.visible        = false
         toolbar.currentToolbar  = currentToolbar
     }
+    //显示左侧导航栏  (不要问我为啥right是左，回答就是懒得改)
+    function showRightToolStrip(){
+        if (!flightView.visible) {
+            mainWindow.showPreFlightChecklistIfNeeded()
+        }
+        viewSwitch(toolbar.flyViewToolbar)
+        flightView.visible = true
+       if(!rightMenutoolstrip.visible){
+          rightMenutoolstrip.visible = true
+       }
+       else{
+        rightMenutoolstrip.visible = false
+       }
+    }
 
+    //显示飞行界面
     function showFlyView() {
         if (!flightView.visible) {
             mainWindow.showPreFlightChecklistIfNeeded()
+        }
+        if(!_rightMenutoolstrip.visible)
+        {
+          _rightMenutoolstrip.visible  =true
         }
         viewSwitch(toolbar.flyViewToolbar)
         flightView.visible = true
@@ -147,9 +171,11 @@ ApplicationWindow {
     function showPlanView() {
         viewSwitch(toolbar.planViewToolbar)
         planView.visible = true
+        //2022815
+        _rightMenutoolstrip.visible = false
     }
 
-    //大界面
+    //显示界面大界面
     function showTool(toolTitle, toolSource, toolIcon) {
         toolDrawer.backIcon     = flightView.visible ? "/qmlimages/PaperPlane.svg" : "/qmlimages/Plan.svg"
         toolDrawer.toolTitle    = toolTitle
@@ -157,6 +183,18 @@ ApplicationWindow {
         toolDrawer.toolIcon     = toolIcon
         toolDrawer.visible      = true
     }
+    //显示半局小界面
+    function showSmallTool()
+    {
+        smallToolDrawer.visible  = true
+    }
+    //显示不同导航栏卡片//
+    function showCard(toolTitle, toolSource, toolIcon)
+    {
+
+    }
+
+
 
     function showAnalyzeTool() {
         showTool(qsTr("Analyze Tools"), "AnalyzeView.qml", "/qmlimages/Analyze.svg")
@@ -173,6 +211,11 @@ ApplicationWindow {
     function showUserTool(){
        showTool(qsTr("UserMsgInfo View"),"qrc:/qml/QGroundControl/MenuTool/UserMsgInfoView.qml","/res/yonghu.svg")
     }
+
+
+
+
+
 
     //-------------------------------------------------------------------------
     //-- Global simple message dialog
@@ -247,14 +290,6 @@ ApplicationWindow {
         return dialog
     }
 
-    function showRightToolStrip(){
-       if(rightMenutoolstrip.visible==true){
-         rightMenutoolstrip.visible =false;
-       }
-       else{
-          rightMenutoolstrip.visible =true;
-       }
-    }
 
 
     Component {
@@ -490,12 +525,13 @@ ApplicationWindow {
         anchors.rightMargin:     10
         //跟顶部的距离
         anchors.topMargin:       10
-        anchors.right:           parent.right
+        anchors.left:            parent.left
         anchors.top:             parent.top
         z:                       QGroundControl.zOrderWidgets
         maxHeight:               parent.height
         visible:                 false
         property real leftInset: x + width
+
     }
 
 //飞行界面  地图
@@ -509,6 +545,65 @@ ApplicationWindow {
         visible:        false
     }
 
+
+
+
+
+
+    //半局界面抽屉
+    Drawer {
+        id:             smallToolDrawer
+        x :300
+        width:          mainWindow.width*0.3
+        height:         mainWindow.height
+        edge:           Qt.leftEdge
+        dragMargin:     0
+        closePolicy:    Drawer.NoAutoClose
+        interactive:    false
+        visible:        false
+        Rectangle {
+            id:             smallToolDrawerToolbar
+            anchors.left:   parent.left
+            anchors.right:  parent.right
+            anchors.top:    parent.top
+            height:         ScreenTools.toolbarHeight
+            color:          qgcPal.toolbarBackground
+
+            RowLayout {
+                anchors.leftMargin: ScreenTools.defaultFontPixelWidth
+                anchors.left:       parent.left
+                anchors.top:        parent.top
+                anchors.bottom:     parent.bottom
+                spacing:            ScreenTools.defaultFontPixelWidth
+            }
+
+            QGCMouseArea {
+                anchors.top:        parent.top
+                anchors.bottom:     parent.bottom
+                x:                  parent.mapFromItem(backIcon, backIcon.x, backIcon.y).x
+                width:              (backTextLabel.x + backTextLabel.width) - backIcon.x
+                onClicked: {
+                    smallToolDrawer.visible      = false
+
+                }
+            }
+        }
+
+        Loader {
+            id:             smallToolDrawerLoader
+            anchors.left:   parent.left
+            anchors.right:  parent.right
+            anchors.top:     smallToolDrawerToolbar.bottom
+            anchors.bottom: parent.bottom
+            Connections {
+                target:                 smallToolDrawerLoader.item
+                ignoreUnknownSignals:   true
+                onPopout:               smallToolDrawer.visible = false
+            }
+        }
+    }
+
+    //大界面抽屉
     Drawer {
         id:             toolDrawer
         width:          mainWindow.width

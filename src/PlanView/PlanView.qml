@@ -632,14 +632,16 @@ Item {
             property bool _isRallyLayer:    _editingLayer == _layerRallyPoints
             property bool _isMissionLayer:  _editingLayer == _layerMission
 
+            //点击飞行后关闭界面显示导航栏
             ToolStripActionList {
                 id: toolStripActionList
                 model: [
                     ToolStripAction {
                         text:           qsTr("Fly")
                         iconSource:     "/qmlimages/PaperPlane.svg"
-                        onTriggered:    mainWindow.showFlyView()
+                        onTriggered:     mainWindow.showFlyView()
                     },
+
                     ToolStripAction {
                         text:                   qsTr("File")
                         enabled:                !_planMasterController.syncInProgress
@@ -714,7 +716,10 @@ Item {
                         dropPanelComponent: centerMapDropPanel
                     }
                 ]
+
+
             }
+
 
             model: toolStripActionList.model
 

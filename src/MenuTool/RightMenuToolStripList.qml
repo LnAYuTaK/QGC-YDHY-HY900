@@ -1,41 +1,57 @@
 import QtQml.Models 2.12
+import QtQuick          2.3
+import QtQuick.Controls 1.2
+import QtLocation       5.3
+import QtPositioning    5.3
+import QtQuick.Layouts  1.2
+import QtQuick.Window   2.2
+
 
 import QGroundControl           1.0
 import QGroundControl.Controls  1.0
+import QGroundControl.Palette   1.0
+import QGroundControl.ScreenTools       1.0
 //导航栏内部List
 ToolStripActionList {
     id: _root
+    signal displayPreFlightChecklist
+   Component {
+
+     }
+
     model: [
         ToolStripAction {
-            text:           qsTr("用户")
-            iconSource:     "/res/yonghu.svg"
-            onTriggered:    mainWindow.showUserTool()
+            text:           qsTr("任务规划")
+            iconSource:     "/qmlimages/Plan.svg"
+            onTriggered:   mainWindow.showPlanView()
+
         },
         ToolStripAction {
-            text:           qsTr("日志")
-            iconSource:     "/qmlimages/Analyze.svg"
-            onTriggered:    mainWindow.showAnalyzeTool()
-        },
-        ToolStripAction {
-            text:           qsTr("设置")
-            iconSource:     "/qmlimages/Gears.svg"
-            onTriggered:    mainWindow.showSetupTool()
-        },
-        ToolStripAction {
-            text:           qsTr("连接")
+            text:           qsTr("通信连接")
             iconSource:     "/qmlimages/resources/lianjie.svg"
-//          onTriggered:    mainWindow.showSetupTool()
+            onTriggered:     mainWindow.showSmallTool()
+
         },
         ToolStripAction {
-            text:           qsTr("参数")
-            iconSource:     "/qmlimages/PatternPresets.png"
-//          onTriggered:    mainWindow.showSetupTool()
+            text:           qsTr("飞控参数")
+            iconSource:   "qrc:/qmlimages/resources/ydhyImage/canshushezhi.svg"
+//          onTriggered:    mainWindow.showSettingsTool()
         },
         ToolStripAction {
-            text:           qsTr("系统")
-            iconSource:     "/res/QGCLogoWhite"
-            onTriggered:    mainWindow.showSettingsTool()
+            text:           qsTr("版本说明")
+            iconSource:     "/qmlimages/resources/ydhyImage/banbenxinxi.svg"
+
         }
 
+//        PreFlightCheckListShowAction { onTriggered: displayPreFlightChecklist() }
     ]
+
+
+
+
+
+
+
+    //版本描述组件
 }
+
