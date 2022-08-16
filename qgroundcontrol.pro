@@ -429,6 +429,7 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
 
 HEADERS += \
     src/DataHandle/DataController.h \
+    src/MenuTool/InstrumentDisplayListModel.h \
     src/NetWorkLayer/NetWorkManager.h \
     src/NetWorkLayer/ParaEditor.h \
     src/QmlControls/QmlUnitsConversion.h \
@@ -448,6 +449,7 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
 
 SOURCES += \
     src/DataHandle/DataController.cpp \
+    src/MenuTool/InstrumentDisplayListModel.cpp \
     src/NetWorkLayer/NetWorkManager.cpp \
     src/NetWorkLayer/ParaEditor.cpp \
     src/Settings/HySettings.cpp \

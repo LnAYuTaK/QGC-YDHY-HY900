@@ -108,21 +108,62 @@ Item {
         height:             parent.height - y - _toolsMargin
         visible:            !multiVehiclePanelSelector.showSingleVehiclePanel
     }
-
-    FlyViewInstrumentPanel {
-        id:                         instrumentPanel
-        anchors.margins:            _toolsMargin
-        //anchors.top:                multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
-        //anchors.right:              parent.right
-        anchors.bottom:              parent.bottom
-        anchors.horizontalCenter:    parent.horizontalCenter
-        width:                      _rightPanelWidth
-        spacing:                    _toolsMargin
-        visible:                    QGroundControl.corePlugin.options.flyView.showInstrumentPanel && multiVehiclePanelSelector.showSingleVehiclePanel
-        availableHeight:            parent.height - y - _toolsMargin
-
-        property real rightInset: visible ? parent.width - x : 0
+    //解锁起飞滑块 中底部
+    ColumnLayout {
+        id:                 unlockSlider
+        anchors.margins:    _toolsMargin
+        anchors.horizontalCenter : parent.horizontalCenter
+        anchors.bottom : parent.bottom
+        GuidedActionConfirm {
+        Layout.fillWidth:   true
+        guidedController:   _guidedController
+        altitudeSlider:     _guidedAltSlider
+      }
     }
+
+    //罗盘
+        FlyViewInstrumentPanel {
+            id:                         instrumentPanel
+            anchors.margins:            _toolsMargin
+            anchors.top:                multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
+            anchors.right:              parent.right
+            anchors.rightMargin:        _toolsMargin*4
+            //anchors.bottom:              parent.bottom
+            //anchors.horizontalCenter:    parent.horizontalCenter
+            width:                      _rightPanelWidth
+            spacing:                    _toolsMargin
+            visible:                    QGroundControl.corePlugin.options.flyView.showInstrumentPanel && multiVehiclePanelSelector.showSingleVehiclePanel
+            availableHeight:            parent.height - y - _toolsMargin
+            property real rightInset: visible ? parent.width - x : 0
+        }
+     //罗盘下面的显示参数
+        ColumnLayout{
+         anchors.margins:    _toolsMargin
+         anchors.top:        instrumentPanel.bottom
+         anchors.right: parent.right
+         HorizontalFactValueGrid {
+            id:                 valueArea
+            userSettingsGroup:   telemetryBarUserSettingsGroup
+            //defaultSettingsGroup:   telemetryBarDefaultSettingsGroup
+         }
+       }
+
+//    FlyViewInstrumentPanel {
+//        id:                         instrumentPanel
+//        anchors.margins:            _toolsMargin
+//        anchors.top:                multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
+//        anchors.right:              parent.right
+//        anchors.rightMargin:        _toolsMargin*4
+//        //anchors.bottom:              parent.bottom
+//        //anchors.horizontalCenter:    parent.horizontalCenter
+//        width:                      _rightPanelWidth
+//        spacing:                    _toolsMargin
+//        visible:                    QGroundControl.corePlugin.options.flyView.showInstrumentPanel && multiVehiclePanelSelector.showSingleVehiclePanel
+//        availableHeight:            parent.height - y - _toolsMargin
+
+//        property real rightInset: visible ? parent.width - x : 0
+//    }
+
 //2022810
 //右侧PhotoVideo暂时屏蔽
 //    PhotoVideoControl {
@@ -155,7 +196,6 @@ Item {
 
 //        property bool _verticalCenter: !QGroundControl.settingsManager.flyViewSettings.alternateInstrumentPanel.rawValue
 //    }
-
     TelemetryValuesBar {
         id:                 telemetryPanel
         x:                  recalcXPosition()
@@ -224,23 +264,23 @@ Item {
         }
     }
 
-    //-- Virtual Joystick
-    Loader {
-        id:                         virtualJoystickMultiTouch
-        z:                          QGroundControl.zOrderTopMost + 1
-        width:                      parent.width  - (_pipOverlay.width / 2)
-        height:                     Math.min(parent.height * 0.25, ScreenTools.defaultFontPixelWidth * 16)
-        visible:                    _virtualJoystickEnabled && !QGroundControl.videoManager.fullScreen && !(_activeVehicle ? _activeVehicle.usingHighLatencyLink : false)
-        anchors.bottom:             parent.bottom
-        anchors.bottomMargin:       parentToolInsets.leftEdgeBottomInset + ScreenTools.defaultFontPixelHeight * 2
-        anchors.horizontalCenter:   parent.horizontalCenter
-        source:                     "qrc:/qml/VirtualJoystick.qml"
-        active:                     _virtualJoystickEnabled && !(_activeVehicle ? _activeVehicle.usingHighLatencyLink : false)
+    //-- Virtual Joystick 虚拟摇杆
+//    Loader {
+//        id:                         virtualJoystickMultiTouch
+//        z:                          QGroundControl.zOrderTopMost + 1
+//        width:                      parent.width  - (_pipOverlay.width / 2)
+//        height:                     Math.min(parent.height * 0.25, ScreenTools.defaultFontPixelWidth * 16)
+//        visible:                    _virtualJoystickEnabled && !QGroundControl.videoManager.fullScreen && !(_activeVehicle ? _activeVehicle.usingHighLatencyLink : false)
+//        anchors.bottom:             parent.bottom
+//        anchors.bottomMargin:       parentToolInsets.leftEdgeBottomInset + ScreenTools.defaultFontPixelHeight * 2
+//        anchors.horizontalCenter:   parent.horizontalCenter
+//        source:                     "qrc:/qml/VirtualJoystick.qml"
+//        active:                     _virtualJoystickEnabled && !(_activeVehicle ? _activeVehicle.usingHighLatencyLink : false)
 
-        property bool autoCenterThrottle: QGroundControl.settingsManager.appSettings.virtualJoystickAutoCenterThrottle.rawValue
+//        property bool autoCenterThrottle: QGroundControl.settingsManager.appSettings.virtualJoystickAutoCenterThrottle.rawValue
 
-        property bool _virtualJoystickEnabled: QGroundControl.settingsManager.appSettings.virtualJoystick.rawValue
-    }
+//        property bool _virtualJoystickEnabled: QGroundControl.settingsManager.appSettings.virtualJoystick.rawValue
+//    }
 
     FlyViewToolStrip {
         id:                     toolStrip
@@ -280,7 +320,6 @@ Item {
         mapControl:         _mapControl
         buttonsOnLeft:      false
         visible:            !ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale && mapControl.pipState.state === mapControl.pipState.fullState
-
         property real centerInset: visible ? parent.height - y : 0
     }
 

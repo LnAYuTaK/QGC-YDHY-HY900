@@ -120,9 +120,9 @@ LogDownloadController::LogDownloadController(void)
 
     //202285
     _setActiveVehicle(manager->activeVehicle());
-    _netWorkManager = qgcApp()->toolbox()->netWorkManager();
-    //202288  下载完成后将日志任务放到队列
-    connect(this,&LogDownloadController::downloadcomplete,_netWorkManager,&NetWorkManager::createLogTask);
+//    _netWorkManager = qgcApp()->toolbox()->netWorkManager();
+//    //202288  下载完成后将日志任务放到队列
+//    connect(this,&LogDownloadController::downloadcomplete,_netWorkManager,&NetWorkManager::createLogTask);
 }
 
 //----------------------------------------------------------------------------------------
@@ -586,9 +586,9 @@ LogDownloadController::filerData(QString filerDataType)
 void
 LogDownloadController::sendLog()
 {
-    if(_netWorkManager!=nullptr){
-        _netWorkManager->runTask();
-    }
+//    if(_netWorkManager!=nullptr){
+//        _netWorkManager->runTask();
+//    }
 }
 //----------------------------------------------------------------------------------------
 

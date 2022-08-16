@@ -83,7 +83,7 @@ QGCToolbox::QGCToolbox(QGCApplication* app)
     _mavlinkLogManager      = new MAVLinkLogManager         (app, this);
     _adsbVehicleManager     = new ADSBVehicleManager        (app, this);
     //202282
-    _netWorkManager         = new NetWorkManager            (app, this);
+//    _netWorkManager         = new NetWorkManager            (app, this);
 
 #if defined(QGC_ENABLE_PAIRING)
     _pairingManager         = new PairingManager            (app, this);
@@ -130,7 +130,7 @@ void QGCToolbox::setChildToolboxes(void)
     _mavlinkLogManager->setToolbox(this);
     _airspaceManager->setToolbox(this);
     _adsbVehicleManager->setToolbox(this);
-    _netWorkManager->setToolbox(this);
+//    _netWorkManager->setToolbox(this);
 
 
 #if defined(QGC_GST_TAISYNC_ENABLED)

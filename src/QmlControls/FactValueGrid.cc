@@ -246,7 +246,6 @@ InstrumentValueData* FactValueGrid::_createNewInstrumentValueWorker(QObject* par
     value->setText(value->fact()->shortDescription());
     _connectSaveSignals(value);
     return value;
-
 }
 
 void FactValueGrid::_saveSettings(void)

@@ -32,7 +32,9 @@ public:
     Fact* lon               () { return &_lonFact; }
     Fact* mgrs              () { return &_mgrsFact; }
     Fact* hdop              () { return &_hdopFact; }
+    //垂直精度因子
     Fact* vdop              () { return &_vdopFact; }
+    //对地航向;实际航迹向
     Fact* courseOverGround  () { return &_courseOverGroundFact; }
     Fact* count             () { return &_countFact; }
     Fact* lock              () { return &_lockFact; }

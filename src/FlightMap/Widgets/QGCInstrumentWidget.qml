@@ -48,7 +48,7 @@ ColumnLayout {
 //右罗盘
         QGCCompassWidget {
             id:                     compass
-//            anchors.leftMargin:     _spacing
+//          anchors.leftMargin:     _spacing
             anchors.right:           parent.right
 
             size:                   _innerRadius * 1.5

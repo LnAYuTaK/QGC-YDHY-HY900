@@ -15,9 +15,6 @@ import QGroundControl.ScreenTools       1.0
 ToolStripActionList {
     id: _root
     signal displayPreFlightChecklist
-   Component {
-
-     }
 
     model: [
         ToolStripAction {
@@ -29,18 +26,19 @@ ToolStripActionList {
         ToolStripAction {
             text:           qsTr("通信连接")
             iconSource:     "/qmlimages/resources/lianjie.svg"
-            onTriggered:     mainWindow.showSmallTool()
+            onTriggered:    mainWindow.showConnectTool()
 
         },
         ToolStripAction {
             text:           qsTr("飞控参数")
             iconSource:   "qrc:/qmlimages/resources/ydhyImage/canshushezhi.svg"
-//          onTriggered:    mainWindow.showSettingsTool()
+            onTriggered:    mainWindow.showParameterTool()
         },
         ToolStripAction {
             text:           qsTr("版本说明")
             iconSource:     "/qmlimages/resources/ydhyImage/banbenxinxi.svg"
-
+            onTriggered:   /* mainWindow.showVersionView()*/
+                           InstrumentDisplayListModel.printTest()
         }
 
 //        PreFlightCheckListShowAction { onTriggered: displayPreFlightChecklist() }

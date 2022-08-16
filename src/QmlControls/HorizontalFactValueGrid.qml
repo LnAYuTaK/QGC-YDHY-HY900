@@ -61,7 +61,7 @@ T.HorizontalFactValueGrid {
                         Repeater {
                             id:     labelRepeater
                             model:  object
-
+                             //参数边框加图标
                             InstrumentValueLabel {
                                 Layout.fillHeight:      true
                                 Layout.alignment:       Qt.AlignRight

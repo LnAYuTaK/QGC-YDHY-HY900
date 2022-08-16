@@ -419,7 +419,7 @@ void Vehicle::_commonInit()
     connect(_imageProtocolManager, &ImageProtocolManager::imageReady, this, &Vehicle::_imageProtocolImageReady);
 
     // Build FactGroup object model
-
+//Vehicle Ìí¼ÓµÄFact ºÍFactGroup
     _addFact(&_rollFact,                _rollFactName);
     _addFact(&_pitchFact,               _pitchFactName);
     _addFact(&_headingFact,             _headingFactName);
@@ -1110,6 +1110,9 @@ void Vehicle::_handleAttitudeQuaternion(mavlink_message_t& message)
     rollRate()->setRawValue(qRadiansToDegrees(rates[0]));
     pitchRate()->setRawValue(qRadiansToDegrees(rates[1]));
     yawRate()->setRawValue(qRadiansToDegrees(rates[2]));
+
+
+    qDebug()<<"ROLLRATE"<<rollRate()->rawValue();
 }
 void Vehicle::_handleGpsRawInt(mavlink_message_t& message)
 {
@@ -1513,6 +1516,7 @@ void Vehicle::_handleBatteryStatus(mavlink_message_t& message)
         _say(tr("warning"));
         _say(QStringLiteral("%1 %2 ").arg(_vehicleIdSpeech()).arg(batteryMessage.arg(batteryIdStr)));
     }
+
 }
 
 void Vehicle::_setHomePosition(QGeoCoordinate& homeCoord)

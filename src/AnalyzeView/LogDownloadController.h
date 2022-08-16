@@ -21,7 +21,7 @@
 
 #include "UASInterface.h"
 #include "AutoPilotPlugin.h"
-#include "NetWorkLayer/NetWorkManager.h"
+//#include "NetWorkLayer/NetWorkManager.h"
 
 class  MultiVehicleManager;
 class  UASInterface;
@@ -181,7 +181,7 @@ private:
     int                 _retries;
     int                 _apmOneBased;
     QString             _downloadPath;
-    NetWorkManager*     _netWorkManager;
+//    NetWorkManager*     _netWorkManager;
 
 
 

@@ -25,6 +25,7 @@
 #include "HorizontalFactValueGrid.h"
 #include "InstrumentValueData.h"
 
+
 #include <QtQml>
 #include <QQmlEngine>
 
@@ -78,6 +79,9 @@ public:
     QmlComponentInfo* pGeneral                  = nullptr;
     QmlComponentInfo* pCommLinks                = nullptr;
     QmlComponentInfo* pOfflineMaps              = nullptr;
+    //2022816 数传组件
+    QmlComponentInfo* pPicTransmis            = nullptr;
+
 #if defined(QGC_GST_TAISYNC_ENABLED)
     QmlComponentInfo* pTaisync                  = nullptr;
 #endif
@@ -99,6 +103,8 @@ public:
     QGCOptions*         defaultOptions          = nullptr;
     QVariantList        settingsList;
     QVariantList        analyzeList;
+
+
 
     QmlObjectListModel _emptyCustomMapItems;
 };
@@ -129,7 +135,7 @@ void QGCCorePlugin::setToolbox(QGCToolbox *toolbox)
 }
 //
 
-
+//2022816
 QVariantList &QGCCorePlugin::settingsPages()
 {
     if(!_p->pGeneral) {
@@ -141,7 +147,11 @@ QVariantList &QGCCorePlugin::settingsPages()
                                               QUrl::fromUserInput("qrc:/qml/LinkSettings.qml"),
                                               QUrl::fromUserInput("qrc:/res/waves.svg"));
         _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pCommLinks)));
-
+        //中文别忘了改一下编码utf8
+        _p->pPicTransmis  = new QmlComponentInfo(QString("图传连接"),
+                                              QUrl::fromUserInput("qrc:/qml/QGroundControl/MenuTool/PicTransmis.qml"),
+                                              QUrl::fromUserInput("qrc:/res/waves.svg"));
+        _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pPicTransmis)));
 
 #if defined (CLEARQGC)
         _p->pOfflineMaps = new QmlComponentInfo(tr("Offline Maps"),
@@ -181,7 +191,7 @@ QVariantList &QGCCorePlugin::settingsPages()
                                          QUrl::fromUserInput("qrc:/qml/HelpSettings.qml"));
         _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pHelp)));
 
- //2022 85�޸�
+ //202285修改
 #if defined(QT_DEBUG)
         //-- These are always present on Debug builds
         _p->pMockLink = new QmlComponentInfo(tr("Mock Link"),
@@ -308,6 +318,7 @@ void QGCCorePlugin::factValueGridCreateDefaultSettings(const QString& defaultSet
 {
     HorizontalFactValueGrid factValueGrid(defaultSettingsGroup);
 
+
     bool        includeFWValues = factValueGrid.vehicleClass() == QGCMAVLink::VehicleClassFixedWing || factValueGrid.vehicleClass() == QGCMAVLink::VehicleClassVTOL || factValueGrid.vehicleClass() == QGCMAVLink::VehicleClassAirship;
 
     factValueGrid.setFontSize(FactValueGrid::LargeFontSize);
@@ -388,12 +399,17 @@ QQmlApplicationEngine* QGCCorePlugin::createQmlApplicationEngine(QObject* parent
     qmlEngine->addImportPath("qrc:/qml");
     qmlEngine->rootContext()->setContextProperty("joystickManager", qgcApp()->toolbox()->joystickManager());
     qmlEngine->rootContext()->setContextProperty("debugMessageModel", AppMessages::getModel());
+    //2022816
+    InstrumentDisplayListModel *  model= new InstrumentDisplayListModel();
+    qmlEngine->rootContext()->setContextProperty("InstrumentDisplayListModel", model);
+
     return qmlEngine;
 }
 
 void QGCCorePlugin::createRootWindow(QQmlApplicationEngine* qmlEngine)
 {
     qmlEngine->load(QUrl(QStringLiteral("qrc:/qml/MainRootWindow.qml")));
+
 }
 
 bool QGCCorePlugin::mavlinkMessage(Vehicle* vehicle, LinkInterface* link, mavlink_message_t message)

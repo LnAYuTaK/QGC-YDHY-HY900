@@ -15,7 +15,7 @@ import QGroundControl.ScreenTools   1.0
 import QGroundControl.Vehicle       1.0
 import QGroundControl.Controls      1.0
 import QGroundControl.Palette       1.0
-
+//移动到FlyWidgetLayer
 Rectangle {
     id:                 telemetryPanel
     height:             telemetryLayout.height + (_toolsMargin * 2)
@@ -98,16 +98,16 @@ Rectangle {
 //            propagateComposedEvents:    true
 //        }
 
-        HorizontalFactValueGrid {
-            id:                     valueArea
-            userSettingsGroup:      telemetryBarUserSettingsGroup
-            //defaultSettingsGroup:   telemetryBarDefaultSettingsGroup
-        }
-
-        GuidedActionConfirm {
-            Layout.fillWidth:   true
-            guidedController:   _guidedController
-            altitudeSlider:     _guidedAltSlider
-        }
+//        HorizontalFactValueGrid {
+//            id:                     valueArea
+//            userSettingsGroup:      telemetryBarUserSettingsGroup
+//            //defaultSettingsGroup:   telemetryBarDefaultSettingsGroup
+//        }
+//起飞解锁滑块
+//        GuidedActionConfirm {
+//            Layout.fillWidth:   true
+//            guidedController:   _guidedController
+//            altitudeSlider:     _guidedAltSlider
+//        }
     }
 }

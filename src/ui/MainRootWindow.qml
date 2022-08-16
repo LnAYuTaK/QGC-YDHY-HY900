@@ -141,7 +141,9 @@ ApplicationWindow {
         toolbar.currentToolbar  = currentToolbar
     }
     //显示左侧导航栏  (不要问我为啥right是左，回答就是懒得改)
+
     function showRightToolStrip(){
+
         if (!flightView.visible) {
             mainWindow.showPreFlightChecklistIfNeeded()
         }
@@ -151,7 +153,9 @@ ApplicationWindow {
           rightMenutoolstrip.visible = true
        }
        else{
-        rightMenutoolstrip.visible = false
+         rightMenutoolstrip.visible = false
+         menuToolCard.visible = false
+
        }
     }
 
@@ -168,13 +172,6 @@ ApplicationWindow {
         flightView.visible = true
     }
 
-    function showPlanView() {
-        viewSwitch(toolbar.planViewToolbar)
-        planView.visible = true
-        //2022815
-        _rightMenutoolstrip.visible = false
-    }
-
     //显示界面大界面
     function showTool(toolTitle, toolSource, toolIcon) {
         toolDrawer.backIcon     = flightView.visible ? "/qmlimages/PaperPlane.svg" : "/qmlimages/Plan.svg"
@@ -183,17 +180,37 @@ ApplicationWindow {
         toolDrawer.toolIcon     = toolIcon
         toolDrawer.visible      = true
     }
-    //显示半局小界面
-    function showSmallTool()
-    {
-        smallToolDrawer.visible  = true
-    }
+
     //显示不同导航栏卡片//
-    function showCard(toolTitle, toolSource, toolIcon)
-    {
-
+    function showCard(toolSource) {
+        if(!menuToolCard.visible){
+         menuToolCard.toolSource   = toolSource
+         menuToolCard.visible  = true
+        }
+        else{
+           menuToolCard.visible  = false
+        }
     }
 
+    //任务规划
+    function showPlanView() {
+        viewSwitch(toolbar.planViewToolbar)
+        planView.visible = true
+        //2022815
+        _rightMenutoolstrip.visible = false
+    }
+    //通讯界面
+    function showConnectTool() {
+       showCard("/qml/QGroundControl/MenuTool/ConnectView.qml")
+    }
+    //飞控参数界面
+    function showParameterTool() {
+       showCard("SetupView.qml")
+    }
+    //版本说明界面
+    function showVersionView() {
+       showCard("/qml/QGroundControl/MenuTool/VersionView.qml")
+    }
 
 
     function showAnalyzeTool() {
@@ -211,11 +228,6 @@ ApplicationWindow {
     function showUserTool(){
        showTool(qsTr("UserMsgInfo View"),"qrc:/qml/QGroundControl/MenuTool/UserMsgInfoView.qml","/res/yonghu.svg")
     }
-
-
-
-
-
 
     //-------------------------------------------------------------------------
     //-- Global simple message dialog
@@ -520,7 +532,7 @@ ApplicationWindow {
         }
     }
     //导航栏
-    RightMenuToolStrip{
+    RightMenuToolStrip {
         id:                      rightMenutoolstrip
         anchors.rightMargin:     10
         //跟顶部的距离
@@ -531,7 +543,6 @@ ApplicationWindow {
         maxHeight:               parent.height
         visible:                 false
         property real leftInset: x + width
-
     }
 
 //飞行界面  地图
@@ -546,62 +557,39 @@ ApplicationWindow {
     }
 
 
-
-
-
-
-    //半局界面抽屉
-    Drawer {
-        id:             smallToolDrawer
-        x :300
-        width:          mainWindow.width*0.3
-        height:         mainWindow.height
-        edge:           Qt.leftEdge
-        dragMargin:     0
-        closePolicy:    Drawer.NoAutoClose
-        interactive:    false
+    //导航栏卡片
+    Rectangle {
+        id:             menuToolCard
+        anchors.left:   rightMenutoolstrip.right
+        anchors.top:    rightMenutoolstrip.top
+        anchors.bottom: rightMenutoolstrip.buttom
+        width:          mainWindow.width*0.5
+        height:         rightMenutoolstrip.height
+        color:         "transparent"
         visible:        false
-        Rectangle {
-            id:             smallToolDrawerToolbar
-            anchors.left:   parent.left
-            anchors.right:  parent.right
-            anchors.top:    parent.top
-            height:         ScreenTools.toolbarHeight
-            color:          qgcPal.toolbarBackground
 
-            RowLayout {
-                anchors.leftMargin: ScreenTools.defaultFontPixelWidth
-                anchors.left:       parent.left
-                anchors.top:        parent.top
-                anchors.bottom:     parent.bottom
-                spacing:            ScreenTools.defaultFontPixelWidth
-            }
+        property alias toolSource:  smallToolDrawerLoader.source
 
-            QGCMouseArea {
-                anchors.top:        parent.top
-                anchors.bottom:     parent.bottom
-                x:                  parent.mapFromItem(backIcon, backIcon.x, backIcon.y).x
-                width:              (backTextLabel.x + backTextLabel.width) - backIcon.x
-                onClicked: {
-                    smallToolDrawer.visible      = false
-
-                }
-            }
+        RowLayout {
+            anchors.leftMargin: ScreenTools.defaultFontPixelWidth
+            anchors.left:       parent.left
+            anchors.top:        parent.top
+            anchors.bottom:     parent.bottom
+            spacing:            ScreenTools.defaultFontPixelWidth
         }
-
         Loader {
             id:             smallToolDrawerLoader
-            anchors.left:   parent.left
-            anchors.right:  parent.right
-            anchors.top:     smallToolDrawerToolbar.bottom
-            anchors.bottom: parent.bottom
+            anchors.fill    :menuToolCard
             Connections {
                 target:                 smallToolDrawerLoader.item
                 ignoreUnknownSignals:   true
-                onPopout:               smallToolDrawer.visible = false
             }
         }
+
     }
+
+
+
 
     //大界面抽屉
     Drawer {

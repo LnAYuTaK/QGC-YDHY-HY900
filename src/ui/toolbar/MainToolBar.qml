@@ -79,7 +79,10 @@ Rectangle {
             Layout.preferredHeight: viewButtonRow.height
             icon.source:           "/res/resources/WindowsYDHY.svg"
             logo:                   true
-            onClicked:    mainWindow.showRightToolStrip()
+            onClicked:        mainWindow.showRightToolStrip()
+
+
+
         }
 
         MainStatusIndicator {

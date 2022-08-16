@@ -8,7 +8,7 @@ import QGroundControl.Controls      1.0
 import QGroundControl.Controllers   1.0
 import QGroundControl.ScreenTools   1.0
 
-//导航栏用户//显示Page
+//导航栏用户//显示Page  //植保机专用
 //2022810
 Rectangle {
    id :_root

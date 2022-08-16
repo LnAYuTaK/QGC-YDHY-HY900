@@ -310,7 +310,7 @@ Rectangle {
     }
 
     Loader {
-        id:                     panelLoader
+        id:                      panelLoader
         anchors.topMargin:      _verticalMargin
         anchors.bottomMargin:   _verticalMargin
         anchors.leftMargin:     _horizontalMargin
