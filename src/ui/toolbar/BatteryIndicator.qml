@@ -19,6 +19,7 @@ import MAVLink                              1.0
 
 //-------------------------------------------------------------------------
 //-- Battery Indicator
+//电池显示
 Item {
     id:             _root
     anchors.top:    parent.top
@@ -170,7 +171,7 @@ Item {
                                 QGCLabel { text: qsTr("Remaining");                             visible: batteryValuesAvailable.timeRemainingAvailable }
                                 QGCLabel { text: qsTr("Remaining") }
                                 QGCLabel { text: qsTr("Voltage") }
-                                QGCLabel { text: qsTr("Consumed");                              visible: batteryValuesAvailable.mahConsumedAvailable }
+                                QGCLabel { text: qsTr("消耗");                              visible: batteryValuesAvailable.mahConsumedAvailable }
                                 QGCLabel { text: qsTr("Temperature");                           visible: batteryValuesAvailable.temperatureAvailable }
                                 QGCLabel { text: qsTr("Function");                              visible: batteryValuesAvailable.functionAvailable }
                             }

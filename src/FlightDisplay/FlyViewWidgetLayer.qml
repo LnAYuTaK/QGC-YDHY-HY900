@@ -137,16 +137,26 @@ Item {
             property real rightInset: visible ? parent.width - x : 0
         }
      //罗盘下面的显示参数
-        ColumnLayout{
-         anchors.margins:    _toolsMargin
-         anchors.top:        instrumentPanel.bottom
-         anchors.right: parent.right
-         HorizontalFactValueGrid {
-            id:                 valueArea
-            userSettingsGroup:   telemetryBarUserSettingsGroup
-            //defaultSettingsGroup:   telemetryBarDefaultSettingsGroup
-         }
-       }
+
+            ParameterView{
+                anchors.top:          instrumentPanel.bottom
+                anchors.bottom:       parent.bottom
+                anchors.right:        parent.right
+                width:                parent.width*0.2
+                color:                "black"
+           }
+
+        //图传界面
+
+
+//         HorizontalFactValueGrid {
+//            id:                 valueArea
+//            userSettingsGroup:   telemetryBarUserSettingsGroup
+//            //defaultSettingsGroup:   telemetryBarDefaultSettingsGroup
+//         }
+
+
+
 
 //    FlyViewInstrumentPanel {
 //        id:                         instrumentPanel

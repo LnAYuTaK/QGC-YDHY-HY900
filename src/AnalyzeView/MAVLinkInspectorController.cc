@@ -837,6 +837,7 @@ MAVLinkInspectorController::_refreshFrequency()
 void
 MAVLinkInspectorController::_vehicleAdded(Vehicle* vehicle)
 {
+
     QGCMAVLinkSystem* v = _findVehicle(static_cast<uint8_t>(vehicle->id()));
     if(v) {
         v->messages()->clearAndDeleteContents();

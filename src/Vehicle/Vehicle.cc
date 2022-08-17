@@ -109,8 +109,8 @@ const char* Vehicle::_escStatusFactGroupName =          "escStatus";
 const char* Vehicle::_estimatorStatusFactGroupName =    "estimatorStatus";
 const char* Vehicle::_terrainFactGroupName =            "terrain";
 const char* Vehicle::_hygrometerFactGroupName =         "hygrometer";
-//2022730
-const char* Vehicle::_flowRatemeterFactGroupName =      "flowratemeter";
+
+
 
 // Standard connected vehicle
 Vehicle::Vehicle(LinkInterface*             link,
@@ -171,8 +171,6 @@ Vehicle::Vehicle(LinkInterface*             link,
     , _estimatorStatusFactGroup     (this)
     , _hygrometerFactGroup          (this)
     , _terrainFactGroup             (this)
-    //2022730
-    , _flowRatemeterFactGroup       (this)
     , _terrainProtocolHandler       (new TerrainProtocolHandler(this, &_terrainFactGroup, this))
 
 {
@@ -328,7 +326,6 @@ Vehicle::Vehicle(MAV_AUTOPILOT              firmwareType,
     , _distanceSensorFactGroup          (this)
     , _localPositionFactGroup           (this)
     , _localPositionSetpointFactGroup   (this)
-    , _flowRatemeterFactGroup           (this)
 {
     _linkManager = _toolbox->linkManager();
 
@@ -461,8 +458,6 @@ void Vehicle::_commonInit()
     _addFactGroup(&_estimatorStatusFactGroup,   _estimatorStatusFactGroupName);
     _addFactGroup(&_hygrometerFactGroup,        _hygrometerFactGroupName);
     _addFactGroup(&_terrainFactGroup,           _terrainFactGroupName);
-    //2022730
-    _addFactGroup(&_flowRatemeterFactGroup,     _flowRatemeterFactGroupName);
 
     // Add firmware-specific fact groups, if provided
     QMap<QString, FactGroup*>* fwFactGroups = _firmwarePlugin->factGroups();
@@ -669,7 +664,7 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
     _imageProtocolManager->mavlinkMessageReceived(message);
 
     _waitForMavlinkMessageMessageReceived(message);
-
+    //从Mavlink中提取信息到电池组
     // Battery fact groups are created dynamically as new batteries are discovered
     VehicleBatteryFactGroup::handleMessageForFactGroupCreation(this, message);
 

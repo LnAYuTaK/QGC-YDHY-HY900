@@ -84,9 +84,9 @@ NetWorkManager :: NetWorkManager(QGCApplication* app, QGCToolbox* toolbox)
 
 void NetWorkManager::setToolbox(QGCToolbox *toolbox)
 {
-    QGCTool::setToolbox(toolbox);
-    QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
-    qmlRegisterSingletonInstance<NetWorkManager>("QGroundControl.NetWorkManager", 1, 0, "NetWorkManager", qgcApp()->toolbox()->netWorkManager());
+//    QGCTool::setToolbox(toolbox);
+//    QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
+//    qmlRegisterSingletonInstance<NetWorkManager>("QGroundControl.NetWorkManager", 1, 0, "NetWorkManager", qgcApp()->toolbox()->netWorkManager());
 }
 
 void NetWorkManager::createLogTask(QString filename,QGCLogEntry* logEntry)

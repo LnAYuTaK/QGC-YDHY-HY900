@@ -129,7 +129,7 @@ signals:
     void sendDataNumAdd();
     //
 private:
-     NetWorkManager  *   _networkMgr =nullptr;
+//     NetWorkManager  *   _networkMgr =nullptr;
 };
 
 #endif // DATAMANAGER_H

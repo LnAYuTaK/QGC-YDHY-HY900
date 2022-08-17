@@ -32,6 +32,8 @@
 #include "QGCApplication.h"
 #include "ADSBVehicleManager.h"
 
+#include "NetWorkLayer/NetWorkManager.h"
+
 #if defined(QGC_ENABLE_PAIRING)
 #include "PairingManager.h"
 #endif
@@ -50,6 +52,8 @@
 #if defined(QGC_CUSTOM_BUILD)
 #include CUSTOMHEADER
 #endif
+//202282
+#include "DataHandle/DataController.h"
 
 
 
@@ -79,6 +83,7 @@ QGCToolbox::QGCToolbox(QGCApplication* app)
     _mavlinkLogManager      = new MAVLinkLogManager         (app, this);
     _adsbVehicleManager     = new ADSBVehicleManager        (app, this);
     //202282
+//    _netWorkManager         = new NetWorkManager            (app, this);
 
 #if defined(QGC_ENABLE_PAIRING)
     _pairingManager         = new PairingManager            (app, this);

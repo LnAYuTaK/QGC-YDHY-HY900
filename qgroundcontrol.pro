@@ -435,7 +435,7 @@ HEADERS += \
     src/QmlControls/QmlUnitsConversion.h \
     src/Settings/HySettings.h \
     src/Vehicle/VehicleEscStatusFactGroup.h \
-    src/Vehicle/VehicleFlowratemeterFactGroup.h \
+#    src/Vehicle/VehicleFlowratemeterFactGroup.h \
     src/api/QGCCorePlugin.h \
     src/api/QGCOptions.h \
     src/api/QGCSettings.h \
@@ -454,7 +454,7 @@ SOURCES += \
     src/NetWorkLayer/ParaEditor.cpp \
     src/Settings/HySettings.cpp \
     src/Vehicle/VehicleEscStatusFactGroup.cc \
-    src/Vehicle/VehicleFlowratemeterFactGroup.cpp \
+#    src/Vehicle/VehicleFlowratemeterFactGroup.cpp \
     src/api/QGCCorePlugin.cc \
     src/api/QGCOptions.cc \
     src/api/QGCSettings.cc \

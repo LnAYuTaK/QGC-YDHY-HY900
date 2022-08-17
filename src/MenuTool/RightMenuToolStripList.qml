@@ -37,8 +37,8 @@ ToolStripActionList {
         ToolStripAction {
             text:           qsTr("版本说明")
             iconSource:     "/qmlimages/resources/ydhyImage/banbenxinxi.svg"
-            onTriggered:   /* mainWindow.showVersionView()*/
-                           InstrumentDisplayListModel.printTest()
+            onTriggered:   /* mainWindow.showVersionView()*/InstrumentDisplayListModel.printTest()/*console.log("PRINT")*/
+
         }
 
 //        PreFlightCheckListShowAction { onTriggered: displayPreFlightChecklist() }

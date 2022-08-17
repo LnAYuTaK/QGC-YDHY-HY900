@@ -418,8 +418,8 @@ LogDownloadController::_receivedAllData()
         _requestLogData(_downloadData->ID, 0, _downloadData->chunk_table.size()*MAVLINK_MSG_LOG_DATA_FIELD_DATA_LEN);
         _timer.start(kTimeOutMilliseconds);
         //ÏÂÔØÍê³É//
-        QFileInfo fileInfo = QFileInfo(_downloadData->file);
-        emit downloadcomplete(fileInfo.absoluteFilePath(),_downloadData->entry);
+        //QFileInfo fileInfo = QFileInfo(_downloadData->file);
+        //emit downloadcomplete(fileInfo.absoluteFilePath(),_downloadData->entry);
 
     } else {
         _resetSelection();
@@ -504,7 +504,7 @@ LogDownloadController::refresh(void)
 {
     _logEntriesModel.clear();
     //-- Get first 50 entries
-    _requestLogList(0,49);
+    _requestLogList(0, 49);
 }
 //----------------------------------------------------------------------------------------
 void

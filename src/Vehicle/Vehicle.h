@@ -40,8 +40,6 @@
 #include "VehicleEscStatusFactGroup.h"
 #include "VehicleEstimatorStatusFactGroup.h"
 #include "VehicleHygrometerFactGroup.h"
-//2022730喷雾器
-#include  "VehicleFlowratemeterFactGroup.h"
 #include "VehicleLinkManager.h"
 #include "MissionManager.h"
 #include "GeoFenceManager.h"
@@ -319,8 +317,7 @@ public:
     Q_PROPERTY(FactGroup*           localPosition   READ localPositionFactGroup     CONSTANT)
     Q_PROPERTY(FactGroup*           localPositionSetpoint READ localPositionSetpointFactGroup CONSTANT)
     Q_PROPERTY(FactGroup*           hygrometer      READ hygrometerFactGroup        CONSTANT)
-    //2022730
-    Q_PROPERTY(FactGroup*           flowratemeter   READ flowRatemeterFactGroup     CONSTANT)
+    //这个接口可以获取到
     Q_PROPERTY(QmlObjectListModel*  batteries       READ batteries                  CONSTANT)
     Q_PROPERTY(Actuators*           actuators       READ actuators                  CONSTANT)
 
@@ -667,8 +664,6 @@ public:
     FactGroup* estimatorStatusFactGroup     () { return &_estimatorStatusFactGroup; }
     FactGroup* terrainFactGroup             () { return &_terrainFactGroup; }
     FactGroup* hygrometerFactGroup          () { return &_hygrometerFactGroup; }
-    //2022730
-    FactGroup* flowRatemeterFactGroup       () { return &_flowRatemeterFactGroup; }    //自己添加
     QmlObjectListModel* batteries           () { return &_batteryFactGroupListModel; }
 
     MissionManager*                 missionManager      () { return _missionManager; }
@@ -1368,9 +1363,6 @@ private:
     VehicleHygrometerFactGroup      _hygrometerFactGroup;
     TerrainFactGroup                _terrainFactGroup;
     QmlObjectListModel              _batteryFactGroupListModel;
-    //2022730
-    VehicleFlowRatemeterFactGroup   _flowRatemeterFactGroup;
-
     TerrainProtocolHandler* _terrainProtocolHandler = nullptr;
 
     MissionManager*                 _missionManager             = nullptr;
@@ -1421,9 +1413,7 @@ private:
     static const char* _estimatorStatusFactGroupName;
     static const char* _hygrometerFactGroupName;
     static const char* _terrainFactGroupName;
-    //2022730
-    static const char* _flowRatemeterFactGroupName;
-
+    //更新UI速度
     static const int _vehicleUIUpdateRateMSecs      = 100;
 
     // Settings keys

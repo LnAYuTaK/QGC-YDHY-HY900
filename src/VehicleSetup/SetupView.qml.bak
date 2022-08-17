@@ -233,7 +233,7 @@ Rectangle {
 
                 onClicked: showSummaryPanel()
             }
-//2022815固件升級
+//2022815
 //            SubMenuButton {
 //                id:                 firmwareButton
 //                imageResource:      "/qmlimages/FirmwareUpgradeIcon.png"
@@ -242,6 +242,7 @@ Rectangle {
 //                visible:            !ScreenTools.isMobile && _corePlugin.options.showFirmwareUpgrade
 //                text:               qsTr("Firmware")
 //                Layout.fillWidth:   true
+
 //                onClicked: showPanel(this, "FirmwareUpgrade.qml")
 //            }
 

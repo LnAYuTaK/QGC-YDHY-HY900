@@ -2469,10 +2469,8 @@ void MissionController::setCurrentPlanViewSeqNum(int sequenceNumber, bool force)
                         for (int j=viIndex-1; j>0; j--) {
                             VisualMissionItem* pPrev = qobject_cast<VisualMissionItem*>(_visualItems->get(j));
                             if (pPrev->specifiesCoordinate() && !pPrev->isStandaloneCoordinate()) {
-                                qDebug() << "Found";
                                 VisualItemPair splitPair(pPrev, pVI);
                                 if (_flightPathSegmentHashTable.contains(splitPair)) {
-                                    qDebug() << "Split segment added in setCurrentPlanViewSeqNum";
                                     _splitSegment = _flightPathSegmentHashTable[splitPair];
                                 } else {
                                     // The recalc of flight path segments hasn't happened yet since it is delayed and compressed.

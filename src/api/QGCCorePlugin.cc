@@ -399,10 +399,9 @@ QQmlApplicationEngine* QGCCorePlugin::createQmlApplicationEngine(QObject* parent
     qmlEngine->addImportPath("qrc:/qml");
     qmlEngine->rootContext()->setContextProperty("joystickManager", qgcApp()->toolbox()->joystickManager());
     qmlEngine->rootContext()->setContextProperty("debugMessageModel", AppMessages::getModel());
-    //2022816
+
     InstrumentDisplayListModel *  model= new InstrumentDisplayListModel();
     qmlEngine->rootContext()->setContextProperty("InstrumentDisplayListModel", model);
-
     return qmlEngine;
 }
 

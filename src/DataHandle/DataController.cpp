@@ -219,7 +219,6 @@ QString VehicleDataFactPack::pack()
 //}
 
 DataController::DataController(void)
- : _networkMgr()
 {
    dataSendTimer =new  QTimer();
    MultiVehicleManager *manager = qgcApp()->toolbox()->multiVehicleManager();
@@ -231,9 +230,6 @@ DataController::DataController(void)
    connect(dataSendTimer,&QTimer::timeout,this,&DataController::saveDataLocal);
    dataSendTimer->setInterval(1000);
    //本地数据库记录TUDO
-
-
-
 }
 
 VehicleDataFactPack* DataController::createDataFact(Vehicle* vehicle)
@@ -326,7 +322,6 @@ void DataController::saveDataLocal()
    f.close();
    }
 }
-
 
 
 

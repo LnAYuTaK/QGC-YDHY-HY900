@@ -17,7 +17,7 @@ import QGroundControl.Airspace      1.0
 import QGroundControl.Airmap        1.0
 import QGroundControl.FlightDisplay 1.0
 import QGroundControl.MenuTool      1.0
-
+//植保机专用
 //AnalyzePage是所有分析视图的基类 用于构建分析视图
 //植保的界面
 AnalyzePage {
@@ -30,8 +30,6 @@ AnalyzePage {
     property real   _margin:                            ScreenTools.defaultFontPixelWidth *0.5
     //按键大小
     property real   _butttonWidth:                      ScreenTools.defaultFontPixelWidth * 10
-
-    property var    _dataController:                    toolbar.dataController
 
     property var    _planController:                    flightView.planController
     Component {

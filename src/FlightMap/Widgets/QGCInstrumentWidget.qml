@@ -55,6 +55,8 @@ ColumnLayout {
             vehicle:                globals.activeVehicle
             anchors.verticalCenter: parent.verticalCenter
         }
+
+
     }
     TerrainProgress {
         Layout.fillWidth: true
