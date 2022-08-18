@@ -46,9 +46,6 @@ Rectangle {
   Column{
        anchors.fill :parent
        spacing :0
-
-
-
        //俯仰角
        Label {
            id : pitch
@@ -87,7 +84,6 @@ Rectangle {
            text: _activeVehicle ?_heading+_activeVehicle.heading.valueString+"°": _heading+qsTr("0°")
            background : Rectangle{
                color:_LabelColorG
-
            }
        }
      //飞行模式

@@ -132,6 +132,7 @@
 
 #include "QGCMapEngine.h"
 
+
 class FinishVideoInitialization : public QRunnable
 {
 public:

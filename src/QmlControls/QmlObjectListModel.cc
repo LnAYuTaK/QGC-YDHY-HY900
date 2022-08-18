@@ -19,6 +19,7 @@
 const int QmlObjectListModel::ObjectRole = Qt::UserRole;
 const int QmlObjectListModel::TextRole = Qt::UserRole + 1;
 
+//QGCµÄºËÐÄ  ModelList
 QmlObjectListModel::QmlObjectListModel(QObject* parent)
     : QAbstractListModel        (parent)
     , _dirty                    (false)

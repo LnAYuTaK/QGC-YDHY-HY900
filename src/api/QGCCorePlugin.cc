@@ -143,6 +143,7 @@ QVariantList &QGCCorePlugin::settingsPages()
                                             QUrl::fromUserInput("qrc:/qml/GeneralSettings.qml"),
                                             QUrl::fromUserInput("qrc:/res/gear-white.svg"));
         _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pGeneral)));
+        //通讯连接
         _p->pCommLinks = new QmlComponentInfo(tr("Comm Links"),
                                               QUrl::fromUserInput("qrc:/qml/LinkSettings.qml"),
                                               QUrl::fromUserInput("qrc:/res/waves.svg"));
