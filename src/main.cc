@@ -343,6 +343,7 @@ int main(int argc, char *argv[])
         { "--no-windows-assert-ui", &quietWindowsAsserts,   nullptr },
         // Add additional command line option flags here
     };
+
     ParseCmdLineOptions(argc, argv, rgCmdLineOptions, sizeof(rgCmdLineOptions)/sizeof(rgCmdLineOptions[0]), false);
     if (stressUnitTests) {
         runUnitTests = true;

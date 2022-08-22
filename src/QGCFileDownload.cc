@@ -20,8 +20,6 @@ QGCFileDownload::QGCFileDownload(QObject* parent)
 
 }
 
-
-//网络获取文件
 bool QGCFileDownload::download(const QString& remoteFile, bool redirect)
 {
     if (!redirect) {

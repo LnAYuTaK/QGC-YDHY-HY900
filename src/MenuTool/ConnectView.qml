@@ -8,7 +8,7 @@ import QGroundControl.Controls      1.0
 import QGroundControl.ScreenTools   1.0
 
 
-//加载的具体代码在后端  QGCCorePlugin.cc
+//连接设置代码  LinkSettings.qml
 Rectangle {
     id:     connectView
     color:  qgcPal.window
@@ -54,7 +54,6 @@ Rectangle {
                     text:               modelData.title
                     autoExclusive:      true
                     Layout.fillWidth:   true
-
                     onClicked: {
                         if (mainWindow.preventViewSwitch()) {
                             return

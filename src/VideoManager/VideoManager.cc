@@ -669,11 +669,7 @@ VideoManager::_updateSettings(unsigned id)
                             settingsChanged |= _updateVideoUri(id, pTinfo->uri());
                             break;
                         case VIDEO_STREAM_TYPE_RTPUDP:
-                            settingsChanged |= _updateVideoUri(
-                                            id,
-                                            pInfo->uri().contains("udp://")
-                                                ? pInfo->uri() // Specced case
-                                                : QStringLiteral("udp://0.0.0.0:%1").arg(pInfo->uri()));
+                            settingsChanged |= _updateVideoUri(id, QStringLiteral("udp://0.0.0.0:%1").arg(pTinfo->uri()));
                             break;
                         case VIDEO_STREAM_TYPE_MPEG_TS_H264:
                             settingsChanged |= _updateVideoUri(id, QStringLiteral("mpegts://0.0.0.0:%1").arg(pTinfo->uri()));

@@ -12,31 +12,21 @@ import QtQuick.Controls     1.2
 import QtQuick.Dialogs      1.2
 import QtQuick.Layouts      1.2
 
-import QGroundControl                1.0
-import QGroundControl.Palette        1.0
-import QGroundControl.Controls       1.0
-import QGroundControl.Controllers    1.0
-import QGroundControl.ScreenTools    1.0
-//import QGroundControl.NetWorkManager 1.0
-import QGroundControl.MenuTool       1.0
+import QGroundControl               1.0
+import QGroundControl.Palette       1.0
+import QGroundControl.Controls      1.0
+import QGroundControl.Controllers   1.0
+import QGroundControl.ScreenTools   1.0
 
-
-//具体实现
-//LogDownloadCotroller.cc
-//QGCFileDialogController.cc
 AnalyzePage {
     id:                 logDownloadPage
     pageComponent:      pageComponent
     pageDescription:    qsTr("Log Download allows you to download binary log files from your vehicle. Click Refresh to get list of available logs.")
 
-    property real _margin:          ScreenTools.defaultFontPixelWidth *0.5
+    property real _margin:          ScreenTools.defaultFontPixelWidth
     property real _butttonWidth:    ScreenTools.defaultFontPixelWidth * 10
 
-
     QGCPalette { id: palette; colorGroupEnabled: enabled }
-
-    LogDownloadController{id: logController }
-
 
     Component {
         id: pageComponent
@@ -67,7 +57,7 @@ AnalyzePage {
 
                 TableViewColumn {
                     title: qsTr("Id")
-                    width: ScreenTools.defaultFontPixelWidth * 4
+                    width: ScreenTools.defaultFontPixelWidth * 6
                     horizontalAlignment: Text.AlignHCenter
                     delegate : Text  {
                         horizontalAlignment: Text.AlignHCenter
@@ -80,7 +70,7 @@ AnalyzePage {
 
                 TableViewColumn {
                     title: qsTr("Date")
-                    width: ScreenTools.defaultFontPixelWidth * 10
+                    width: ScreenTools.defaultFontPixelWidth * 34
                     horizontalAlignment: Text.AlignHCenter
                     delegate: Text  {
                         text: {
@@ -102,7 +92,7 @@ AnalyzePage {
 
                 TableViewColumn {
                     title: qsTr("Size")
-                    width: ScreenTools.defaultFontPixelWidth * 8
+                    width: ScreenTools.defaultFontPixelWidth * 18
                     horizontalAlignment: Text.AlignHCenter
                     delegate : Text  {
                         horizontalAlignment: Text.AlignRight
@@ -115,7 +105,7 @@ AnalyzePage {
 
                 TableViewColumn {
                     title: qsTr("Status")
-                    width: ScreenTools.defaultFontPixelWidth * 10
+                    width: ScreenTools.defaultFontPixelWidth * 22
                     horizontalAlignment: Text.AlignHCenter
                     delegate : Text  {
                         horizontalAlignment: Text.AlignHCenter
@@ -126,9 +116,6 @@ AnalyzePage {
                     }
                 }
             }
-
-
-
             Column {
                 spacing:            _margin
                 Layout.alignment:   Qt.AlignTop | Qt.AlignLeft
@@ -170,66 +157,22 @@ AnalyzePage {
                             fileDialog.openForLoad()
                         }
                     }
-
                     QGCFileDialog {
                         id: fileDialog
                         onAcceptedForLoad: {
-                            logController.download(QGroundControl.settingsManager.appSettings.logSavePath)
+                            logController.download(file)
                             close()
                         }
                     }
                 }
-
-               QGCButton {
-                    enabled:    !logController.requestingList && !logController.downloadingLogs && logController.model.count > 0
-                    text:       qsTr("筛选")
-                    width:      _butttonWidth
-                    //筛选日期
-                    onClicked: {
-                        logController.filerData("Today")
-                    }
-                }
-               QGCButton {
-                    enabled:    !logController.requestingList && !logController.downloadingLogs && logController.model.count > 0
-                    text:       qsTr("发送日志")
-                    width:      _butttonWidth
-
-                    onClicked:{
-                        //-- Clear selection
-                        for(var i = 0; i < logController.model.count; i++) {
-                            var o = logController.model.get(i)
-                            if (o) o.selected = false
-                        }
-                        //-- Flag selected log files
-                        tableView.selection.forEach(function(rowIndex){
-                            var o = logController.model.get(rowIndex)
-                            if (o) o.selected = true
-                            console.log(o.id)
-                        })
-                        logController.sendLog();
-
-                    }
-
-                  }
                 QGCButton {
                     enabled:    !logController.requestingList && !logController.downloadingLogs && logController.model.count > 0
                     text:       qsTr("Erase All")
                     width:      _butttonWidth
-                    onClicked:  mainWindow.showComponentDialog(
-                        eraseAllMessage,
-                        qsTr("Delete All Log Files"),
-                        mainWindow.showDialogDefaultWidth,
-                        StandardButton.Yes | StandardButton.No)
-                    Component {
-                        id: eraseAllMessage
-                        QGCViewMessage {
-                            message:    qsTr("All log files will be erased permanently. Is this really what you want?")
-                            function accept() {
-                                logController.eraseAll()
-                                hideDialog()
-                            }
-                        }
-                    }
+                    onClicked:  mainWindow.showMessageDialog(qsTr("Delete All Log Files"),
+                                                             qsTr("All log files will be erased permanently. Is this really what you want?"),
+                                                             StandardButton.Yes | StandardButton.No,
+                                                             function() { logController.eraseAll() })
                 }
                 QGCButton {
                     text:       qsTr("Cancel")

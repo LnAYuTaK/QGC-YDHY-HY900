@@ -16,19 +16,24 @@ import QGroundControl               1.0
 import QGroundControl.Controls      1.0
 import QGroundControl.ScreenTools   1.0
 import QGroundControl.Palette       1.0
-
 Rectangle {
     id:                 _linkRoot
     color:              qgcPal.window
     anchors.fill:       parent
     anchors.margins:    ScreenTools.defaultFontPixelWidth
-
     property var _currentSelection:     null
     property int _firstColumnWidth:     ScreenTools.defaultFontPixelWidth * 12
     property int _secondColumnWidth:    ScreenTools.defaultFontPixelWidth * 30
     property int _rowSpacing:           ScreenTools.defaultFontPixelHeight / 2
     property int _colSpacing:           ScreenTools.defaultFontPixelWidth / 2
 
+
+//    function  filterLinkType(linklistmodel){
+//      while(linklistmodel.count){
+//          console.log(linklistmodel.get(linklistmodel.count).name)
+//          linklistmodel.count--
+//      }
+//   }
     QGCPalette {
         id:                 qgcPal
         colorGroupEnabled:  enabled
@@ -53,6 +58,20 @@ Rectangle {
         }
     }
 
+    function showLinkType(linktype){
+        switch(linktype){
+            case 0:
+                return "串口连接"
+            case 1:
+               return  "UDP连接"
+            case 2:
+               return  "TCP连接"
+            case 3:
+                return  "蓝牙"
+            default:
+                return  "其他"
+        }
+    }
      //复选table 显示每一个连接
     QGCFlickable {
         clip:               true
@@ -76,10 +95,12 @@ Rectangle {
             anchors.margins:    ScreenTools.defaultFontPixelWidth
             anchors.verticalCenter: parent.verticalCenter
             spacing:            ScreenTools.defaultFontPixelHeight/2
+            property string linktypeString:  "其他"
             Repeater {
                 model: QGroundControl.linkManager.linkConfigurations
                 delegate:
                    //2022818添加自动连接和手动连接功能
+                   //2022819添加显示连接类型
                     QGCButton {
                         anchors.horizontalCenter:   settingsColumn.horizontalCenter
                         width:                      settingsColumn.width
@@ -88,7 +109,8 @@ Rectangle {
                     Text {
                         anchors.left:parent.left
                         anchors.verticalCenter: parent.verticalCenter
-                        text:object.name
+                        text:showLinkType(object.linkType)+"  ID: "+object.name
+
                     }
                     CheckBox {
                        anchors.verticalCenter: parent.verticalCenter
@@ -116,53 +138,6 @@ Rectangle {
                 }
             }
         }
-//        Column {
-//            id:                 bluetoothSettingColumn
-//            width:              _linkRoot.width
-//            anchors.margins:    ScreenTools.defaultFontPixelWidth
-//            anchors.verticalCenter: parent.verticalCenter
-//            spacing:            ScreenTools.defaultFontPixelHeight/2
-//            Repeater {
-//                model: QGroundControl.linkManager.linkConfigurations
-//                delegate:
-//                   //2022818添加自动连接和手动连接功能
-//                    QGCButton {
-//                    anchors.horizontalCenter:   settingsColumn.horizontalCenter
-//                    width:                      settingsColumn.width
-//                    autoExclusive:              true
-//                    visible:                    !object.dynamic
-//                    Text{
-//                        anchors.left:parent.left
-//                        anchors.verticalCenter: parent.verticalCenter
-//                        text:object.name
-//                    }
-//                    CheckBox{
-
-//                          anchors.verticalCenter: parent.verticalCenter
-//                          anchors.right: _linkButton.left
-//                          text: qsTr("自动");
-//                          checked:            object.autoConnect
-//                          onCheckedChanged:   object.autoConnect = checked
-//                    }
-//                    Button{
-//                         id: _linkButton
-//                         anchors.verticalCenter: parent.verticalCenter
-//                         anchors.right : parent.right
-//                         anchors.rightMargin:  10
-//                         text: qsTr("连接");
-//                         onClicked: {
-//                             checked = true
-//                             _currentSelection = object
-//                             QGroundControl.linkManager.createConnectedLink(_currentSelection)
-//                         }
-//                    }
-//                    onClicked: {
-//                        checked = true
-//                        _currentSelection = object
-//                    }
-//                }
-//            }
-//        }
     }
     Row {
         id:                 buttonRow
@@ -193,14 +168,15 @@ Rectangle {
             }
         }
 
-        QGCButton {
-            text:       qsTr("Edit")
-            enabled:    _currentSelection && !_currentSelection.link
-            onClicked:  _linkRoot.openCommSettings(_currentSelection)
-        }
+//        QGCButton {
+//            text:       qsTr("Edit")
+//            enabled:    _currentSelection && !_currentSelection.link
+//            onClicked:  _linkRoot.openCommSettings(_currentSelection)
+//        }
 
         QGCButton {
             text:       qsTr("新建")
+
             onClicked:  _linkRoot.openCommSettings(null)
         }
 //       QGCButton {
@@ -213,11 +189,11 @@ Rectangle {
             enabled:    _currentSelection && _currentSelection.link
             onClicked:  _currentSelection.link.disconnect()
         }
-        QGCButton {
-            text:       qsTr("MockLink Options")
-            visible:    _currentSelection && _currentSelection.link && _currentSelection.link.isMockLink
-            onClicked:  mainWindow.showPopupDialogFromSource("qrc:/unittest/MockLinkOptionsDlg.qml", { link: _currentSelection.link })
-        }
+//        QGCButton {
+//            text:       qsTr("MockLink Options")
+//            visible:    _currentSelection && _currentSelection.link && _currentSelection.link.isMockLink
+//            onClicked:  mainWindow.showPopupDialogFromSource("qrc:/unittest/MockLinkOptionsDlg.qml", { link: _currentSelection.link })
+//        }
     }
     Loader {
         id:             settingsLoader
@@ -336,6 +312,7 @@ Rectangle {
                             width:      ScreenTools.defaultFontPixelWidth * 10
                             text:       qsTr("Cancel")
                             onClicked: {
+
                                 settingsLoader.sourceComponent = null
                                 QGroundControl.linkManager.cancelConfigurationEditing(settingsLoader.editingConfig)
                             }
@@ -346,3 +323,4 @@ Rectangle {
         }
     }
 }
+

@@ -17,7 +17,7 @@ import QGroundControl.Palette               1.0
 import QGroundControl.Controls              1.0
 import QGroundControl.ScreenTools           1.0
 import QGroundControl.MultiVehicleManager   1.0
-//配置屏蔽的位置在后端QGCAPPlication.cc
+
 Rectangle {
     id:     setupView
     color:  qgcPal.window
@@ -222,18 +222,18 @@ Rectangle {
                 }
             }
 
-            SubMenuButton {
-                id:                 summaryButton
-                imageResource:      "/qmlimages/VehicleSummaryIcon.png"
-                setupIndicator:     false
-                checked:            true
-                exclusiveGroup:     setupButtonGroup
-                text:               qsTr("Summary")
-                Layout.fillWidth:   true
+//            SubMenuButton {
+//                id:                 summaryButton
+//                imageResource:      "/qmlimages/VehicleSummaryIcon.png"
+//                setupIndicator:     false
+//                checked:            true
+//                exclusiveGroup:     setupButtonGroup
+//                text:               qsTr("Summary")
+//                Layout.fillWidth:   true
 
-                onClicked: showSummaryPanel()
-            }
-//2022815固件升級
+//                onClicked: showSummaryPanel()
+//            }
+
 //            SubMenuButton {
 //                id:                 firmwareButton
 //                imageResource:      "/qmlimages/FirmwareUpgradeIcon.png"
@@ -242,30 +242,32 @@ Rectangle {
 //                visible:            !ScreenTools.isMobile && _corePlugin.options.showFirmwareUpgrade
 //                text:               qsTr("Firmware")
 //                Layout.fillWidth:   true
+
 //                onClicked: showPanel(this, "FirmwareUpgrade.qml")
 //            }
 
-            SubMenuButton {
-                id:                 px4FlowButton
-                exclusiveGroup:     setupButtonGroup
-                visible:            QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle.vehicleLinkManager.primaryLinkIsPX4Flow : false
-                setupIndicator:     false
-                text:               qsTr("PX4Flow")
-                Layout.fillWidth:   true
-                onClicked:          showPanel(this, "PX4FlowSensor.qml")
-            }
+//            SubMenuButton {
+//                id:                 px4FlowButton
+//                exclusiveGroup:     setupButtonGroup
+//                visible:            QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle.vehicleLinkManager.primaryLinkIsPX4Flow : false
+//                setupIndicator:     false
+//                text:               qsTr("PX4Flow")
+//                Layout.fillWidth:   true
+//                onClicked:          showPanel(this, "PX4FlowSensor.qml")
+//            }
 
-            SubMenuButton {
-                id:                 joystickButton
-                imageResource:      "/qmlimages/Joystick.png"
-                setupIndicator:     true
-                setupComplete:      joystickManager.activeJoystick ? joystickManager.activeJoystick.calibrated : false
-                exclusiveGroup:     setupButtonGroup
-                visible:            _fullParameterVehicleAvailable && joystickManager.joysticks.length !== 0
-                text:               qsTr("Joystick")
-                Layout.fillWidth:   true
-                onClicked:          showPanel(this, "JoystickConfig.qml")
-            }
+//            SubMenuButton {
+//                id:                 joystickButton
+//                imageResource:      "/qmlimages/Joystick.png"
+//                setupIndicator:     true
+//                setupComplete:      joystickManager.activeJoystick ? joystickManager.activeJoystick.calibrated : false
+//                exclusiveGroup:     setupButtonGroup
+//                visible:            _fullParameterVehicleAvailable && joystickManager.joysticks.length !== 0
+//                text:               qsTr("Joystick")
+//                Layout.fillWidth:   true
+//                onClicked:          showPanel(this, "JoystickConfig.qml")
+//            }
+
             Repeater {
                 id:     componentRepeater
                 model:  _fullParameterVehicleAvailable ? QGroundControl.multiVehicleManager.activeVehicle.autopilot.vehicleComponents : 0
@@ -309,7 +311,7 @@ Rectangle {
     }
 
     Loader {
-        id:                      panelLoader
+        id:                     panelLoader
         anchors.topMargin:      _verticalMargin
         anchors.bottomMargin:   _verticalMargin
         anchors.leftMargin:     _horizontalMargin

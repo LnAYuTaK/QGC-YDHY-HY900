@@ -31,10 +31,23 @@ SetupPage {
                 implicitWidth:              _leftColumnWidth
 
                 // mixer ui
-                QGCLabel {
-                    text:                   qsTr("Geometry")
-                    font.pointSize:         ScreenTools.mediumFontPointSize
-                    visible:                actuators.mixer.groups.count > 0
+                RowLayout {
+                    width:                      _leftColumnWidth
+                    visible:                    actuators.mixer.groups.count > 0
+                    QGCLabel {
+                        text:                   qsTr("Geometry") + (actuators.mixer.title ? ": " + actuators.mixer.title : "")
+                        font.pointSize:         ScreenTools.mediumFontPointSize
+                        Layout.fillWidth:       true
+                    }
+                    QGCLabel {
+                        text:                   "<a href='"+actuators.mixer.helpUrl+"'>?</a>"
+                        font.pointSize:         ScreenTools.mediumFontPointSize
+                        visible:                actuators.mixer.helpUrl
+                        textFormat:             Text.RichText
+                        onLinkActivated: {
+                            Qt.openUrlExternally(link);
+                        }
+                    }
                 }
 
                 Rectangle {
@@ -286,7 +299,7 @@ SetupPage {
                                                 model:              actionGroup.actions
                                                 QGCMenuItem {
                                                     text:           object.label
-                                                    onTriggered:	object.trigger()
+                                                    onTriggered:    object.trigger()
                                                 }
                                                 onObjectAdded:      actionMenu.insertItem(index, object)
                                                 onObjectRemoved:    actionMenu.removeItem(object)
@@ -354,6 +367,7 @@ SetupPage {
                             QGCButton {
                                 text:          qsTr("Identify & Assign Motors")
                                 visible:       !actuators.motorAssignmentActive && selActuatorOutput.actuatorOutput.groupsVisible
+                                enabled:       actuators.motorAssignmentEnabled
                                 onClicked: {
                                     var success = actuators.initMotorAssignment()
                                     if (success) {

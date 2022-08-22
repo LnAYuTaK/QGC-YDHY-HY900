@@ -141,7 +141,7 @@ void MultiVehicleManager::_vehicleHeartbeatInfo(LinkInterface* link, int vehicle
     _sendGCSHeartbeat();
 
     qgcApp()->toolbox()->settingsManager()->appSettings()->defaultFirmwareType()->setRawValue(vehicleFirmwareType);
-    //202282
+
     emit vehicleAdded(vehicle);
 
     if (_vehicles.count() > 1) {
@@ -274,6 +274,7 @@ void MultiVehicleManager::setActiveVehicle(Vehicle* vehicle)
             emit activeVehicleAvailableChanged(false);
             emit parameterReadyVehicleAvailableChanged(false);
         }
+
         // See explanation in _deleteVehiclePhase1
         _vehicleBeingSetActive = vehicle;
         QTimer::singleShot(20, this, &MultiVehicleManager::_setActiveVehiclePhase2);

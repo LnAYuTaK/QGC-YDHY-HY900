@@ -19,7 +19,6 @@ import QGroundControl.MultiVehicleManager   1.0
 import QGroundControl.ScreenTools           1.0
 import QGroundControl.Controllers           1.0
 
-//上方工具栏
 Rectangle {
     id:     _root
     color:  qgcPal.toolbarBackground
@@ -30,13 +29,10 @@ Rectangle {
     readonly property int planViewToolbar:  1
     readonly property int simpleToolbar:    2
 
-// 在MainRootWindow中被调用
-
-
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
     property bool   _communicationLost: _activeVehicle ? _activeVehicle.vehicleLinkManager.communicationLost : false
     property color  _mainStatusBGColor: qgcPal.brandingPurple
-    //调色板
+
     QGCPalette { id: qgcPal }
 
     /// Bottom single pixel divider
@@ -71,22 +67,26 @@ Rectangle {
         QGCToolBarButton {
             id:                     currentButton
             Layout.preferredHeight: viewButtonRow.height
-            icon.source:           "/res/resources/WindowsYDHY.svg"
+            //修改公司图标
+            icon.source:            "/res/QGCLogoFull"
             logo:                   true
-            onClicked:        mainWindow.showRightToolStrip()
+            //2022 8.22
+            onClicked:              mainWindow.showMenuToolStrip()
         }
 
         MainStatusIndicator {
             Layout.preferredHeight: viewButtonRow.height
             visible:                currentToolbar === flyViewToolbar
         }
+
         QGCButton {
             id:                 disconnectButton
-            text:               qsTr("connected")
+            text:               qsTr("Disconnect")
             onClicked:          _activeVehicle.closeVehicle()
             visible:            _activeVehicle && _communicationLost && currentToolbar === flyViewToolbar
         }
     }
+
     QGCFlickable {
         id:                     toolsFlickable
         anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5
@@ -108,9 +108,9 @@ Rectangle {
                                     (currentToolbar == planViewToolbar ? "qrc:/qml/PlanToolBarIndicators.qml" : "")
         }
     }
+
     //-------------------------------------------------------------------------
-//-- Branding Logo
-//显示固件厂家图标
+    //-- Branding Logo
 //    Image {
 //        anchors.right:          parent.right
 //        anchors.top:            parent.top

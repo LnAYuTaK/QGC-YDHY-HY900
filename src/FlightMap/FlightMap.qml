@@ -66,12 +66,13 @@ Map {
     }
 
     function centerToSpecifiedLocation() {
-        mainWindow.showComponentDialog(specifyMapPositionDialog, qsTr("Specify Position"), mainWindow.showDialogDefaultWidth, StandardButton.Close)
+        specifyMapPositionDialog.createObject(mainWindow).open()
     }
 
     Component {
         id: specifyMapPositionDialog
         EditPositionDialog {
+            title:                  qsTr("Specify Position")
             coordinate:             center
             onCoordinateChanged:    center = coordinate
         }
@@ -102,9 +103,11 @@ Map {
 
     on_ActiveVehicleCoordinateChanged: _possiblyCenterToVehiclePosition()
 
-    Component.onCompleted: {
-        updateActiveMapType()
-        _possiblyCenterToVehiclePosition()
+    onMapReadyChanged: {
+        if (_map.mapReady) {
+            updateActiveMapType()
+            _possiblyCenterToVehiclePosition()
+        }
     }
 
     Connections {
@@ -126,7 +129,7 @@ Map {
 
         sourceItem: Image {
             id:             mapItemImage
-            source:         isNaN(gcsHeading) ? "/res/resources/WindowsYDHY.svg": "/res/QGCLogoArrow"
+            source:         isNaN(gcsHeading) ? "/res/QGCLogoFull" : "/res/QGCLogoArrow"
             mipmap:         true
             antialiasing:   true
             fillMode:       Image.PreserveAspectFit

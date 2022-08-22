@@ -1,8 +1,8 @@
 Module QGroundControl.MenuTool
-RightMenuToolStrip     1.0     RightMenuToolStrip.qml
-RightMenuToolStripList 1.0     RightMenuToolStripList.qml
+MenuToolStrip     1.0     MenuToolStrip.qml
+MenuToolStripList 1.0     MenuToolStripList.qml
 UserMsgInfoView        1.0     UserMsgInfoView.qml
 FlightMsgPage          1.0     FlightMsgPage.qml
-DataTableView          1.0     DataTableView.qml
 ParameterView          1.0     ParameterView.qml
 ConnectView            1.0     ConnectView.qml
+VersionView            1.0     VersionView.qml

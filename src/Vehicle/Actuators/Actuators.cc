@@ -103,6 +103,9 @@ void Actuators::updateGeometryImage()
 
     _imageRefreshFlag = !_imageRefreshFlag;
     emit imageRefreshFlagChanged();
+
+    _motorAssignmentEnabled = provider->numMotors() > 0;
+    emit motorAssignmentEnabledChanged();
 }
 
 bool Actuators::isMultirotor() const
@@ -236,7 +239,7 @@ void Actuators::parametersChanged()
     _actuatorTest.updateFunctions(actuators);
 
     // check if there are required functions, but not set on any output
-    QSet<int> requiredFunctions = _mixer.requiredFunctions();
+    QSet<int> requiredFunctions = _mixer.getFunctions(true);
     _hasUnsetRequiredFunctions = false;
     for (int requiredFunction : requiredFunctions) {
         if (uniqueConfiguredFunctions.find(requiredFunction) == uniqueConfiguredFunctions.end()) {
@@ -245,9 +248,90 @@ void Actuators::parametersChanged()
     }
     emit hasUnsetRequiredFunctionsChanged();
 
+    updateFunctionMetadata();
+
     updateActuatorActions();
 
     updateGeometryImage();
+}
+
+void Actuators::updateFunctionMetadata()
+{
+    // Update the function parameter metadata:
+    // - remove the mixer functions that are unused with the current configration (e.g. if 4 motors -> remove motors 5-N)
+    // - use the specific labels
+    QSet<int> usedMixerFunctions = _mixer.getFunctions(false);
+
+    QMap<int, QString> usedMixerLabels;
+    for (int usedMixerFunction : usedMixerFunctions) {
+        usedMixerLabels[usedMixerFunction] = _mixer.getSpecificLabelForFunction(usedMixerFunction);
+    }
+
+    if (_usedMixerLabels == usedMixerLabels) {
+        // no update required
+        return;
+    }
+    _usedMixerLabels = usedMixerLabels;
+
+    // Get the unused mixer functions
+    QSet<int> removedMixerFunctions;
+    for(Mixer::ActuatorTypes::const_iterator iter = _mixer.actuatorTypes().constBegin();
+            iter != _mixer.actuatorTypes().constEnd(); ++iter) {
+        if (iter.key() == "DEFAULT")
+            continue;
+
+        for (int i = iter.value().functionMin; i <= iter.value().functionMax; ++i) {
+            if (!usedMixerFunctions.contains(i)) {
+                removedMixerFunctions.insert(i);
+            }
+        }
+    }
+
+    // Now update all function facts (we need to treat them individually, as some might have extra functions)
+    for (int groupIdx = 0; groupIdx < _actuatorOutputs->count(); groupIdx++) {
+        ActuatorOutput* group = qobject_cast<ActuatorOutput*>(_actuatorOutputs->get(groupIdx));
+
+        group->forEachOutputFunction([&](ActuatorOutputSubgroup* subgroup, ChannelConfigInstance*, Fact* fact) {
+            QStringList enumStrings = fact->enumStrings();
+            if (!enumStrings.empty()) {
+                QVariantList enumValues = fact->enumValues();
+
+                // Replace or add
+                for (int usedMixerFunction : usedMixerFunctions) {
+                    QString label = usedMixerLabels[usedMixerFunction];
+                    int index = enumValues.indexOf(usedMixerFunction);
+                    if (index == -1) {
+                        // Insert at the right place
+                        bool inserted = false;
+                        for (index = 0; index < enumValues.count() && !inserted; ++index) {
+                            if (enumValues[index].toInt() > usedMixerFunction) {
+                                enumValues.insert(index, usedMixerFunction);
+                                enumStrings.insert(index, label);
+                                inserted = true;
+                            }
+                        }
+                        if (!inserted) {
+                            enumValues.append(usedMixerFunction);
+                            enumStrings.append(label);
+                        }
+                    } else {
+                        enumStrings[index] = label;
+                    }
+                }
+
+                // Remove
+                for (int removedMixerFunction : removedMixerFunctions) {
+                    int index = enumValues.indexOf(removedMixerFunction);
+                    if (index != -1) {
+                        enumValues.removeAt(index);
+                        enumStrings.removeAt(index);
+                    }
+                }
+
+                fact->setEnumInfo(enumStrings, enumValues);
+            }
+        });
+    }
 }
 
 void Actuators::updateActuatorActions()
@@ -510,6 +594,8 @@ bool Actuators::parseJson(const QJsonDocument &json)
         Mixer::MixerOption option{};
         option.option = mixerConfig["option"].toString();
         option.type = mixerConfig["type"].toString();
+        option.title = mixerConfig["title"].toString();
+        option.helpUrl = mixerConfig["help-url"].toString();
         QJsonArray actuatorsJson = mixerConfig["actuators"].toArray();
         for (const auto& actuatorJson : actuatorsJson) {
             QJsonValue actuatorJsonVal = actuatorJson.toObject();
@@ -674,13 +760,7 @@ bool Actuators::showUi() const
 bool Actuators::initMotorAssignment()
 {
     GeometryImage::VehicleGeometryImageProvider* provider = GeometryImage::VehicleGeometryImageProvider::instance();
-    int numMotors = 0;
-    QList<ActuatorGeometry>& actuators = provider->actuators();
-    for (const auto& actuator : actuators) {
-        if (actuator.type == ActuatorGeometry::Type::Motor) {
-            ++numMotors;
-        }
-    }
+    int numMotors = provider->numMotors();
 
     // get the minimum function for motors
     bool ret = false;

@@ -271,6 +271,8 @@ public:
     Q_PROPERTY(bool     roiModeSupported        READ roiModeSupported                               CONSTANT)                   ///< Orbit mode is supported by this vehicle
     Q_PROPERTY(bool     takeoffVehicleSupported READ takeoffVehicleSupported                        CONSTANT)                   ///< Guided takeoff supported
     Q_PROPERTY(QString  gotoFlightMode          READ gotoFlightMode                                 CONSTANT)                   ///< Flight mode vehicle is in while performing goto
+    Q_PROPERTY(bool     haveMRSpeedLimits       READ haveMRSpeedLimits                              NOTIFY haveMRSpeedLimChanged)
+    Q_PROPERTY(bool     haveFWSpeedLimits       READ haveFWSpeedLimits                              NOTIFY haveFWSpeedLimChanged)
 
     Q_PROPERTY(ParameterManager*        parameterManager    READ parameterManager   CONSTANT)
     Q_PROPERTY(VehicleLinkManager*      vehicleLinkManager  READ vehicleLinkManager CONSTANT)
@@ -317,10 +319,8 @@ public:
     Q_PROPERTY(FactGroup*           localPosition   READ localPositionFactGroup     CONSTANT)
     Q_PROPERTY(FactGroup*           localPositionSetpoint READ localPositionSetpointFactGroup CONSTANT)
     Q_PROPERTY(FactGroup*           hygrometer      READ hygrometerFactGroup        CONSTANT)
-    //这个接口可以获取到
     Q_PROPERTY(QmlObjectListModel*  batteries       READ batteries                  CONSTANT)
     Q_PROPERTY(Actuators*           actuators       READ actuators                  CONSTANT)
-
 
     Q_PROPERTY(int      firmwareMajorVersion        READ firmwareMajorVersion       NOTIFY firmwareVersionChanged)
     Q_PROPERTY(int      firmwareMinorVersion        READ firmwareMinorVersion       NOTIFY firmwareVersionChanged)
@@ -354,6 +354,15 @@ public:
     /// @return The minimum takeoff altitude (relative) for guided takeoff.
     Q_INVOKABLE double minimumTakeoffAltitude();
 
+    /// @return Maximum horizontal speed multirotor.
+    Q_INVOKABLE double maximumHorizontalSpeedMultirotor();
+
+    /// @return Maximum equivalent airspeed.
+    Q_INVOKABLE double maximumEquivalentAirspeed();
+
+    /// @return Minumum equivalent airspeed.
+    Q_INVOKABLE double minimumEquivalentAirspeed();
+
     /// Command vehicle to move to specified location (altitude is included and relative)
     Q_INVOKABLE void guidedModeGotoLocation(const QGeoCoordinate& gotoCoord);
 
@@ -361,6 +370,13 @@ public:
     ///     @param altitudeChange If > 0, go up by amount specified, if < 0, go down by amount specified
     ///     @param pauseVehicle true: pause vehicle prior to altitude change
     Q_INVOKABLE void guidedModeChangeAltitude(double altitudeChange, bool pauseVehicle);
+
+    /// Command vehicle to change groundspeed
+    ///     @param groundspeed Target horizontal groundspeed
+    Q_INVOKABLE void guidedModeChangeGroundSpeed   (double groundspeed);
+    /// Command vehicle to change equivalent airspeed
+    ///     @param airspeed Target equivalent airspeed
+    Q_INVOKABLE void guidedModeChangeEquivalentAirspeed   (double airspeed);
 
     /// Command vehicle to orbit given center point
     ///     @param centerCoord Orit around this point
@@ -446,6 +462,9 @@ public:
     bool    roiModeSupported        () const;
     bool    takeoffVehicleSupported () const;
     QString gotoFlightMode          () const;
+
+    bool haveMRSpeedLimits() const { return _multirotor_speed_limits_available; }
+    bool haveFWSpeedLimits() const { return _fixed_wing_airspeed_limits_available; }
 
     // Property accessors
 
@@ -677,10 +696,6 @@ public:
     VehicleObjectAvoidance*         objectAvoidance     () { return _objectAvoidance; }
     Autotune*                       autotune            () const { return _autotune; }
 
-
-    //202281 添加一个获取VehicleID的方法
-    int  vehcileId(int vehicleId);
-
     static const int cMaxRcChannels = 18;
 
     /// Sends the specified MAV_CMD to the vehicle. If no Ack is received command will be retried. If a sendMavCommand is already in progress
@@ -902,6 +917,8 @@ signals:
     void readyToFlyChanged              (bool readyToFy);
     void allSensorsHealthyChanged       (bool allSensorsHealthy);
     void requiresGpsFixChanged          ();
+    void haveMRSpeedLimChanged          ();
+    void haveFWSpeedLimChanged          ();
 
     void firmwareVersionChanged         ();
     void firmwareCustomVersionChanged   ();
@@ -946,41 +963,9 @@ signals:
     void gimbalDataChanged              ();
     void isROIEnabledChanged            ();
     void initialConnectComplete         ();
+
     void sensorsParametersResetAck      (bool success);
 
-//以下是Vehicle 可以获取的
-// 2022730
-//无人机起飞信号
-    void vehicleTakeOff();
-//无人机降落更新架次
-    void vehicleLand();
-//无人机起飞时间  *每一个架次起飞时间相同
-    void vehicleFlightTime(QString time);
-//无人机喷头喷头状态是否打开
-    void vehicleSprayState(bool isOpen);
-//无人机ID
-    void vehicleid(int id);
-//无人机流速获取之后分为 小数整数 暂时未使用
-    void vehicleFlowRate(uint8_t flowRate);
-//无人机作业面积(注意要累加)
-    void vehicleWorkArea(double workArea);
-//无人机经度
-    void vehicleLongitude(double lot);
-//无人机维度
-    void vehicleLatitude(double lat);
-//无人机高度飞行高度
-    void vehicleFlighTaltiTude(double flightTaltiTude);
-//无人机飞行速度(地速)
-    void vehicleGroundFlightSpeed(double groundSpeed);
-//202281
-//无人机数据发送时刻()//
-    void vehicleDataSendTime();
-//无人机液位计状态
-    void vehicleLevelGaugeStatus(bool gaugetype);
-//无人机飞行状态
-    void vehicleFlightMode(QString flightmodetype);
-//无人机的信息
-    void vehicleMsgText(QString msgtext);
 private slots:
     void _mavlinkMessageReceived            (LinkInterface* link, mavlink_message_t message);
     void _sendMessageMultipleNext           ();
@@ -1003,6 +988,7 @@ private slots:
     void _updateMissionItemIndex            ();
     void _updateHeadingToNextWP             ();
     void _updateDistanceToGCS               ();
+    void _updateHomepoint                   ();
     void _updateHobbsMeter                  ();
     void _vehicleParamLoaded                (bool ready);
     void _sendQGCTimeToVehicle              ();
@@ -1042,11 +1028,6 @@ private:
     void _handleObstacleDistance        (const mavlink_message_t& message);
     void _handleEvent(uint8_t comp_id, std::unique_ptr<events::parser::ParsedEvent> event);
     // ArduPilot dialect messages
-//2022730
-#if !defined(NO_FLOWRATE_CONTROL)
-    void _handleFlowRatemeter           (mavlink_message_t& message);
-#endif
-
 #if !defined(NO_ARDUPILOT_DIALECT)
     void _handleCameraFeedback          (const mavlink_message_t& message);
 #endif
@@ -1321,6 +1302,10 @@ private:
 
     float _altitudeTuningOffset = qQNaN(); // altitude offset, so the plotted value is around 0
 
+    // these flags are used to determine if the speed change action from fly view should be shown
+    bool _multirotor_speed_limits_available = false;
+    bool _fixed_wing_airspeed_limits_available = false;
+
     // FactGroup facts
 
     Fact _rollFact;
@@ -1363,6 +1348,7 @@ private:
     VehicleHygrometerFactGroup      _hygrometerFactGroup;
     TerrainFactGroup                _terrainFactGroup;
     QmlObjectListModel              _batteryFactGroupListModel;
+
     TerrainProtocolHandler* _terrainProtocolHandler = nullptr;
 
     MissionManager*                 _missionManager             = nullptr;
@@ -1413,7 +1399,7 @@ private:
     static const char* _estimatorStatusFactGroupName;
     static const char* _hygrometerFactGroupName;
     static const char* _terrainFactGroupName;
-    //更新UI速度
+
     static const int _vehicleUIUpdateRateMSecs      = 100;
 
     // Settings keys

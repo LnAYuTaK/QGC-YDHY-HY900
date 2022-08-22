@@ -28,6 +28,7 @@ import QGroundControl.FlightMap     1.0
 import QGroundControl.Palette       1.0
 import QGroundControl.ScreenTools   1.0
 import QGroundControl.Vehicle       1.0
+import QGroundControl.MenuTool      1.0
 
 Item {
     id: _root
@@ -51,7 +52,7 @@ Item {
     property real   _margins:               ScreenTools.defaultFontPixelWidth / 2
     property var    _guidedController:      guidedActionsController
     property var    _guidedActionList:      guidedActionList
-    property var    _guidedAltSlider:       guidedAltSlider
+    property var    _guidedValueSlider:       guidedValueSlider
     property real   _toolsMargin:           ScreenTools.defaultFontPixelWidth * 0.75
     property rect   _centerViewport:        Qt.rect(0, 0, width, height)
     property real   _rightPanelWidth:       ScreenTools.defaultFontPixelWidth * 30
@@ -74,12 +75,14 @@ Item {
         bottomEdgeLeftInset:    _pipOverlay.visible ? parent.height - _pipOverlay.y : 0
     }
 
+    //
     FlyViewWidgetLayer {
         id:                     widgetLayer
         anchors.top:            parent.top
-        anchors.bottom:         parent.bottom
+        anchors.bottom:         _pipOverlay.top
         anchors.left:           parent.left
-        anchors.right:          guidedAltSlider.visible ? guidedAltSlider.left : parent.right
+        anchors.right:          guidedValueSlider.visible ? guidedValueSlider.left : parent.right
+        anchors.margins:        _toolsMargin
         z:                      _fullItemZorder + 1
         parentToolInsets:       _toolInsets
         mapControl:             _mapControl
@@ -95,23 +98,22 @@ Item {
         visible:            !QGroundControl.videoManager.fullScreen
     }
 
-
     GuidedActionsController {
         id:                 guidedActionsController
         missionController:  _missionController
         actionList:         _guidedActionList
-        altitudeSlider:     _guidedAltSlider
+        guidedValueSlider:     _guidedValueSlider
     }
 
-    /*GuidedActionConfirm {
+    GuidedActionConfirm {
         id:                         guidedActionConfirm
         anchors.margins:            _margins
         anchors.bottom:             parent.bottom
         anchors.horizontalCenter:   parent.horizontalCenter
         z:                          QGroundControl.zOrderTopMost
         guidedController:           _guidedController
-        altitudeSlider:             _guidedAltSlider
-    }*/
+        guidedValueSlider:             _guidedValueSlider
+    }
 
     GuidedActionList {
         id:                         guidedActionList
@@ -122,9 +124,9 @@ Item {
         guidedController:           _guidedController
     }
 
-    //-- Altitude slider
-    GuidedAltitudeSlider {
-        id:                 guidedAltSlider
+    //-- Guided value slider (e.g. altitude)
+    GuidedValueSlider {
+        id:                 guidedValueSlider
         anchors.margins:    _toolsMargin
         anchors.right:      parent.right
         anchors.top:        parent.top
@@ -134,8 +136,8 @@ Item {
         width:              ScreenTools.defaultFontPixelWidth * 10
         color:              qgcPal.window
         visible:            false
-  }
-//地图
+    }
+
     FlyViewMap {
         id:                     mapControl
         planMasterController:   _planController
@@ -149,11 +151,12 @@ Item {
         id: videoControl
     }
 
+
     QGCPipOverlay {
         id:                     _pipOverlay
-        anchors.left:           parent.left
+        anchors.left:          parent.left
         anchors.bottom:         parent.bottom
-        anchors.margins:        _toolsMargin
+//        anchors.margins:        _toolsMargin
         item1IsFullSettingsKey: "MainFlyWindowIsMap"
         item1:                  mapControl
         item2:                  QGroundControl.videoManager.hasVideo ? videoControl : null

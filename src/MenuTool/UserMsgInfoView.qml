@@ -85,7 +85,7 @@ Rectangle {
 
       Connections {
           target: panelLoader.item
-          //信 popout()
+          // popout()
           onPopout: {
               console.log("CreateObject")
               var windowedPage = windowedUserMsgInfoPage.createObject(mainWindow)

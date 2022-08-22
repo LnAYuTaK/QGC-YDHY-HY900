@@ -9,6 +9,15 @@
 
 QMAKE_PROJECT_DEPTH = 0 # undocumented qmake flag to force absolute paths in makefiles
 
+#大载重无人机宏定义
+DEFINES += HY_900
+
+
+
+
+
+
+
 # These are disabled until proven correct
 DEFINES += QGC_GST_TAISYNC_DISABLED
 DEFINES += QGC_GST_MICROHARD_DISABLED
@@ -45,7 +54,10 @@ MacBuild {
 }
 
 LinuxBuild {
-    CONFIG  += qesp_linux_udev
+    CONFIG += qesp_linux_udev
+    system("$$QMAKE_LINK -fuse-ld=gold -Wl,--version &>/dev/null") {
+        CONFIG += use_gold_linker
+    }
 }
 
 WindowsBuild {
@@ -428,14 +440,8 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
 #
 
 HEADERS += \
-    src/DataHandle/DataController.h \
-    src/MenuTool/InstrumentDisplayListModel.h \
-    src/NetWorkLayer/NetWorkManager.h \
-    src/NetWorkLayer/ParaEditor.h \
     src/QmlControls/QmlUnitsConversion.h \
-    src/Settings/HySettings.h \
     src/Vehicle/VehicleEscStatusFactGroup.h \
-#    src/Vehicle/VehicleFlowratemeterFactGroup.h \
     src/api/QGCCorePlugin.h \
     src/api/QGCOptions.h \
     src/api/QGCSettings.h \
@@ -448,13 +454,7 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
 }
 
 SOURCES += \
-    src/DataHandle/DataController.cpp \
-    src/MenuTool/InstrumentDisplayListModel.cpp \
-    src/NetWorkLayer/NetWorkManager.cpp \
-    src/NetWorkLayer/ParaEditor.cpp \
-    src/Settings/HySettings.cpp \
     src/Vehicle/VehicleEscStatusFactGroup.cc \
-#    src/Vehicle/VehicleFlowratemeterFactGroup.cpp \
     src/api/QGCCorePlugin.cc \
     src/api/QGCOptions.cc \
     src/api/QGCSettings.cc \
@@ -795,6 +795,10 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
         HEADERS += \
             src/PairingManager/QtNFC.h
     }
+}
+
+contains(DEFINES, NO_SERIAL_LINK) {
+    CONFIG += NoSerialBuild
 }
 
 !NoSerialBuild {
@@ -1206,7 +1210,6 @@ PX4FirmwarePlugin {
         src/AutoPilotPlugins/PX4/AirframeComponentController.h \
         src/AutoPilotPlugins/PX4/CameraComponent.h \
         src/AutoPilotPlugins/PX4/FlightModesComponent.h \
-        src/AutoPilotPlugins/PX4/PX4AdvancedFlightModesController.h \
         src/AutoPilotPlugins/PX4/PX4AirframeLoader.h \
         src/AutoPilotPlugins/PX4/PX4AutoPilotPlugin.h \
         src/AutoPilotPlugins/PX4/PX4FlightBehavior.h \
@@ -1228,7 +1231,6 @@ PX4FirmwarePlugin {
         src/AutoPilotPlugins/PX4/AirframeComponentController.cc \
         src/AutoPilotPlugins/PX4/CameraComponent.cc \
         src/AutoPilotPlugins/PX4/FlightModesComponent.cc \
-        src/AutoPilotPlugins/PX4/PX4AdvancedFlightModesController.cc \
         src/AutoPilotPlugins/PX4/PX4AirframeLoader.cc \
         src/AutoPilotPlugins/PX4/PX4AutoPilotPlugin.cc \
         src/AutoPilotPlugins/PX4/PX4FlightBehavior.cc \
@@ -1557,4 +1559,3 @@ LinuxBuild {
 
     INSTALLS += target share_qgroundcontrol share_icons share_metainfo share_applications
 }
-android: include(C:/Users/Administrator/AppData/Local/Android/android-sdk/android_openssl/openssl.pri)

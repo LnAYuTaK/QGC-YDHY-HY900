@@ -18,14 +18,12 @@
 #include "ParameterManager.h"
 #include "Vehicle.h"
 #include "SettingsManager.h"
-#include "NetWorkLayer/NetWorkManager.h"
 
 #include <QDebug>
 #include <QSettings>
 #include <QUrl>
 #include <QBitArray>
 #include <QtCore/qmath.h>
-#include <QTime>
 
 #define kTimeOutMilliseconds 500
 #define kGUIRateMilliseconds 17
@@ -117,12 +115,7 @@ LogDownloadController::LogDownloadController(void)
     MultiVehicleManager *manager = qgcApp()->toolbox()->multiVehicleManager();
     connect(manager, &MultiVehicleManager::activeVehicleChanged, this, &LogDownloadController::_setActiveVehicle);
     connect(&_timer, &QTimer::timeout, this, &LogDownloadController::_processDownload);
-
-    //202285
     _setActiveVehicle(manager->activeVehicle());
-//    _netWorkManager = qgcApp()->toolbox()->netWorkManager();
-//    //202288  下载完成后将日志任务放到队列
-//    connect(this,&LogDownloadController::downloadcomplete,_netWorkManager,&NetWorkManager::createLogTask);
 }
 
 //----------------------------------------------------------------------------------------
@@ -135,6 +128,7 @@ LogDownloadController::_processDownload()
         _findMissingData();
     }
 }
+
 //----------------------------------------------------------------------------------------
 void
 LogDownloadController::_setActiveVehicle(Vehicle* vehicle)
@@ -181,7 +175,7 @@ LogDownloadController::_logEntry(UASInterface* uas, uint32_t time_utc, uint32_t 
             if(id < _logEntriesModel.count()) {
                 QGCLogEntry* entry = _logEntriesModel[id];
                 entry->setSize(size);
-                entry->setTime(QDateTime::fromTime_t(time_utc));
+                entry->setTime(QDateTime::fromSecsSinceEpoch(time_utc));
                 entry->setReceived(true);
                 entry->setStatus(tr("Available"));
             } else {
@@ -298,7 +292,7 @@ LogDownloadController::_findMissingEntries()
         _receivedAllEntries();
     }
 }
-//----------------------------------------------------------------------------------------
+
 void LogDownloadController::_updateDataRate(void)
 {
     if (_downloadData->elapsed.elapsed() >= kGUIRateMilliseconds) {
@@ -315,6 +309,7 @@ void LogDownloadController::_updateDataRate(void)
         _downloadData->elapsed.start();
     }
 }
+
 
 //----------------------------------------------------------------------------------------
 void
@@ -407,7 +402,6 @@ LogDownloadController::_logComplete() const
 }
 
 //----------------------------------------------------------------------------------------
-//下载数据
 void
 LogDownloadController::_receivedAllData()
 {
@@ -417,15 +411,10 @@ LogDownloadController::_receivedAllData()
         //-- Request Log
         _requestLogData(_downloadData->ID, 0, _downloadData->chunk_table.size()*MAVLINK_MSG_LOG_DATA_FIELD_DATA_LEN);
         _timer.start(kTimeOutMilliseconds);
-        //下载完成//
-        //QFileInfo fileInfo = QFileInfo(_downloadData->file);
-        //emit downloadcomplete(fileInfo.absoluteFilePath(),_downloadData->entry);
-
     } else {
         _resetSelection();
         _setDownloading(false);
     }
-
 }
 
 //----------------------------------------------------------------------------------------
@@ -506,6 +495,7 @@ LogDownloadController::refresh(void)
     //-- Get first 50 entries
     _requestLogList(0, 49);
 }
+
 //----------------------------------------------------------------------------------------
 void
 LogDownloadController::_requestLogList(uint32_t start, uint32_t end)
@@ -572,27 +562,9 @@ void LogDownloadController::downloadToDirectory(const QString& dir)
         _receivedAllData();
     }
 }
-//202288
-//----------------------------------------------------------------------------------------
-
-//----------------------------------------------------------------------------------------
-void
-LogDownloadController::filerData(QString filerDataType)
-{
-    _logEntriesModel.remove(filerDataType);
-    emit modelChanged         ();
-}
-//----------------------------------------------------------------------------------------
-void
-LogDownloadController::sendLog()
-{
-//    if(_netWorkManager!=nullptr){
-//        _netWorkManager->runTask();
-//    }
-}
-//----------------------------------------------------------------------------------------
 
 
+//----------------------------------------------------------------------------------------
 QGCLogEntry*
 LogDownloadController::_getNextSelected()
 {
@@ -777,32 +749,6 @@ QGCLogModel::append(QGCLogEntry* object)
 }
 
 //-----------------------------------------------------------------------------
-//202285
-void
-QGCLogModel::remove(QString filertype)
-{
-  int dayCompare=0;
-  if (filertype=="Today"){
-      dayCompare = 0;
-  }
-  else if (filertype== "FiveDay"){
-      dayCompare = 5;
-  }
-  QDateTime now = QDateTime::currentDateTime();
-  if(!_logEntries.isEmpty()) {
-       for (int i = 0; i < _logEntries.count(); ++i){
-          QGCLogEntry *node = (QGCLogEntry*)_logEntries.at(i);
-          if (node->time().daysTo(now)>dayCompare){
-              qDebug()<<  node->time() << i;
-               _logEntries.removeAt(i);
-               //链表减少 总的计数也要减少！
-               i--;
-          }
-       }
-  }
-  emit countChanged();
-}
-//-----------------------------------------------------------------------------
 void
 QGCLogModel::clear(void)
 {
@@ -817,6 +763,7 @@ QGCLogModel::clear(void)
         emit countChanged();
     }
 }
+
 //-----------------------------------------------------------------------------
 QGCLogEntry*
 QGCLogModel::operator[](int index)

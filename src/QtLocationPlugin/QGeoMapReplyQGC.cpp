@@ -240,13 +240,11 @@ QGeoTiledMapReplyQGC::cacheReply(QGCCacheTile* tile)
 }
 
 //-----------------------------------------------------------------------------
-//这里有小bug 可能因为地图导致崩溃
 void
 QGeoTiledMapReplyQGC::timeout()
 {
-
     if(_reply) {
-//       _reply->abort();
+        _reply->abort();
     }
     emit aborted();
 }

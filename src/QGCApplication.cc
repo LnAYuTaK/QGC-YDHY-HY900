@@ -132,7 +132,6 @@
 
 #include "QGCMapEngine.h"
 
-
 class FinishVideoInitialization : public QRunnable
 {
 public:
@@ -450,7 +449,7 @@ void QGCApplication::_initCommon()
     QSettings settings;
 
     // Register our Qml objects
-//注册到qml实例化
+
     qmlRegisterType<QGCPalette>     ("QGroundControl.Palette", 1, 0, "QGCPalette");
     qmlRegisterType<QGCMapPalette>  ("QGroundControl.Palette", 1, 0, "QGCMapPalette");
 
@@ -476,7 +475,6 @@ void QGCApplication::_initCommon()
     qmlRegisterUncreatableType<MissionCommandTree>  (kQGroundControl,                       1, 0, "MissionCommandTree",         kRefOnly);
     qmlRegisterUncreatableType<CameraCalc>          (kQGroundControl,                       1, 0, "CameraCalc",                 kRefOnly);
     qmlRegisterUncreatableType<LogReplayLink>       (kQGroundControl,                       1, 0, "LogReplayLink",              kRefOnly);
-    //仪器值数据
     qmlRegisterUncreatableType<InstrumentValueData> (kQGroundControl,                       1, 0, "InstrumentValueData",        kRefOnly);
     qmlRegisterType<LogReplayLinkController>        (kQGroundControl,                       1, 0, "LogReplayLinkController");
 #if !defined(QGC_DISABLE_MAVLINK_INSPECTOR)
@@ -514,12 +512,9 @@ void QGCApplication::_initCommon()
     qmlRegisterType<EditPositionDialogController>   (kQGCControllers,                       1, 0, "EditPositionDialogController");
     qmlRegisterType<RCToParamDialogController>      (kQGCControllers,                       1, 0, "RCToParamDialogController");
 
-//2022810添加到qml 导入
-
     qmlRegisterType<TerrainProfile>                 ("QGroundControl.Controls",             1, 0, "TerrainProfile");
     qmlRegisterType<ToolStripAction>                ("QGroundControl.Controls",             1, 0, "ToolStripAction");
     qmlRegisterType<ToolStripActionList>            ("QGroundControl.Controls",             1, 0, "ToolStripActionList");
-
 
 #ifndef __mobile__
 #ifndef NO_SERIAL_LINK
@@ -538,10 +533,6 @@ void QGCApplication::_initCommon()
     qmlRegisterSingletonType<ShapeFileHelper>           ("QGroundControl.ShapeFileHelper",          1, 0, "ShapeFileHelper",        shapeFileHelperSingletonFactory);
     qmlRegisterSingletonType<ShapeFileHelper>           ("MAVLink",                                 1, 0, "MAVLink",                mavlinkSingletonFactory);
 
-    //2022810实例化
-
-
-    //qmlRegisterSingletonType<>
     // Although this should really be in _initForNormalAppBoot putting it here allowws us to create unit tests which pop up more easily
     if(QFontDatabase::addApplicationFont(":/fonts/opensans") < 0) {
         qWarning() << "Could not load /fonts/opensans font";
@@ -758,7 +749,7 @@ void QGCApplication::showAppMessage(const QString& message, const QString& title
     if (rootQmlObject) {
         QVariant varReturn;
         QVariant varMessage = QVariant::fromValue(message);
-        QMetaObject::invokeMethod(_rootQmlObject(), "showMessageDialog", Q_RETURN_ARG(QVariant, varReturn), Q_ARG(QVariant, dialogTitle), Q_ARG(QVariant, varMessage));
+        QMetaObject::invokeMethod(_rootQmlObject(), "_showMessageDialog", Q_RETURN_ARG(QVariant, varReturn), Q_ARG(QVariant, dialogTitle), Q_ARG(QVariant, varMessage));
     } else if (runningUnitTests()) {
         // Unit tests can run without UI
         qDebug() << "QGCApplication::showAppMessage unittest title:message" << dialogTitle << message;
@@ -886,6 +877,7 @@ bool QGCApplication::_parseVersionText(const QString& versionString, int& majorV
 
     return false;
 }
+
 
 void QGCApplication::_onGPSConnect()
 {

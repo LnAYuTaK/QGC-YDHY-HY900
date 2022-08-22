@@ -75,7 +75,6 @@ public:
 
 signals:
     void vehicleAdded                   (Vehicle* vehicle);
-    //202284
     void vehicleRemoved                 (Vehicle* vehicle);
     void activeVehicleAvailableChanged  (bool activeVehicleAvailable);
     void parameterReadyVehicleAvailableChanged(bool parameterReadyVehicleAvailable);
@@ -115,7 +114,6 @@ private:
     JoystickManager*            _joystickManager;
     MAVLinkProtocol*            _mavlinkProtocol;
     QGeoCoordinate              _lastKnownLocation;
-
 
     QTimer              _gcsHeartbeatTimer;             ///< Timer to emit heartbeats
     bool                _gcsHeartbeatEnabled;           ///< Enabled/disable heartbeat emission

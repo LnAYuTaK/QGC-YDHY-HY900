@@ -19,7 +19,7 @@ Button {
     property bool   showBorder:     qgcPal.globalTheme === QGCPalette.Light
     property bool   iconLeft:       false
     property real   backRadius:     0
-    property real   heightFactor:   0.5
+    property real   heightFactor:   0.3
     property string iconSource
 
     property alias wrapMode:            text.wrapMode

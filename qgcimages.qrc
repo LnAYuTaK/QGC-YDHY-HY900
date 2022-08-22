@@ -196,34 +196,27 @@
         <file alias="Yield.svg">src/ui/toolbar/Images/Yield.svg</file>
         <file alias="ZoomMinus.svg">src/FlightMap/Images/ZoomMinus.svg</file>
         <file alias="ZoomPlus.svg">src/FlightMap/Images/ZoomPlus.svg</file>
-        <file>src/ui/toolbar/Images/canshu.svg</file>
-        <file>src/ui/toolbar/Images/renwu.svg</file>
-        <file>src/ui/toolbar/Images/yonghu.svg</file>
-        <file>src/ui/AppSettings.qml</file>
-        <file alias="icon-setting.svg">resources/icon-setting.svg</file>
-        <file alias="shezhi_1.svg">resources/shezhi_1.svg</file>
-        <file>resources/ydhyImage/canshu.svg</file>
-        <file>resources/ydhyImage/renwu.svg</file>
-        <file>resources/ydhyImage/shezhi.svg</file>
-        <file>resources/ydhyImage/shezhi_1.svg</file>
-        <file>resources/ydhyImage/shezhi_2.svg</file>
-        <file>resources/ydhyImage/shezhi_3.svg</file>
-        <file>resources/ydhyImage/shezhi_4.svg</file>
-        <file>resources/ydhyImage/shezhi_5.svg</file>
-        <file>resources/ydhyImage/shezhi_6.svg</file>
-        <file>resources/ydhyImage/shezhi_7.svg</file>
-        <file>resources/ydhyImage/shezhitianchong.svg</file>
-        <file>resources/ydhyImage/shezhixitongshezhigongnengshezhishuxing.svg</file>
-        <file>resources/ydhyImage/yonghu.svg</file>
-        <file>resources/lianjie.svg</file>
-        <file>resources/ydhyImage/_canshu_canshushezhi.svg</file>
-        <file>resources/ydhyImage/banbenhao.svg</file>
-        <file>resources/ydhyImage/banbenpitchon.svg</file>
-        <file>resources/ydhyImage/banbenxinxi.svg</file>
-        <file>resources/ydhyImage/banbenxinxi_1.svg</file>
-        <file>resources/ydhyImage/canshu_1.svg</file>
-        <file>resources/ydhyImage/canshupeizhi.svg</file>
-        <file>resources/ydhyImage/canshushezhi.svg</file>
-        <file>resources/ydhyImage/lianjie.svg</file>
+        <file>resources/ImageRes/_canshu_canshushezhi.svg</file>
+        <file>resources/ImageRes/banbenhao.svg</file>
+        <file>resources/ImageRes/banbenpitchon.svg</file>
+        <file>resources/ImageRes/banbenxinxi.svg</file>
+        <file>resources/ImageRes/banbenxinxi_1.svg</file>
+        <file>resources/ImageRes/canshu.svg</file>
+        <file>resources/ImageRes/canshu_1.svg</file>
+        <file>resources/ImageRes/canshupeizhi.svg</file>
+        <file>resources/ImageRes/canshushezhi.svg</file>
+        <file>resources/ImageRes/lianjie.svg</file>
+        <file>resources/ImageRes/renwu.svg</file>
+        <file>resources/ImageRes/shezhi.svg</file>
+        <file>resources/ImageRes/shezhi_1.svg</file>
+        <file>resources/ImageRes/shezhi_2.svg</file>
+        <file>resources/ImageRes/shezhi_3.svg</file>
+        <file>resources/ImageRes/shezhi_4.svg</file>
+        <file>resources/ImageRes/shezhi_5.svg</file>
+        <file>resources/ImageRes/shezhi_6.svg</file>
+        <file>resources/ImageRes/shezhi_7.svg</file>
+        <file>resources/ImageRes/shezhitianchong.svg</file>
+        <file>resources/ImageRes/shezhixitongshezhigongnengshezhishuxing.svg</file>
+        <file>resources/ImageRes/yonghu.svg</file>
     </qresource>
 </RCC>

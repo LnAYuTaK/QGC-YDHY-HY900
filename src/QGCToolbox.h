@@ -34,7 +34,6 @@ class QGCCorePlugin;
 class SettingsManager;
 class AirspaceManager;
 class ADSBVehicleManager;
-//202282
 #if defined(QGC_ENABLE_PAIRING)
 class PairingManager;
 #endif
@@ -83,7 +82,6 @@ public:
     MicrohardManager*           microhardManager        () { return _microhardManager; }
 #endif
 
-
 private:
     void setChildToolboxes(void);
     void _scanAndLoadPlugins(QGCApplication *app);
@@ -111,7 +109,6 @@ private:
     SettingsManager*            _settingsManager        = nullptr;
     AirspaceManager*            _airspaceManager        = nullptr;
     ADSBVehicleManager*         _adsbVehicleManager     = nullptr;
-
 #if defined(QGC_ENABLE_PAIRING)
     PairingManager*             _pairingManager         = nullptr;
 #endif

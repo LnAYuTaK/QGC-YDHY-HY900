@@ -100,7 +100,6 @@ DECLARE_SETTINGGROUP(App, "")
         savePathFact->setVisible(false);
 #else
         QDir rootDir = QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
-
         savePathFact->setRawValue(rootDir.filePath(appName));
 #endif
     }
@@ -334,7 +333,9 @@ QLocale::Language AppSettings::_qLocaleLanguageID(void)
 
     if (settings.childKeys().contains("language")) {
         // We need to convert to the new settings key/values
+#if 0
 
+#endif
         static QList<int> rgNewValues = { 0,20,25,30,31,36,37,42,43,48,58,59,66,85,90,91,96,111,114,125,15 };
 
         int oldValue = settings.value("language").toInt();

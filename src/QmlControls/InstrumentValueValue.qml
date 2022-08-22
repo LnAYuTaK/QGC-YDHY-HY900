@@ -14,6 +14,7 @@ import QtQuick.Controls 2.5
 import QGroundControl               1.0
 import QGroundControl.Controls      1.0
 import QGroundControl.Templates     1.0
+import QGroundControl.Templates     1.0
 import QGroundControl.ScreenTools   1.0
 import QGroundControl.Palette       1.0
 
@@ -36,9 +37,9 @@ ColumnLayout {
     QGCLabel {
         id:                 label
         Layout.alignment:   Qt.AlignVCenter
-        font.pointSize:     20
+        font.pointSize:     _fontSize
         text:               valueText()
-        color:             "white"
+
         function valueText() {
             if (instrumentValueData.fact) {
                 return instrumentValueData.fact.enumOrValueString + (instrumentValueData.showUnits ? " " + instrumentValueData.fact.units : "")

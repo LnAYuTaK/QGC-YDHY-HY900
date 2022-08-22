@@ -19,7 +19,6 @@
 const int QmlObjectListModel::ObjectRole = Qt::UserRole;
 const int QmlObjectListModel::TextRole = Qt::UserRole + 1;
 
-//QGCµÄºËÐÄ  ModelList
 QmlObjectListModel::QmlObjectListModel(QObject* parent)
     : QAbstractListModel        (parent)
     , _dirty                    (false)
@@ -221,9 +220,9 @@ void QmlObjectListModel::insert(int i, QList<QObject*> objects)
                 QObject::connect(object, SIGNAL(dirtyChanged(bool)), this, SLOT(_childDirtyChanged(bool)));
             }
         }
-        j++;
 
         _objectList.insert(j, object);
+        j++;
     }
 
     insertRows(i, objects.count());

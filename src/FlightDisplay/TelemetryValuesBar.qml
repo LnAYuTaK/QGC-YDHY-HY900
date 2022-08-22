@@ -15,16 +15,14 @@ import QGroundControl.ScreenTools   1.0
 import QGroundControl.Vehicle       1.0
 import QGroundControl.Controls      1.0
 import QGroundControl.Palette       1.0
-//移动到FlyWidgetLayer
+
 Rectangle {
     id:                 telemetryPanel
     height:             telemetryLayout.height + (_toolsMargin * 2)
     width:              telemetryLayout.width + (_toolsMargin * 2)
-    color:              "transparent"
+    color:              qgcPal.window
     radius:             ScreenTools.defaultFontPixelWidth / 2
-    //2022810修改参数底部颜色位置
-    anchors.bottom:      parent.bottom
-    anchors.left:       parent.left
+
     property bool       bottomMode: true
 
     DeadMouseArea { anchors.fill: parent }
@@ -87,7 +85,6 @@ Rectangle {
 //                }
 //            }
 //        }
-
 //        QGCMouseArea {
 //            id:                         mouseArea
 //            x:                          telemetryLayout.x
@@ -101,13 +98,13 @@ Rectangle {
 //        HorizontalFactValueGrid {
 //            id:                     valueArea
 //            userSettingsGroup:      telemetryBarUserSettingsGroup
-//            //defaultSettingsGroup:   telemetryBarDefaultSettingsGroup
+//            defaultSettingsGroup:   telemetryBarDefaultSettingsGroup
 //        }
-//起飞解锁滑块
+//起飞滑块
 //        GuidedActionConfirm {
 //            Layout.fillWidth:   true
 //            guidedController:   _guidedController
-//            altitudeSlider:     _guidedAltSlider
+//            guidedValueSlider:     _guidedValueSlider
 //        }
     }
 }

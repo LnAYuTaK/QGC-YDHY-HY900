@@ -24,10 +24,8 @@ ToolStripActionList {
             onTriggered:    mainWindow.showPlanView()
         },
         PreFlightCheckListShowAction { onTriggered: displayPreFlightChecklist() },
-        //起飞按钮
         GuidedActionTakeoff { },
-        //返航
-        GuidedActionLand { },   
+        GuidedActionLand { },
         GuidedActionRTL { },
         GuidedActionPause { },
         GuidedActionActionList { }

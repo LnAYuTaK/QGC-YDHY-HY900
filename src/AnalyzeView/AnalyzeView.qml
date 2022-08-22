@@ -36,12 +36,10 @@ Rectangle {
         id: geoController
     }
 
-
-//日志控制器负责日志的下载发送
     LogDownloadController {
         id: logController
     }
-//选项  //现在删改到只有日志
+
     QGCFlickable {
         id:                 buttonScroll
         width:              buttonColumn.width
@@ -127,6 +125,7 @@ Rectangle {
         source:                 "LogDownloadPage.qml"
 
         property string title
+
         Connections {
             target: panelLoader.item
             onPopout: {
@@ -136,6 +135,7 @@ Rectangle {
                 _root.popout()
             }
         }
+
     }
 
     Component {
@@ -158,6 +158,7 @@ Rectangle {
                     onLoaded:       item.popped = true
                 }
             }
+
             onClosing: {
                 visible = false
                 source = ""

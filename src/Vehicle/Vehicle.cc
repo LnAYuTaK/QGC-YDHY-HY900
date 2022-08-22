@@ -55,6 +55,7 @@
 #include "MockLink.h"
 #endif
 #include "Autotune.h"
+
 #if defined(QGC_AIRMAP_ENABLED)
 #include "AirspaceVehicleManager.h"
 #endif
@@ -73,7 +74,7 @@ const char* Vehicle::_joystickEnabledSettingsKey =  "JoystickEnabled";
 const char* Vehicle::_rollFactName =                "roll";
 const char* Vehicle::_pitchFactName =               "pitch";
 const char* Vehicle::_headingFactName =             "heading";
-const char* Vehicle::_rollRateFactName =            "rollRate";
+const char* Vehicle::_rollRateFactName =             "rollRate";
 const char* Vehicle::_pitchRateFactName =           "pitchRate";
 const char* Vehicle::_yawRateFactName =             "yawRate";
 const char* Vehicle::_airSpeedFactName =            "airSpeed";
@@ -109,8 +110,6 @@ const char* Vehicle::_escStatusFactGroupName =          "escStatus";
 const char* Vehicle::_estimatorStatusFactGroupName =    "estimatorStatus";
 const char* Vehicle::_terrainFactGroupName =            "terrain";
 const char* Vehicle::_hygrometerFactGroupName =         "hygrometer";
-
-
 
 // Standard connected vehicle
 Vehicle::Vehicle(LinkInterface*             link,
@@ -172,7 +171,6 @@ Vehicle::Vehicle(LinkInterface*             link,
     , _hygrometerFactGroup          (this)
     , _terrainFactGroup             (this)
     , _terrainProtocolHandler       (new TerrainProtocolHandler(this, &_terrainFactGroup, this))
-
 {
     _linkManager = _toolbox->linkManager();
 
@@ -197,8 +195,6 @@ Vehicle::Vehicle(LinkInterface*             link,
 
     _commonInit();
 
-
-
     _vehicleLinkManager->_addLink(link);
 
     // Set video stream to udp if running ArduSub and Video is disabled
@@ -222,7 +218,6 @@ Vehicle::Vehicle(LinkInterface*             link,
     _autopilotPlugin->setParent(this);
 
     // PreArm Error self-destruct timer
-    //警告报警
     connect(&_prearmErrorTimer, &QTimer::timeout, this, &Vehicle::_prearmErrorTimeout);
     _prearmErrorTimer.setInterval(_prearmErrorTimeoutMSecs);
     _prearmErrorTimer.setSingleShot(true);
@@ -267,9 +262,6 @@ Vehicle::Vehicle(LinkInterface*             link,
     // Start csv logger
     connect(&_csvLogTimer, &QTimer::timeout, this, &Vehicle::_writeCsvLine);
     _csvLogTimer.start(1000);
-
-
-
 }
 
 // Disconnected Vehicle for offline editing
@@ -371,6 +363,7 @@ void Vehicle::_commonInit()
     connect(this, &Vehicle::hobbsMeterChanged,      this, &Vehicle::_updateHobbsMeter);
 
     connect(_toolbox->qgcPositionManager(), &QGCPositionManager::gcsPositionChanged, this, &Vehicle::_updateDistanceToGCS);
+    connect(_toolbox->qgcPositionManager(), &QGCPositionManager::gcsPositionChanged, this, &Vehicle::_updateHomepoint);
 
     _missionManager = new MissionManager(this);
     connect(_missionManager, &MissionManager::error,                    this, &Vehicle::_missionManagerError);
@@ -389,8 +382,7 @@ void Vehicle::_commonInit()
     _imageProtocolManager           = new ImageProtocolManager          ();
     _vehicleLinkManager             = new VehicleLinkManager            (this);
 
-    _parameterManager = new ParameterManager(this); //参数加载
-
+    _parameterManager = new ParameterManager(this);
     connect(_parameterManager, &ParameterManager::parametersReadyChanged, this, &Vehicle::_parametersReady);
 
     connect(_initialConnectStateMachine, &InitialConnectStateMachine::progressUpdate,
@@ -416,7 +408,7 @@ void Vehicle::_commonInit()
     connect(_imageProtocolManager, &ImageProtocolManager::imageReady, this, &Vehicle::_imageProtocolImageReady);
 
     // Build FactGroup object model
-//Vehicle 添加的Fact 和FactGroup
+
     _addFact(&_rollFact,                _rollFactName);
     _addFact(&_pitchFact,               _pitchFactName);
     _addFact(&_headingFact,             _headingFactName);
@@ -608,8 +600,7 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
         _maxProtoVersion = mavlinkVersion;
         qCDebug(VehicleLog) << "_mavlinkMessageReceived Link already running Mavlink v2. Setting _maxProtoVersion" << _maxProtoVersion;
     }
-    //202282
-    emit vehicleid(_id);
+
     if (message.sysid != _id && message.sysid != 0) {
         // We allow RADIO_STATUS messages which come from a link the vehicle is using to pass through and be handled
         if (!(message.msgid == MAVLINK_MSG_ID_RADIO_STATUS && _vehicleLinkManager->containsLink(link))) {
@@ -664,7 +655,7 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
     _imageProtocolManager->mavlinkMessageReceived(message);
 
     _waitForMavlinkMessageMessageReceived(message);
-    //从Mavlink中提取信息到电池组
+
     // Battery fact groups are created dynamically as new batteries are discovered
     VehicleBatteryFactGroup::handleMessageForFactGroupCreation(this, message);
 
@@ -672,7 +663,7 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
     for (FactGroup* factGroup : factGroups()) {
         factGroup->handleMessage(this, message);
     }
-    //根据msgid 提取信息
+
     switch (message.msgid) {
     case MAVLINK_MSG_ID_HOME_POSITION:
         _handleHomePosition(message);
@@ -783,16 +774,13 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
         }
     }
         break;
-// Following are ArduPilot dialect messages
+
+        // Following are ArduPilot dialect messages
 #if !defined(NO_ARDUPILOT_DIALECT)
     case MAVLINK_MSG_ID_CAMERA_FEEDBACK:
         _handleCameraFeedback(message);
         break;
 #endif
-    //2022730
-    case MAVLINK_MSG_ID_SERVO_OUTPUT_RAW:
-        _handleFlowRatemeter(message);
-        break;
     }
 
     // This must be emitted after the vehicle processes the message. This way the vehicle state is up to date when anyone else
@@ -890,6 +878,7 @@ void Vehicle::_chunkedStatusTextCompleted(uint8_t compId)
             messageText += chunk;
         }
     }
+
     _chunkedStatusTextInfoMap.remove(compId);
 
     // PX4 backwards compatibility: messages sent out ending with a tab are also sent as event
@@ -981,12 +970,11 @@ void Vehicle::_handleStatusText(mavlink_message_t& message)
         }
         _chunkedStatusTextTimer.start();
     }
+
     if (statustext.id == 0 || includesNullTerminator) {
         _chunkedStatusTextTimer.stop();
         _chunkedStatusTextCompleted(message.compid);
     }
-    emit vehicleMsgText(messageText);
-
 }
 
 void Vehicle::_handleVfrHud(mavlink_message_t& message)
@@ -1002,8 +990,6 @@ void Vehicle::_handleVfrHud(mavlink_message_t& message)
         _altitudeTuningOffset = vfrHud.alt;
     }
     _altitudeTuningFact.setRawValue(vfrHud.alt - _altitudeTuningOffset);
-    //2022730
-    emit vehicleGroundFlightSpeed(double(qIsNaN(vfrHud.groundspeed) ? 0 : vfrHud.groundspeed));
 }
 
 void Vehicle::_handleNavControllerOutput(mavlink_message_t& message)
@@ -1105,17 +1091,13 @@ void Vehicle::_handleAttitudeQuaternion(mavlink_message_t& message)
     rollRate()->setRawValue(qRadiansToDegrees(rates[0]));
     pitchRate()->setRawValue(qRadiansToDegrees(rates[1]));
     yawRate()->setRawValue(qRadiansToDegrees(rates[2]));
-
-
-    qDebug()<<"ROLLRATE"<<rollRate()->rawValue();
 }
+
 void Vehicle::_handleGpsRawInt(mavlink_message_t& message)
 {
     mavlink_gps_raw_int_t gpsRawInt;
     mavlink_msg_gps_raw_int_decode(&message, &gpsRawInt);
-    //202281
-    emit vehicleFlightTime(QString::number(gpsRawInt.time_usec));
-    emit vehicleDataSendTime();
+
     _gpsRawIntMessageAvailable = true;
 
     if (gpsRawInt.fix_type >= GPS_FIX_TYPE_3D_FIX) {
@@ -1130,9 +1112,6 @@ void Vehicle::_handleGpsRawInt(mavlink_message_t& message)
             }
         }
     }
-    //2022730
-    emit  vehicleLongitude(double (gpsRawInt.lat* 1e-7));
-    emit  vehicleLatitude(double (gpsRawInt.lon* 1e-7));
 }
 
 void Vehicle::_handleGlobalPositionInt(mavlink_message_t& message)
@@ -1143,8 +1122,6 @@ void Vehicle::_handleGlobalPositionInt(mavlink_message_t& message)
     if (!_altitudeMessageAvailable) {
         _altitudeRelativeFact.setRawValue(globalPositionInt.relative_alt / 1000.0);
         _altitudeAMSLFact.setRawValue(globalPositionInt.alt / 1000.0);
-        //2022739
-        emit vehicleFlighTaltiTude(double(globalPositionInt.relative_alt/1000.0));
     }
 
     // ArduPilot sends bogus GLOBAL_POSITION_INT messages with lat/lat 0/0 even when it has no gps signal
@@ -1282,24 +1259,6 @@ void Vehicle::_handleAltitude(mavlink_message_t& message)
     _altitudeRelativeFact.setRawValue(altitude.altitude_relative);
     _altitudeAMSLFact.setRawValue(altitude.altitude_amsl);
 }
-//处理流速计
-void Vehicle::_handleFlowRatemeter(mavlink_message_t& message)
-{
-    mavlink_servo_output_raw_t servooutputraw;
-    //解码
-    mavlink_msg_servo_output_raw_decode(&message, &servooutputraw);
-    int temp = 0;
-    bool spraystate = false;
-    if(servooutputraw.servo13_raw < servooutputraw.servo8_raw)
-        temp = (servooutputraw.servo8_raw)/100;
-    else
-        temp = (servooutputraw.servo13_raw)/100;
-    if(temp>19)
-        spraystate =true;
-    if(temp<11)
-        spraystate =false;
-    emit vehicleSprayState(spraystate);
-}
 
 void Vehicle::_setCapabilities(uint64_t capabilityBits)
 {
@@ -1357,7 +1316,6 @@ QString Vehicle::vehicleUIDStr()
             pUid[5] & 0xff,
             pUid[6] & 0xff,
             pUid[7] & 0xff);
-
     return uid;
 }
 
@@ -1511,7 +1469,6 @@ void Vehicle::_handleBatteryStatus(mavlink_message_t& message)
         _say(tr("warning"));
         _say(QStringLiteral("%1 %2 ").arg(_vehicleIdSpeech()).arg(batteryMessage.arg(batteryIdStr)));
     }
-
 }
 
 void Vehicle::_setHomePosition(QGeoCoordinate& homeCoord)
@@ -1534,7 +1491,6 @@ void Vehicle::_handleHomePosition(mavlink_message_t& message)
     _setHomePosition(newHomePosition);
 }
 
-//这里是起飞状态  初始化飞行次数和工作面积  开启计数器
 void Vehicle::_updateArmed(bool armed)
 {
     if (_armed != armed) {
@@ -1547,17 +1503,9 @@ void Vehicle::_updateArmed(bool armed)
             _clearCameraTriggerPoints();
             // Reset battery warning
             _lowestBatteryChargeStateAnnouncedMap.clear();
-       //2022730
-            emit vehicleDataSendTime();
-            emit vehicleTakeOff();
         } else {
             _trajectoryPoints->stop();
-
             _flightTimerStop();
-
-
-        //2022730
-             emit vehicleLand();
             // Also handle Video Streaming
             if(qgcApp()->toolbox()->videoManager()->videoReceiver()) {
                 if(_settingsManager->videoSettings()->disableWhenDisarmed()->rawValue().toBool()) {
@@ -1835,7 +1783,6 @@ void Vehicle::_handleRCChannels(mavlink_message_t& message)
 #pragma warning(pop, 0)
 #endif
 
-//发送数据给飞控
 bool Vehicle::sendMessageOnLinkThreadSafe(LinkInterface* link, mavlink_message_t message)
 {
     if (!link->isConnected()) {
@@ -1853,6 +1800,7 @@ bool Vehicle::sendMessageOnLinkThreadSafe(LinkInterface* link, mavlink_message_t
     link->writeBytesThreadSafe((const char*)buffer, len);
     _messagesSent++;
     emit messagesSentChanged();
+
     return true;
 }
 
@@ -1861,12 +1809,12 @@ int Vehicle::motorCount()
     switch (_vehicleType) {
     case MAV_TYPE_HELICOPTER:
         return 1;
-    case MAV_TYPE_VTOL_DUOROTOR:
+    case MAV_TYPE_VTOL_TAILSITTER_DUOROTOR:
         return 2;
     case MAV_TYPE_TRICOPTER:
         return 3;
     case MAV_TYPE_QUADROTOR:
-    case MAV_TYPE_VTOL_QUADROTOR:
+    case MAV_TYPE_VTOL_TAILSITTER_QUADROTOR:
         return 4;
     case MAV_TYPE_HEXAROTOR:
         return 6;
@@ -1948,7 +1896,7 @@ void Vehicle::_handletextMessageReceived(UASMessage* message)
         emit newFormattedMessage(message->getFormatedText());
     }
 }
-//这里是处理飞控的 Text Msg 并根据类型显示警告级别
+
 void Vehicle::_handleTextMessage(int newCount)
 {
     // Reset?
@@ -2271,7 +2219,6 @@ void Vehicle::_flightTimerStop()
 void Vehicle::_updateFlightTime()
 {
     _flightTimeFact.setRawValue((double)_flightTimer.elapsed() / 1000.0);
-
 }
 
 void Vehicle::_gotProgressUpdate(float progressValue)
@@ -2319,6 +2266,12 @@ void Vehicle::_parametersReady(bool parametersReady)
         _setupAutoDisarmSignalling();
         _initialConnectStateMachine->advance();
     }
+
+    _multirotor_speed_limits_available = _firmwarePlugin->mulirotorSpeedLimitsAvailable(this);
+    _fixed_wing_airspeed_limits_available = _firmwarePlugin->fixedWingAirSpeedLimitsAvailable(this);
+
+    emit haveMRSpeedLimChanged();
+    emit haveFWSpeedLimChanged();
 }
 
 void Vehicle::_sendQGCTimeToVehicle()
@@ -2478,11 +2431,11 @@ QString Vehicle::vehicleTypeName() const {
         { MAV_TYPE_FLAPPING_WING,   tr("Flapping wing")},
         { MAV_TYPE_KITE,            tr("Flapping wing")},
         { MAV_TYPE_ONBOARD_CONTROLLER, tr("Onboard companion controller")},
-        { MAV_TYPE_VTOL_DUOROTOR,   tr("Two-rotor VTOL using control surfaces in vertical operation in addition. Tailsitter")},
-        { MAV_TYPE_VTOL_QUADROTOR,  tr("Quad-rotor VTOL using a V-shaped quad config in vertical operation. Tailsitter")},
+        { MAV_TYPE_VTOL_TAILSITTER_DUOROTOR,   tr("Two-rotor VTOL using control surfaces in vertical operation in addition. Tailsitter")},
+        { MAV_TYPE_VTOL_TAILSITTER_QUADROTOR,  tr("Quad-rotor VTOL using a V-shaped quad config in vertical operation. Tailsitter")},
         { MAV_TYPE_VTOL_TILTROTOR,  tr("Tiltrotor VTOL")},
-        { MAV_TYPE_VTOL_RESERVED2,  tr("VTOL reserved 2")},
-        { MAV_TYPE_VTOL_RESERVED3,  tr("VTOL reserved 3")},
+        { MAV_TYPE_VTOL_FIXEDROTOR,  tr("VTOL Fixedrotor")},
+        { MAV_TYPE_VTOL_TAILSITTER,  tr("VTOL Tailsitter")},
         { MAV_TYPE_VTOL_RESERVED4,  tr("VTOL reserved 4")},
         { MAV_TYPE_VTOL_RESERVED5,  tr("VTOL reserved 5")},
         { MAV_TYPE_GIMBAL,          tr("Onboard gimbal")},
@@ -2505,7 +2458,6 @@ void Vehicle::_handleFlightModeChanged(const QString& flightMode)
 {
     _say(tr("%1 %2 flight mode").arg(_vehicleIdSpeech()).arg(flightMode));
     emit guidedModeChanged(_firmwarePlugin->isGuidedMode(this));
-    emit vehicleFlightMode(flightMode);
 }
 
 void Vehicle::_announceArmedChanged(bool armed)
@@ -2596,6 +2548,23 @@ double Vehicle::minimumTakeoffAltitude()
     return _firmwarePlugin->minimumTakeoffAltitude(this);
 }
 
+double Vehicle::maximumHorizontalSpeedMultirotor()
+{
+    return _firmwarePlugin->maximumHorizontalSpeedMultirotor(this);
+}
+
+
+double Vehicle::maximumEquivalentAirspeed()
+{
+    return _firmwarePlugin->maximumEquivalentAirspeed(this);
+}
+
+
+double Vehicle::minimumEquivalentAirspeed()
+{
+    return _firmwarePlugin->minimumEquivalentAirspeed(this);
+}
+
 void Vehicle::startMission()
 {
     _firmwarePlugin->startMission(this);
@@ -2625,6 +2594,26 @@ void Vehicle::guidedModeChangeAltitude(double altitudeChange, bool pauseVehicle)
         return;
     }
     _firmwarePlugin->guidedModeChangeAltitude(this, altitudeChange, pauseVehicle);
+}
+
+void
+Vehicle::guidedModeChangeGroundSpeed(double groundspeed)
+{
+    if (!guidedModeSupported()) {
+        qgcApp()->showAppMessage(guided_mode_not_supported_by_vehicle);
+        return;
+    }
+    _firmwarePlugin->guidedModeChangeGroundSpeed(this, groundspeed);
+}
+
+void
+Vehicle::guidedModeChangeEquivalentAirspeed(double airspeed)
+{
+    if (!guidedModeSupported()) {
+        qgcApp()->showAppMessage(guided_mode_not_supported_by_vehicle);
+        return;
+    }
+    _firmwarePlugin->guidedModeChangeEquivalentAirspeed(this, airspeed);
 }
 
 void Vehicle::guidedModeOrbit(const QGeoCoordinate& centerCoord, double radius, double amslAltitude)
@@ -2891,7 +2880,7 @@ bool Vehicle::_commandCanBeDuplicated(MAV_CMD command)
 {
     // For some commands we don't care about response as much as we care about sending them regularly.
     // This test avoids commands not being sent due to an ACK not being received yet.
-    // MOTOR_TEST in ardusub is a case where we need a constant stream of commands so it don't time out.
+    // MOTOR_TEST in ardusub is a case where we need a constant stream of commands so it doesn't time out.
     switch (command) {
     case MAV_CMD_DO_MOTOR_TEST:
         return true;
@@ -3652,7 +3641,7 @@ void Vehicle::_handleADSBVehicle(const mavlink_message_t& message)
 
     mavlink_msg_adsb_vehicle_decode(&message, &adsbVehicleMsg);
     if ((adsbVehicleMsg.flags & ADSB_FLAGS_VALID_COORDS) && adsbVehicleMsg.tslc <= maxTimeSinceLastSeen) {
-        ADSBVehicle::VehicleInfo_t vehicleInfo;
+        ADSBVehicle::ADSBVehicleInfo_t vehicleInfo;
 
         vehicleInfo.availableFlags = 0;
         vehicleInfo.icaoAddress = adsbVehicleMsg.ICAO_address;
@@ -3728,6 +3717,24 @@ void Vehicle::_updateDistanceToGCS()
         _distanceToGCSFact.setRawValue(coordinate().distanceTo(gcsPosition));
     } else {
         _distanceToGCSFact.setRawValue(qQNaN());
+    }
+}
+
+void Vehicle::_updateHomepoint()
+{
+    const bool setHomeCmdSupported = firmwarePlugin()->supportedMissionCommands(vehicleClass()).contains(MAV_CMD_DO_SET_HOME);
+    const bool updateHomeActivated = _toolbox->settingsManager()->flyViewSettings()->updateHomePosition()->rawValue().toBool();
+    if(setHomeCmdSupported && updateHomeActivated){
+        QGeoCoordinate gcsPosition = _toolbox->qgcPositionManager()->gcsPosition();
+        if (coordinate().isValid() && gcsPosition.isValid()) {
+            sendMavCommand(defaultComponentId(),
+                           MAV_CMD_DO_SET_HOME, false,
+                           0,
+                           0, 0, 0,
+                           static_cast<float>(gcsPosition.latitude()) ,
+                           static_cast<float>(gcsPosition.longitude()),
+                           static_cast<float>(gcsPosition.altitude()));
+        }
     }
 }
 
@@ -3913,6 +3920,12 @@ void Vehicle::flashBootloader()
 
 void Vehicle::gimbalControlValue(double pitch, double yaw)
 {
+    if (apmFirmware()) {
+        // ArduPilot firmware treats this values as centi-degrees
+        pitch *= 100;
+        yaw *= 100;
+    }
+
     //qDebug() << "Gimbal:" << pitch << yaw;
     sendMavCommand(
                 _defaultComponentId,
@@ -3984,8 +3997,6 @@ void Vehicle::_handleObstacleDistance(const mavlink_message_t& message)
 void Vehicle::updateFlightDistance(double distance)
 {
     _flightDistanceFact.setRawValue(_flightDistanceFact.rawValue().toDouble() + distance);
-    //2022730
-    emit vehicleWorkArea(distance);
 }
 
 void Vehicle::sendParamMapRC(const QString& paramName, double scale, double centerValue, int tuningID, double minValue, double maxValue)

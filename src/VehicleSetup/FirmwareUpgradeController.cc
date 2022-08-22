@@ -60,6 +60,7 @@ static QMap<int, QString> px4_board_name_map {
     {52, "px4_fmu-v6_default"},
     {53, "px4_fmu-v6x_default"},
     {54, "px4_fmu-v6u_default"},
+    {56, "px4_fmu-v6c_default"},
     {55, "sky-drones_smartap-airlink_default"},
     {88, "airmind_mindpx-v2_default"},
     {12, "bitcraze_crazyflie_default"},
@@ -87,6 +88,7 @@ static QMap<int, QString> px4_board_name_map {
     {1017, "mro_pixracerpro_default"},
     {1023, "mro_ctrl-zero-h7_default"},
     {1024, "mro_ctrl-zero-h7-oem_default"},
+    {1048, "holybro_kakuteh7_default"},
 };
 
 uint qHash(const FirmwareUpgradeController::FirmwareIdentifier& firmwareId)
@@ -402,7 +404,7 @@ void FirmwareUpgradeController::_firmwareDownloadProgress(qint64 curr, qint64 to
         _progressBar->setProperty("value", static_cast<float>(curr) / static_cast<float>(total));
     }
 }
-///通过网络下载固件
+
 /// @brief Called when the firmware download completes.
 void FirmwareUpgradeController::_firmwareDownloadComplete(QString /*remoteFile*/, QString localFile, QString errorMsg)
 {

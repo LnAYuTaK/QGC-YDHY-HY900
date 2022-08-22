@@ -25,7 +25,6 @@
 #include "HorizontalFactValueGrid.h"
 #include "InstrumentValueData.h"
 
-
 #include <QtQml>
 #include <QQmlEngine>
 
@@ -48,6 +47,10 @@ public:
             delete pCommLinks;
         if(pOfflineMaps)
             delete pOfflineMaps;
+#if defined (HY_900)
+        if(pImgTranMis)
+            delete pImgTranMis;
+#endif
 #if defined(QGC_GST_TAISYNC_ENABLED)
         if(pTaisync)
             delete pTaisync;
@@ -78,10 +81,10 @@ public:
 
     QmlComponentInfo* pGeneral                  = nullptr;
     QmlComponentInfo* pCommLinks                = nullptr;
-    QmlComponentInfo* pOfflineMaps              = nullptr;
-    //2022816 数传组件
-    QmlComponentInfo* pPicTransmis            = nullptr;
 
+    QmlComponentInfo* pImgTranMis               = nullptr ;
+
+    QmlComponentInfo* pOfflineMaps              = nullptr;
 #if defined(QGC_GST_TAISYNC_ENABLED)
     QmlComponentInfo* pTaisync                  = nullptr;
 #endif
@@ -103,8 +106,6 @@ public:
     QGCOptions*         defaultOptions          = nullptr;
     QVariantList        settingsList;
     QVariantList        analyzeList;
-
-
 
     QmlObjectListModel _emptyCustomMapItems;
 };
@@ -133,9 +134,7 @@ void QGCCorePlugin::setToolbox(QGCToolbox *toolbox)
     qmlRegisterUncreatableType<QGCOptions>          ("QGroundControl", 1, 0, "QGCOptions",          "Reference only");
     qmlRegisterUncreatableType<QGCFlyViewOptions>   ("QGroundControl", 1, 0, "QGCFlyViewOptions",   "Reference only");
 }
-//
 
-//2022816
 QVariantList &QGCCorePlugin::settingsPages()
 {
     if(!_p->pGeneral) {
@@ -143,30 +142,28 @@ QVariantList &QGCCorePlugin::settingsPages()
                                             QUrl::fromUserInput("qrc:/qml/GeneralSettings.qml"),
                                             QUrl::fromUserInput("qrc:/res/gear-white.svg"));
         _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pGeneral)));
-        //通讯连接
-        _p->pCommLinks = new QmlComponentInfo(tr("Comm Links"),
+        _p->pCommLinks = new QmlComponentInfo(tr("通讯连接"),
                                               QUrl::fromUserInput("qrc:/qml/LinkSettings.qml"),
                                               QUrl::fromUserInput("qrc:/res/waves.svg"));
         _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pCommLinks)));
-        //中文别忘了改一下编码utf8
-        _p->pPicTransmis  = new QmlComponentInfo(QString("图传连接"),
+#if defined (HY_900)
+        _p->pImgTranMis = new QmlComponentInfo(tr("图传配置"),
                                               QUrl::fromUserInput("qrc:/qml/QGroundControl/MenuTool/PicTransmis.qml"),
                                               QUrl::fromUserInput("qrc:/res/waves.svg"));
-        _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pPicTransmis)));
+        _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pImgTranMis)));
+#endif
 
-#if defined (CLEARQGC)
+#if !defined(HY_900)
         _p->pOfflineMaps = new QmlComponentInfo(tr("Offline Maps"),
                                                 QUrl::fromUserInput("qrc:/qml/OfflineMap.qml"),
                                                 QUrl::fromUserInput("qrc:/res/waves.svg"));
         _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pOfflineMaps)));
+
 #if defined(QGC_GST_TAISYNC_ENABLED)
         _p->pTaisync = new QmlComponentInfo(tr("Taisync"),
-                                           QUrl::fromUserInput("qrc:/qml/TaisyncSettings.qml"),
+                                            QUrl::fromUserInput("qrc:/qml/TaisyncSettings.qml"),
                                             QUrl::fromUserInput(""));
-       _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pTaisync)));
-#endif
-
-
+        _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pTaisync)));
 #endif
 #if defined(QGC_GST_MICROHARD_ENABLED)
         _p->pMicrohard = new QmlComponentInfo(tr("Microhard"),
@@ -180,7 +177,6 @@ QVariantList &QGCCorePlugin::settingsPages()
                                            QUrl::fromUserInput(""));
         _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pAirmap)));
 #endif
-#if defined (CLEARQGC)
         _p->pMAVLink = new QmlComponentInfo(tr("MAVLink"),
                                             QUrl::fromUserInput("qrc:/qml/MavlinkSettings.qml"),
                                             QUrl::fromUserInput("qrc:/res/waves.svg"));
@@ -191,8 +187,6 @@ QVariantList &QGCCorePlugin::settingsPages()
         _p->pHelp = new QmlComponentInfo(tr("Help"),
                                          QUrl::fromUserInput("qrc:/qml/HelpSettings.qml"));
         _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pHelp)));
-
- //202285修改
 #if defined(QT_DEBUG)
         //-- These are always present on Debug builds
         _p->pMockLink = new QmlComponentInfo(tr("Mock Link"),
@@ -206,17 +200,17 @@ QVariantList &QGCCorePlugin::settingsPages()
         _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pQmlTest)));
 #endif
 #endif
-
     }
     return _p->settingsList;
 }
 
-//202285
 QVariantList& QGCCorePlugin::analyzePages()
 {
+
+
+    #if defined(HY_900)
     if (!_p->analyzeList.count()) {
         _p->analyzeList.append(QVariant::fromValue(new QmlComponentInfo(tr("Log Download"),     QUrl::fromUserInput("qrc:/qml/LogDownloadPage.qml"),        QUrl::fromUserInput("qrc:/qmlimages/LogDownloadIcon"))));
-#if defined(CLEARBUILD)
 #if !defined(__mobile__)
         _p->analyzeList.append(QVariant::fromValue(new QmlComponentInfo(tr("GeoTag Images"),    QUrl::fromUserInput("qrc:/qml/GeoTagPage.qml"),             QUrl::fromUserInput("qrc:/qmlimages/GeoTagIcon"))));
 #endif
@@ -225,8 +219,8 @@ QVariantList& QGCCorePlugin::analyzePages()
         _p->analyzeList.append(QVariant::fromValue(new QmlComponentInfo(tr("MAVLink Inspector"),QUrl::fromUserInput("qrc:/qml/MAVLinkInspectorPage.qml"),   QUrl::fromUserInput("qrc:/qmlimages/MAVLinkInspector"))));
 #endif
         _p->analyzeList.append(QVariant::fromValue(new QmlComponentInfo(tr("Vibration"),        QUrl::fromUserInput("qrc:/qml/VibrationPage.qml"),          QUrl::fromUserInput("qrc:/qmlimages/VibrationPageIcon"))));
-#endif
     }
+   #endif
     return _p->analyzeList;
 }
 
@@ -262,6 +256,7 @@ bool QGCCorePlugin::adjustSettingMetaData(const QString& settingsGroup, FactMeta
             return false;
         }
 #endif
+
         //-- Default Palette
         if (metaData.name() == AppSettings::indoorPaletteName) {
             QVariant outdoorPalette;
@@ -318,7 +313,6 @@ QString QGCCorePlugin::showAdvancedUIMessage() const
 void QGCCorePlugin::factValueGridCreateDefaultSettings(const QString& defaultSettingsGroup)
 {
     HorizontalFactValueGrid factValueGrid(defaultSettingsGroup);
-
 
     bool        includeFWValues = factValueGrid.vehicleClass() == QGCMAVLink::VehicleClassFixedWing || factValueGrid.vehicleClass() == QGCMAVLink::VehicleClassVTOL || factValueGrid.vehicleClass() == QGCMAVLink::VehicleClassAirship;
 
@@ -400,16 +394,12 @@ QQmlApplicationEngine* QGCCorePlugin::createQmlApplicationEngine(QObject* parent
     qmlEngine->addImportPath("qrc:/qml");
     qmlEngine->rootContext()->setContextProperty("joystickManager", qgcApp()->toolbox()->joystickManager());
     qmlEngine->rootContext()->setContextProperty("debugMessageModel", AppMessages::getModel());
-
-    InstrumentDisplayListModel *  model= new InstrumentDisplayListModel();
-    qmlEngine->rootContext()->setContextProperty("InstrumentDisplayListModel", model);
     return qmlEngine;
 }
 
 void QGCCorePlugin::createRootWindow(QQmlApplicationEngine* qmlEngine)
 {
     qmlEngine->load(QUrl(QStringLiteral("qrc:/qml/MainRootWindow.qml")));
-
 }
 
 bool QGCCorePlugin::mavlinkMessage(Vehicle* vehicle, LinkInterface* link, mavlink_message_t message)

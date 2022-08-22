@@ -29,8 +29,8 @@ import QGroundControl.FlightMap     1.0
 import QGroundControl.Palette       1.0
 import QGroundControl.ScreenTools   1.0
 import QGroundControl.Vehicle       1.0
+//2022 822
 import QGroundControl.MenuTool      1.0
-
 
 // This is the ui overlay layer for the widgets/tools for Fly View
 Item {
@@ -39,6 +39,7 @@ Item {
     property var    parentToolInsets
     property var    totalToolInsets:        _totalToolInsets
     property var    mapControl
+    property var    parameterView   :        parameterView
 
     property var    _activeVehicle:         QGroundControl.multiVehicleManager.activeVehicle
     property var    _planMasterController:  globals.planMasterControllerFlyView
@@ -49,11 +50,10 @@ Item {
     property real   _margins:               ScreenTools.defaultFontPixelWidth / 2
     property real   _toolsMargin:           ScreenTools.defaultFontPixelWidth * 0.75
     property rect   _centerViewport:        Qt.rect(0, 0, width, height)
-    property real   _rightPanelWidth:       ScreenTools.defaultFontPixelWidth * 30
+    property real   _rightPanelWidth:       ScreenTools.defaultFontPixelWidth * 10
 
     QGCToolInsets {
         id:                     _totalToolInsets
-        //添加到左侧
         leftEdgeTopInset:       toolStrip.leftInset
         leftEdgeCenterInset:    toolStrip.leftInset
         leftEdgeBottomInset:    parentToolInsets.leftEdgeBottomInset
@@ -108,82 +108,48 @@ Item {
         height:             parent.height - y - _toolsMargin
         visible:            !multiVehiclePanelSelector.showSingleVehiclePanel
     }
-    //解锁起飞滑块 中底部
-    ColumnLayout {
-        id:                 unlockSlider
-        anchors.margins:    _toolsMargin
-        anchors.horizontalCenter : parent.horizontalCenter
-        anchors.bottom : parent.bottom
-        GuidedActionConfirm {
-        Layout.fillWidth:   true
-        guidedController:   _guidedController
-        altitudeSlider:     _guidedAltSlider
-      }
+    //罗盘
+    FlyViewInstrumentPanel {
+        id:                         instrumentPanel
+        anchors.margins:            _toolsMargin
+        anchors.top:                multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
+        anchors.right:              parent.right
+        width:                      _rightPanelWidth*1.5
+        spacing:                    _toolsMargin
+        visible:                    QGroundControl.corePlugin.options.flyView.showInstrumentPanel && multiVehiclePanelSelector.showSingleVehiclePanel
+        availableHeight:            parent.height - y - _toolsMargin
+
+        property real rightInset: visible ? parent.width - x : 0
     }
 
-    //罗盘
-        FlyViewInstrumentPanel {
-            id:                         instrumentPanel
-            anchors.margins:            _toolsMargin
-            anchors.top:                multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
-            anchors.right:              parent.right
-            anchors.rightMargin:        _toolsMargin*4
-            //anchors.bottom:              parent.bottom
-            //anchors.horizontalCenter:    parent.horizontalCenter
-            width:                      _rightPanelWidth
-            spacing:                    _toolsMargin
-            visible:                    QGroundControl.corePlugin.options.flyView.showInstrumentPanel && multiVehiclePanelSelector.showSingleVehiclePanel
-            availableHeight:            parent.height - y - _toolsMargin
-            property real rightInset: visible ? parent.width - x : 0
-        }
-     //罗盘下面的显示参数
+    ParameterView{
+             id : parameterView
+             anchors.top:          instrumentPanel.bottom
+             anchors.bottom:       parent.bottom
+             anchors.right:        parent.right
+             width:                parent.width*0.2
+             color:                "black"
+     }
 
-            ParameterView{
-                anchors.top:          instrumentPanel.bottom
-                anchors.bottom:       parent.bottom
-                anchors.right:        parent.right
-                width:                parent.width*0.2
-                color:                "black"
-           }
-
-        //图传界面
-
-
-//         HorizontalFactValueGrid {
-//            id:                 valueArea
-//            userSettingsGroup:   telemetryBarUserSettingsGroup
-//            //defaultSettingsGroup:   telemetryBarDefaultSettingsGroup
-//         }
-
-
-
-
-//    FlyViewInstrumentPanel {
-//        id:                         instrumentPanel
-//        anchors.margins:            _toolsMargin
-//        anchors.top:                multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
-//        anchors.right:              parent.right
-//        anchors.rightMargin:        _toolsMargin*4
-//        //anchors.bottom:              parent.bottom
-//        //anchors.horizontalCenter:    parent.horizontalCenter
-//        width:                      _rightPanelWidth
-//        spacing:                    _toolsMargin
-//        visible:                    QGroundControl.corePlugin.options.flyView.showInstrumentPanel && multiVehiclePanelSelector.showSingleVehiclePanel
-//        availableHeight:            parent.height - y - _toolsMargin
-
-//        property real rightInset: visible ? parent.width - x : 0
+//    QGCPipOverlay {
+//        id:                     _pipOverlay
+//        anchors.left:           parent.left
+//        anchors.right :         widgetLayer.parameterView.left
+//        anchors.bottom:         parent.bottom
+//        anchors.margins:        _toolsMargin
+//        item1IsFullSettingsKey: "MainFlyWindowIsMap"
+//        item1:                  mapControl
+//        item2:                  QGroundControl.videoManager.hasVideo ? videoControl : null
+//        fullZOrder:             _fullItemZorder
+//        pipZOrder:              _pipItemZorder
+//        show:                   !QGroundControl.videoManager.fullScreen &&
+//                                    (videoControl.pipState.state === videoControl.pipState.pipState || mapControl.pipState.state === mapControl.pipState.pipState)
 //    }
-
-//2022810
-//右侧PhotoVideo暂时屏蔽
 //    PhotoVideoControl {
 //        id:                     photoVideoControl
 //        anchors.margins:        _toolsMargin
-
-//        anchors.bottom:         parent.bottom
 //        anchors.right:          parent.right
 //        width:                  _rightPanelWidth
-//        height:                  200
 //        state:                  _verticalCenter ? "verticalCenter" : "topAnchor"
 //        states: [
 //            State {
@@ -206,6 +172,7 @@ Item {
 
 //        property bool _verticalCenter: !QGroundControl.settingsManager.flyViewSettings.alternateInstrumentPanel.rawValue
 //    }
+
     TelemetryValuesBar {
         id:                 telemetryPanel
         x:                  recalcXPosition()
@@ -274,7 +241,7 @@ Item {
         }
     }
 
-    //-- Virtual Joystick 虚拟摇杆
+    //-- Virtual Joystick
 //    Loader {
 //        id:                         virtualJoystickMultiTouch
 //        z:                          QGroundControl.zOrderTopMost + 1
@@ -300,8 +267,9 @@ Item {
         anchors.top:            parent.top
         z:                      QGroundControl.zOrderWidgets
         maxHeight:              parent.height - y - parentToolInsets.bottomEdgeLeftInset - _toolsMargin
+        //2022 8.22
         visible:                false
- onDisplayPreFlightChecklist: mainWindow.showPopupDialogFromComponent(preFlightChecklistPopup)
+        onDisplayPreFlightChecklist: preFlightChecklistPopup.createObject(mainWindow).open()
 
         property real leftInset: x + width
     }
@@ -313,15 +281,12 @@ Item {
         z:                          QGroundControl.zOrderWidgets
         show:                       mapControl.pipState.state !== mapControl.pipState.pipState
     }
+//    警告
+//    VehicleWarnings {
+//        anchors.centerIn:   parent
+//        z:                  QGroundControl.zOrderTopMost
+//    }
 
-    VehicleWarnings {
-        anchors.left :        toolStrip.right
-        anchors.top:          mapScale.bottom
-        anchors.topMargin:    _toolsMargin
-        anchors.leftMargin:   _toolsMargin
-        z:                    QGroundControl.zOrderTopMost
-    }
-    //放大缩小地图尺寸
     MapScale {
         id:                 mapScale
         anchors.margins:    _toolsMargin
@@ -330,6 +295,7 @@ Item {
         mapControl:         _mapControl
         buttonsOnLeft:      false
         visible:            !ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale && mapControl.pipState.state === mapControl.pipState.fullState
+
         property real centerInset: visible ? parent.height - y : 0
     }
 

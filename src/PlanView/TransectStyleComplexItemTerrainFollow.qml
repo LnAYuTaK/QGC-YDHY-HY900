@@ -28,7 +28,7 @@ ColumnLayout {
             if (!QGroundControl.corePlugin.options.showMissionAbsoluteAltitude || !_missionItem.cameraCalc.isManualCamera) {
                 removeModes.push(QGroundControl.AltitudeModeAbsolute)
             }
-            mainWindow.showPopupDialogFromComponent(altModeDialogComponent, { rgRemoveModes: removeModes, updateAltModeFn: updateFunction })
+            altModeDialogComponent.createObject(mainWindow, { rgRemoveModes: removeModes, updateAltModeFn: updateFunction }).open()
         }
 
         Component { id: altModeDialogComponent; AltModeDialog { } }

@@ -104,9 +104,7 @@ AnalyzePage {
 //
                       }
                   }
-
               }
-
               QGCButton{
                   text:       qsTr("回传")
                   width:      _butttonWidth

@@ -12,7 +12,6 @@ import QtQuick.Controls 2.4
 import QtQuick.Dialogs  1.3
 import QtQuick.Layouts  1.11
 import QtQuick.Window   2.11
-import QtGraphicalEffects 1.0
 
 import QGroundControl               1.0
 import QGroundControl.Palette       1.0
@@ -21,23 +20,14 @@ import QGroundControl.ScreenTools   1.0
 import QGroundControl.FlightDisplay 1.0
 import QGroundControl.FlightMap     1.0
 import QGroundControl.MenuTool      1.0
-import QGroundControl.FlightDisplay 1.0
-import QGroundControl.FlightMap     1.0
 
 /// @brief Native QML top level window
 /// All properties defined here are visible to all QML pages.
-//202285修改位置
 ApplicationWindow {
     id:             mainWindow
     minimumWidth:   ScreenTools.isMobile ? Screen.width  : Math.min(ScreenTools.defaultFontPixelWidth * 100, Screen.width)
     minimumHeight:  ScreenTools.isMobile ? Screen.height : Math.min(ScreenTools.defaultFontPixelWidth * 50, Screen.height)
     visible:        true
-
-    //全局的导航栏访问属性
-     property var _rightMenutoolstrip :    rightMenutoolstrip
-
-
-    //全局定义方便取用  //不规范需要更改
 
     Component.onCompleted: {
         //-- Full screen on mobile or tiny screens
@@ -59,8 +49,6 @@ ApplicationWindow {
         property var rgPromptIds:       QGroundControl.corePlugin.firstRunPromptsToShow()
         property int nextPromptIdIndex: 0
 
-        onRgPromptIdsChanged: console.log(QGroundControl.corePlugin, QGroundControl.corePlugin.firstRunPromptsToShow())
-
         function clearNextPromptSignal() {
             if (currentDialog) {
                 currentDialog.closed.disconnect(nextPrompt)
@@ -69,8 +57,10 @@ ApplicationWindow {
 
         function nextPrompt() {
             if (nextPromptIdIndex < rgPromptIds.length) {
-                currentDialog = showPopupDialogFromSource(QGroundControl.corePlugin.firstRunPromptResource(rgPromptIds[nextPromptIdIndex]))
+                var component = Qt.createComponent(QGroundControl.corePlugin.firstRunPromptResource(rgPromptIds[nextPromptIdIndex]));
+                currentDialog = component.createObject(mainWindow)
                 currentDialog.closed.connect(nextPrompt)
+                currentDialog.open()
                 nextPromptIdIndex++
             } else {
                 currentDialog = null
@@ -85,6 +75,7 @@ ApplicationWindow {
 
     //-------------------------------------------------------------------------
     //-- Global Scope Variables
+
     QtObject {
         id: globals
 
@@ -93,10 +84,10 @@ ApplicationWindow {
         readonly property real      defaultTextWidth:               ScreenTools.defaultFontPixelWidth
         readonly property var       planMasterControllerFlyView:    flightView.planController
         readonly property var       guidedControllerFlyView:        flightView.guidedController
+
         property var                planMasterControllerPlanView:   null
         property var                currentPlanMissionItem:         planMasterControllerPlanView ? planMasterControllerPlanView.missionController.currentPlanViewItem : null
     }
-
 
     /// Default color palette used throughout the UI
     QGCPalette { id: qgcPal; colorGroupEnabled: true }
@@ -140,39 +131,26 @@ ApplicationWindow {
         planView.visible        = false
         toolbar.currentToolbar  = currentToolbar
     }
-    //显示左侧导航栏  (不要问我为啥right是左，回答就是懒得改)
 
-    function showRightToolStrip(){
-
-        if (!flightView.visible) {
-            mainWindow.showPreFlightChecklistIfNeeded()
-        }
-        viewSwitch(toolbar.flyViewToolbar)
-        flightView.visible = true
-       if(!rightMenutoolstrip.visible){
-          rightMenutoolstrip.visible = true
-       }
-       else{
-         rightMenutoolstrip.visible = false
-         menuToolCard.visible = false
-
-       }
-    }
-
-    //显示飞行界面
     function showFlyView() {
         if (!flightView.visible) {
             mainWindow.showPreFlightChecklistIfNeeded()
         }
-        if(!_rightMenutoolstrip.visible)
+        if(!menuToolStrip.visible)
         {
-          _rightMenutoolstrip.visible  =true
+          menuToolStrip.visible  =true
         }
         viewSwitch(toolbar.flyViewToolbar)
         flightView.visible = true
     }
 
-    //显示界面大界面
+    function showPlanView() {
+        menuToolCard.visible = false
+        viewSwitch(toolbar.planViewToolbar)
+        planView.visible = true
+        //2022815
+        menuToolStrip.visible = false
+    }
     function showTool(toolTitle, toolSource, toolIcon) {
         toolDrawer.backIcon     = flightView.visible ? "/qmlimages/PaperPlane.svg" : "/qmlimages/Plan.svg"
         toolDrawer.toolTitle    = toolTitle
@@ -181,7 +159,23 @@ ApplicationWindow {
         toolDrawer.visible      = true
     }
 
-    //显示不同导航栏卡片//
+    //左侧的导航栏
+    function showMenuToolStrip(){
+
+        if (!flightView.visible) {
+            mainWindow.showPreFlightChecklistIfNeeded()
+        }
+        viewSwitch(toolbar.flyViewToolbar)
+        flightView.visible = true
+       if(!menuToolStrip.visible){
+          menuToolStrip.visible = true
+       }
+       else{
+         menuToolStrip.visible = false
+         menuToolCard.visible = false
+       }
+    }
+    //显示导航栏内容
     function showCard(toolSource) {
         if(!menuToolCard.visible){
          menuToolCard.toolSource   = toolSource
@@ -190,14 +184,6 @@ ApplicationWindow {
         else{
            menuToolCard.visible  = false
         }
-    }
-
-    //任务规划
-    function showPlanView() {
-        viewSwitch(toolbar.planViewToolbar)
-        planView.visible = true
-        //2022815
-        _rightMenutoolstrip.visible = false
     }
     //通讯界面
     function showConnectTool() {
@@ -212,7 +198,6 @@ ApplicationWindow {
        showCard("/qml/QGroundControl/MenuTool/VersionView.qml")
     }
 
-
     function showAnalyzeTool() {
         showTool(qsTr("Analyze Tools"), "AnalyzeView.qml", "/qmlimages/Analyze.svg")
     }
@@ -225,88 +210,28 @@ ApplicationWindow {
         showTool(qsTr("Application Settings"), "AppSettings.qml", "/res/QGCLogoWhite")
     }
 
-    function showUserTool(){
-       showTool(qsTr("UserMsgInfo View"),"qrc:/qml/QGroundControl/MenuTool/UserMsgInfoView.qml","/res/yonghu.svg")
-    }
-
     //-------------------------------------------------------------------------
     //-- Global simple message dialog
-    //全局简单消息对话框 就是尖头的可以点击确定关闭的
-    function showMessageDialog(dialogTitle, dialogText) {
-        showPopupDialogFromComponent(simpleMessageDialog, { title: dialogTitle, text: dialogText })
+
+    function showMessageDialog(dialogTitle, dialogText, buttons = StandardButton.Ok, acceptFunction = null) {
+        simpleMessageDialogComponent.createObject(mainWindow, { title: dialogTitle, text: dialogText, buttons: buttons, acceptFunction: acceptFunction }).open()
+    }
+
+    // This variant is only meant to be called by QGCApplication
+    function _showMessageDialog(dialogTitle, dialogText) {
+        showMessageDialog(dialogTitle, dialogText)
     }
 
     Component {
-        id: simpleMessageDialog
+        id: simpleMessageDialogComponent
 
-        QGCPopupDialog {
-            title:      dialogProperties.title
-            buttons:    StandardButton.Ok
-
-            ColumnLayout {
-                QGCLabel {
-                    id:                     textLabel
-                    wrapMode:               Text.WordWrap
-                    text:                   dialogProperties.text
-                    Layout.fillWidth:       true
-                    Layout.maximumWidth:    mainWindow.width / 2
-                }
-            }
+        QGCSimpleMessageDialog {
         }
     }
 
     /// Saves main window position and size
     MainWindowSavedState {
         window: mainWindow
-    }
-
-    //-------------------------------------------------------------------------
-    //-- Global complex dialog
-
-    /// Shows a QGCViewDialogContainer based dialog
-    ///     @param component The dialog contents
-    ///     @param title Title for dialog
-    ///     @param charWidth Width of dialog in characters
-    ///     @param buttons Buttons to show in dialog using StandardButton enum
-
-    readonly property int showDialogFullWidth:      -1  ///< Use for full width dialog
-    readonly property int showDialogDefaultWidth:   40  ///< Use for default dialog width
-
-    function showComponentDialog(component, title, charWidth, buttons) {
-        var dialogWidth = charWidth === showDialogFullWidth ? mainWindow.width : ScreenTools.defaultFontPixelWidth * charWidth
-        var dialog = dialogDrawerComponent.createObject(mainWindow, { width: dialogWidth, dialogComponent: component, dialogTitle: title, dialogButtons: buttons })
-        mainWindow.pushPreventViewSwitch()
-        dialog.open()
-    }
-
-    Component {
-        id: dialogDrawerComponent
-        QGCViewDialogContainer {
-            y:          mainWindow.header.height
-            height:     mainWindow.height - mainWindow.header.height
-            onClosed:   mainWindow.popPreventViewSwitch()
-        }
-    }
-
-    // Dialogs based on QGCPopupDialog
-
-    function showPopupDialogFromComponent(component, properties) {
-        var dialog = popupDialogContainerComponent.createObject(mainWindow, { dialogComponent: component, dialogProperties: properties })
-        dialog.open()
-        return dialog
-    }
-
-    function showPopupDialogFromSource(source, properties) {
-        var dialog = popupDialogContainerComponent.createObject(mainWindow, { dialogSource: source, dialogProperties: properties })
-        dialog.open()
-        return dialog
-    }
-
-
-
-    Component {
-        id: popupDialogContainerComponent
-        QGCPopupDialogContainer { }
     }
 
     property bool _forceClose: false
@@ -325,64 +250,48 @@ ApplicationWindow {
     //  Unsaved missions - then
     //  Pending parameter writes - then
     //  Active connections
+
+    property string closeDialogTitle: qsTr("Close %1").arg(QGroundControl.appName)
+
+    function checkForUnsavedMission() {
+        if (globals.planMasterControllerPlanView && globals.planMasterControllerPlanView.dirty) {
+            showMessageDialog(closeDialogTitle,
+                              qsTr("You have a mission edit in progress which has not been saved/sent. If you close you will lose changes. Are you sure you want to close?"),
+                              StandardButton.Yes | StandardButton.No,
+                              function() { checkForPendingParameterWrites() })
+        } else {
+            checkForPendingParameterWrites()
+        }
+    }
+
+    function checkForPendingParameterWrites() {
+        for (var index=0; index<QGroundControl.multiVehicleManager.vehicles.count; index++) {
+            if (QGroundControl.multiVehicleManager.vehicles.get(index).parameterManager.pendingWrites) {
+                mainWindow.showMessageDialog(closeDialogTitle,
+                    qsTr("You have pending parameter updates to a vehicle. If you close you will lose changes. Are you sure you want to close?"),
+                    StandardButton.Yes | StandardButton.No,
+                    function() { checkForActiveConnections() })
+                return
+            }
+        }
+        checkForActiveConnections()
+    }
+
+    function checkForActiveConnections() {
+        if (QGroundControl.multiVehicleManager.activeVehicle) {
+            mainWindow.showMessageDialog(closeDialogTitle,
+                qsTr("There are still active connections to vehicles. Are you sure you want to exit?"),
+                StandardButton.Yes | StandardButton.No,
+                function() { finishCloseProcess() })
+        } else {
+            finishCloseProcess()
+        }
+    }
+
     onClosing: {
         if (!_forceClose) {
-            unsavedMissionCloseDialog.check()
             close.accepted = false
-        }
-    }
-
- //关闭提示
-    MessageDialog {
-        id:                 unsavedMissionCloseDialog
-        title:              qsTr("%1 close").arg(QGroundControl.appName)
-        text:               qsTr("You have a mission edit in progress which has not been saved/sent. If you close you will lose changes. Are you sure you want to close?")
-        standardButtons:    StandardButton.Yes | StandardButton.No
-        modality:           Qt.ApplicationModal
-        visible:            false
-        onYes:              pendingParameterWritesCloseDialog.check()
-        function check() {
-            if (globals.planMasterControllerPlanView && globals.planMasterControllerPlanView.dirty) {
-                unsavedMissionCloseDialog.open()
-            } else {
-                pendingParameterWritesCloseDialog.check()
-            }
-        }
-    }
-
-    MessageDialog {
-        id:                 pendingParameterWritesCloseDialog
-        title:              qsTr("%1 close").arg("YDHY")
-        text:               qsTr("You have pending parameter updates to a vehicle. If you close you will lose changes. Are you sure you want to close?")
-        standardButtons:    StandardButton.Yes | StandardButton.No
-        modality:           Qt.ApplicationModal
-        visible:            false
-        onYes:              activeConnectionsCloseDialog.check()
-        function check() {
-            for (var index=0; index<QGroundControl.multiVehicleManager.vehicles.count; index++) {
-                if (QGroundControl.multiVehicleManager.vehicles.get(index).parameterManager.pendingWrites) {
-                    pendingParameterWritesCloseDialog.open()
-                    return
-                }
-            }
-            activeConnectionsCloseDialog.check()
-        }
-    }
-
-    MessageDialog {
-        id:                 activeConnectionsCloseDialog
-        title:              qsTr("%1 close").arg("YDHY")
-        text:               qsTr("There are still active connections to vehicles. Are you sure you want to exit?")
-        standardButtons:    StandardButton.Yes | StandardButton.Cancel
-        modality:           Qt.ApplicationModal
-        visible:            false
-        onYes:              finishCloseProcess()
-        function check() {
-            if (QGroundControl.multiVehicleManager.activeVehicle) {
-                activeConnectionsCloseDialog.open()
-            } else {
-                finishCloseProcess()
-            }
+            checkForUnsavedMission()
         }
     }
 
@@ -392,9 +301,9 @@ ApplicationWindow {
         id:             rootBackground
         anchors.fill:   parent
     }
+
     //-------------------------------------------------------------------------
     /// Toolbar
-    //顶端任务栏
     header: MainToolBar {
         id:         toolbar
         height:     ScreenTools.toolbarHeight
@@ -407,14 +316,13 @@ ApplicationWindow {
 
     function showToolSelectDialog() {
         if (!mainWindow.preventViewSwitch()) {
-            showPopupDialogFromComponent(toolSelectDialogComponent)
+            toolSelectDialogComponent.createObject(mainWindow).open()
         }
     }
 
-
     Component {
         id: toolSelectDialogComponent
-       //QGC弹出窗口
+
         QGCPopupDialog {
             id:         toolSelectDialog
             title:      qsTr("Select Tool")
@@ -424,24 +332,24 @@ ApplicationWindow {
             property real _margins:             ScreenTools.defaultFontPixelWidth
 
             ColumnLayout {
-                width:  innerLayout.width + (_margins * 2)
-                height: innerLayout.height + (_margins * 2)
+                width:  innerLayout.width + (toolSelectDialog._margins * 2)
+                height: innerLayout.height + (toolSelectDialog._margins * 2)
 
                 ColumnLayout {
                     id:             innerLayout
-                    Layout.margins: _margins
+                    Layout.margins: toolSelectDialog._margins
                     spacing:        ScreenTools.defaultFontPixelWidth
 
                     SubMenuButton {
                         id:                 setupButton
-                        height:             _toolButtonHeight
+                        height:             toolSelectDialog._toolButtonHeight
                         Layout.fillWidth:   true
-                        text:               qsTr("无人机设置")
+                        text:               qsTr("Vehicle Setup")
                         imageColor:         qgcPal.text
                         imageResource:      "/qmlimages/Gears.svg"
                         onClicked: {
                             if (!mainWindow.preventViewSwitch()) {
-                                toolSelectDialog.hideDialog()
+                                toolSelectDialog.close()
                                 mainWindow.showSetupTool()
                             }
                         }
@@ -449,15 +357,15 @@ ApplicationWindow {
 
                     SubMenuButton {
                         id:                 analyzeButton
-                        height:             _toolButtonHeight
+                        height:             toolSelectDialog._toolButtonHeight
                         Layout.fillWidth:   true
-                        text:               qsTr("分析工具")
+                        text:               qsTr("Analyze Tools")
                         imageResource:      "/qmlimages/Analyze.svg"
                         imageColor:         qgcPal.text
                         visible:            QGroundControl.corePlugin.showAdvancedUI
                         onClicked: {
                             if (!mainWindow.preventViewSwitch()) {
-                                toolSelectDialog.hideDialog()
+                                toolSelectDialog.close()
                                 mainWindow.showAnalyzeTool()
                             }
                         }
@@ -465,26 +373,28 @@ ApplicationWindow {
 
                     SubMenuButton {
                         id:                 settingsButton
-                        height:             _toolButtonHeight
+                        height:             toolSelectDialog._toolButtonHeight
                         Layout.fillWidth:   true
-                        text:               qsTr("应用设置")
-                        imageResource:      "/res/resources/WindowsYDHY.svg"
+                        text:               qsTr("Application Settings")
+                        imageResource:      "/res/QGCLogoFull"
                         imageColor:         "transparent"
                         visible:            !QGroundControl.corePlugin.options.combineSettingsAndSetup
                         onClicked: {
                             if (!mainWindow.preventViewSwitch()) {
-                                toolSelectDialog.hideDialog()
+                                toolSelectDialog.close()
                                 mainWindow.showSettingsTool()
                             }
                         }
                     }
+
                     ColumnLayout {
-                        width:      innerLayout.width
-                        spacing:    0
+                        width:                  innerLayout.width
+                        spacing:                0
+                        Layout.alignment:       Qt.AlignHCenter
 
                         QGCLabel {
                             id:                     versionLabel
-                            text:                   qsTr("YDHY")
+                            text:                   qsTr("%1 Version").arg(QGroundControl.appName)
                             font.pointSize:         ScreenTools.smallFontPointSize
                             wrapMode:               QGCLabel.WordWrap
                             Layout.maximumWidth:    parent.width
@@ -514,6 +424,7 @@ ApplicationWindow {
                                         }
                                     }
                                 }
+
                                 MessageDialog {
                                     id:                 advancedModeConfirmation
                                     title:              qsTr("Advanced Mode")
@@ -531,10 +442,23 @@ ApplicationWindow {
             }
         }
     }
+
+
+    FlyView {
+        id:             flightView
+        anchors.fill:   parent
+    }
+
+    PlanView {
+        id:             planView
+        anchors.fill:   parent
+        visible:        false
+    }
+
     //导航栏
-    RightMenuToolStrip {
-        id:                      rightMenutoolstrip
-        anchors.rightMargin:     10
+    MenuToolStrip {
+        id:                      menuToolStrip
+        anchors.leftMargin:      ScreenTools.defaultFontPixelWidth * 0.75
         //跟顶部的距离
         anchors.topMargin:       10
         anchors.left:            parent.left
@@ -544,27 +468,15 @@ ApplicationWindow {
         visible:                 false
         property real leftInset: x + width
     }
-
-//飞行界面  地图
-    FlyView {
-        id:             flightView
-        anchors.fill:   parent
-    }
-    PlanView {
-        id:             planView
-        anchors.fill:   parent
-        visible:        false
-    }
-
-
-    //导航栏卡片
+    //导航内卡片
     Rectangle {
         id:             menuToolCard
-        anchors.left:   rightMenutoolstrip.right
-        anchors.top:    rightMenutoolstrip.top
-        anchors.bottom: rightMenutoolstrip.buttom
-        width:          mainWindow.width*0.5
-        height:         rightMenutoolstrip.height
+        anchors.left:   menuToolStrip.right
+        anchors.leftMargin:   ScreenTools.defaultFontPixelWidth * 0.75
+        anchors.top:    menuToolStrip.top
+        anchors.bottom: menuToolStrip.buttom
+        width:          mainWindow.width*0.8
+        height:         menuToolStrip.height*1.2
         color:         "transparent"
         visible:        false
 
@@ -585,13 +497,7 @@ ApplicationWindow {
                 ignoreUnknownSignals:   true
             }
         }
-
     }
-
-
-
-
-    //大界面抽屉
     Drawer {
         id:             toolDrawer
         width:          mainWindow.width
@@ -704,7 +610,7 @@ ApplicationWindow {
         y:                  ScreenTools.defaultFontPixelHeight
         x:                  Math.round((mainWindow.width - width) * 0.5)
         width:              mainWindow.width  * 0.55
-        height:             ScreenTools.defaultFontPixelHeight * 20
+        height:             ScreenTools.defaultFontPixelHeight * 6
         modal:              false
         focus:              true
         closePolicy:        Popup.CloseOnEscape
@@ -827,7 +733,7 @@ ApplicationWindow {
         property var    currentItem:        null
         property var    currentIndicator:   null
         background: Rectangle {
-            width:  loader.width*0.2
+            width:  loader.width
             height: loader.height
             color:  Qt.rgba(0,0,0,0)
         }

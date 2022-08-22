@@ -13,9 +13,7 @@
 #include "QGCPalette.h"
 #include "QGCMAVLink.h"
 #include "QmlObjectListModel.h"
-//#include "NetWorkLayer/NetWorkManager.h"
 
-# include "MenuTool/InstrumentDisplayListModel.h"
 #include <QObject>
 #include <QVariantList>
 
@@ -216,5 +214,4 @@ protected:
 
 private:
     QGCCorePlugin_p*    _p;
-
 };

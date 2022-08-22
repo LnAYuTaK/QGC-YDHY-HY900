@@ -26,7 +26,7 @@ add_custom_target(FligthDisplayQml
 		GuidedActionRTL.qml
 		GuidedActionsController.qml
 		GuidedActionTakeoff.qml
-		GuidedAltitudeSlider.qml
+		GuidedValueSlider.qml
 		GuidedToolStripAction.qml
 		MultiRotorChecklist.qml
 		MultiVehicleList.qml
@@ -40,7 +40,6 @@ add_custom_target(FligthDisplayQml
 		ProximityRadarValues.qml
 		ProximityRadarVideoView.qml
 		RoverChecklist.qml
-                            
 		SubChecklist.qml
 		TelemetryValuesBar.qml
 		TerrainProgress.qml

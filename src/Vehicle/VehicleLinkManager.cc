@@ -48,10 +48,12 @@ void VehicleLinkManager::_commRegainedOnLink(LinkInterface* link)
 {
     QString commRegainedMessage;
     QString primarySwitchMessage;
+
     int linkIndex = _containsLinkIndex(link);
     if (linkIndex == -1) {
         return;
     }
+
     _rgLinkInfo[linkIndex].commLost = false;
 
     // Notify the user of communication regained

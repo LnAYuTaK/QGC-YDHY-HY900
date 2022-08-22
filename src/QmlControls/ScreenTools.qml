@@ -7,7 +7,6 @@ import QtQuick.Window   2.2
 import QGroundControl                       1.0
 import QGroundControl.ScreenToolsController 1.0
 
-
 /*!
  The ScreenTools Singleton provides information on QGC's standard font metrics. It also provides information on screen
  size which can be used to adjust user interface for varying available screen real estate.
