@@ -735,7 +735,7 @@ void QGCApplication::showCriticalVehicleMessage(const QString& message)
         QMetaObject::invokeMethod(_rootQmlObject(), "showCriticalVehicleMessage", Q_RETURN_ARG(QVariant, varReturn), Q_ARG(QVariant, varMessage));
     } else if (runningUnitTests()) {
         // Unit tests can run without UI
-        qDebug() << "QGCApplication::showCriticalVehicleMessage unittest" << message;
+        //qDebug() << "QGCApplication::showCriticalVehicleMessage unittest" << message;
     } else {
         qWarning() << "Internal error";
     }
@@ -752,7 +752,7 @@ void QGCApplication::showAppMessage(const QString& message, const QString& title
         QMetaObject::invokeMethod(_rootQmlObject(), "_showMessageDialog", Q_RETURN_ARG(QVariant, varReturn), Q_ARG(QVariant, dialogTitle), Q_ARG(QVariant, varMessage));
     } else if (runningUnitTests()) {
         // Unit tests can run without UI
-        qDebug() << "QGCApplication::showAppMessage unittest title:message" << dialogTitle << message;
+        //qDebug() << "QGCApplication::showAppMessage unittest title:message" << dialogTitle << message;
     } else {
         // UI isn't ready yet
         _delayedAppMessages.append(QPair<QString, QString>(dialogTitle, message));
@@ -826,6 +826,7 @@ void QGCApplication::_checkForNewVersion()
             if (!versionCheckFile.isEmpty()) {
                 QGCFileDownload* download = new QGCFileDownload(this);
                 connect(download, &QGCFileDownload::downloadComplete, this, &QGCApplication::_qgcCurrentStableVersionDownloadComplete);
+
                 download->download(versionCheckFile);
             }
         }

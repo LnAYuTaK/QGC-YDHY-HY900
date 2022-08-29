@@ -166,7 +166,6 @@ void ParameterManager::_updateProgressBar(void)
     }
 }
 
-
 void ParameterManager::mavlinkMessageReceived(mavlink_message_t message)
 {
     if (message.msgid == MAVLINK_MSG_ID_PARAM_VALUE) {
@@ -271,11 +270,11 @@ void ParameterManager::_handleParamValue(int componentId, QString parameterName,
             const void*         vehicleData         = parameterValue.constData();
 
             if (memcmp(cacheData, vehicleData, dataSize)) {
-                qDebug() << "Cache/Vehicle values differ for name:cache:actual" << parameterName << parameterValue << cacheParamTypeVal.second;
+                //qDebug() << "Cache/Vehicle values differ for name:cache:actual" << parameterName << parameterValue << cacheParamTypeVal.second;
             }
             _debugCacheParamSeen[componentId][parameterName] = true;
         } else {
-            qDebug() << "Parameter missing from cache" << parameterName;
+            //qDebug() << "Parameter missing from cache" << parameterName;
         }
     }
 
@@ -1120,7 +1119,7 @@ void ParameterManager::_checkInitialLoadComplete(void)
         if (!_logReplay && _debugCacheCRC.contains(componentId) && _debugCacheCRC[componentId]) {
             for (const QString& paramName: _debugCacheParamSeen[componentId].keys()) {
                 if (!_debugCacheParamSeen[componentId][paramName]) {
-                    qDebug() << "Parameter in cache but not on vehicle componentId:Name" << componentId << paramName;
+                    //qDebug() << "Parameter in cache but not on vehicle componentId:Name" << componentId << paramName;
                 }
             }
         }

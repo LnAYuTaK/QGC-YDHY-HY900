@@ -142,7 +142,7 @@ void PX4ParameterMetaData::loadParameterFactMetaDataFile(const QString& metaData
                 }
                 if (intVersion <= 2) {
                     // We can't read these old files
-                    qDebug() << "Parameter version stamp too old, skipping load. Found:" << intVersion << "Want: 3 File:" << metaDataFile;
+                    //qDebug() << "Parameter version stamp too old, skipping load. Found:" << intVersion << "Want: 3 File:" << metaDataFile;
                     return;
                 }
                 
@@ -154,7 +154,7 @@ void PX4ParameterMetaData::loadParameterFactMetaDataFile(const QString& metaData
             } else if (elementName == "group") {
                 if (xmlState != XmlStateFoundVersion) {
                     // We didn't get a version stamp, assume older version we can't read
-                    qDebug() << "Parameter version stamp not found, skipping load" << metaDataFile;
+                    //qDebug() << "Parameter version stamp not found, skipping load" << metaDataFile;
                     return;
                 }
                 xmlState = XmlStateFoundGroup;

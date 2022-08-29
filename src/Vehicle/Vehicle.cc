@@ -62,7 +62,10 @@
 
 QGC_LOGGING_CATEGORY(VehicleLog, "VehicleLog")
 
+
+//默认更新当前参数时间
 #define UPDATE_TIMER 50
+
 #define DEFAULT_LAT  38.965767f
 #define DEFAULT_LON -120.083923f
 

@@ -12,12 +12,6 @@ QMAKE_PROJECT_DEPTH = 0 # undocumented qmake flag to force absolute paths in mak
 #大载重无人机宏定义
 DEFINES += HY_900
 
-
-
-
-
-
-
 # These are disabled until proven correct
 DEFINES += QGC_GST_TAISYNC_DISABLED
 DEFINES += QGC_GST_MICROHARD_DISABLED

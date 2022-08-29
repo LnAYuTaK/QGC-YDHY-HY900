@@ -22,6 +22,7 @@ QGCFileDownload::QGCFileDownload(QObject* parent)
 
 bool QGCFileDownload::download(const QString& remoteFile, bool redirect)
 {
+
     if (!redirect) {
         _originalRemoteFile = remoteFile;
     }

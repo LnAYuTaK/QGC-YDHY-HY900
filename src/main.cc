@@ -158,7 +158,7 @@ void setNativeMethods(void)
     if (val < 0) {
         qWarning() << "Error registering methods: " << val;
     } else {
-        qDebug() << "Main Native Functions Registered";
+        //qDebug() << "Main Native Functions Registered";
     }
 
     if (jniEnv->ExceptionCheck()) {
@@ -400,10 +400,10 @@ int main(int argc, char *argv[])
             // Run the test
             int failures = UnitTest::run(unitTestOptions);
             if (failures == 0) {
-                qDebug() << "ALL TESTS PASSED";
+                //qDebug() << "ALL TESTS PASSED";
                 exitCode = 0;
             } else {
-                qDebug() << failures << " TESTS FAILED!";
+                //qDebug() << failures << " TESTS FAILED!";
                 exitCode = -failures;
                 break;
             }
@@ -426,7 +426,7 @@ int main(int argc, char *argv[])
     //-- Shutdown Cache System
     destroyMapEngine();
 
-    qDebug() << "After app delete";
+    //qDebug() << "After app delete";
 
     return exitCode;
 }

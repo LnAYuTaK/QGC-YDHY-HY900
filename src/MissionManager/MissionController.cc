@@ -1384,7 +1384,7 @@ void MissionController::_recalcFlightPathSegments(void)
                             _splitSegment = segment;
                             _delayedSplitSegmentUpdate = false;
                             signalSplitSegmentChanged = true;
-                            qDebug() << "Update delayed split segment";
+                            //qDebug() << "Update delayed split segment";
                         }
                         lastFlyThroughVI->setSimpleFlighPathSegment(segment);
                     }
@@ -2367,7 +2367,7 @@ bool MissionController::_isROICancelItem(SimpleMissionItem* simpleItem)
 void MissionController::setCurrentPlanViewSeqNum(int sequenceNumber, bool force)
 {
     if (_visualItems && (force || sequenceNumber != _currentPlanViewSeqNum)) {
-        qDebug() << "setCurrentPlanViewSeqNum";
+        //qDebug() << "setCurrentPlanViewSeqNum";
         bool    foundLand =             false;
         int     takeoffSeqNum =         -1;
         int     landSeqNum =            -1;
@@ -2468,15 +2468,15 @@ void MissionController::setCurrentPlanViewSeqNum(int sequenceNumber, bool force)
                         for (int j=viIndex-1; j>0; j--) {
                             VisualMissionItem* pPrev = qobject_cast<VisualMissionItem*>(_visualItems->get(j));
                             if (pPrev->specifiesCoordinate() && !pPrev->isStandaloneCoordinate()) {
-                                qDebug() << "Found";
+                                //qDebug() << "Found";
                                 VisualItemPair splitPair(pPrev, pVI);
                                 if (_flightPathSegmentHashTable.contains(splitPair)) {
-                                    qDebug() << "Split segment added in setCurrentPlanViewSeqNum";
+                                    //qDebug() << "Split segment added in setCurrentPlanViewSeqNum";
                                     _splitSegment = _flightPathSegmentHashTable[splitPair];
                                 } else {
                                     // The recalc of flight path segments hasn't happened yet since it is delayed and compressed.
                                     // So we need to register the fact that we need a split segment update and it will happen in the recalc instead.
-                                    qDebug() << "Delayed split";
+                                    //qDebug() << "Delayed split";
                                     _delayedSplitSegmentUpdate = true;
                                 }
                                 break;

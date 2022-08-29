@@ -72,7 +72,7 @@ void FWLandingPatternTest::_testDirty(void)
     rgFacts << _fwItem->glideSlope()
             << _fwItem->valueSetIsDistance();
     for(Fact* fact: rgFacts) {
-        qDebug() << fact->name();
+        //qDebug() << fact->name();
         QVERIFY(!_fwItem->dirty());
         changeFactValue(fact);
         QVERIFY(_viSpy->checkSignalByMask(dirtyChangedMask));
@@ -93,7 +93,7 @@ void FWLandingPatternTest::_testSaveLoad(void)
     FixedWingLandingComplexItem* newItem = new FixedWingLandingComplexItem(_masterController, false /* flyView */);
     bool success =newItem->load(items[0].toObject(), 10, errorString);
     if (!success) {
-        qDebug() << errorString;
+        //qDebug() << errorString;
     }
     QVERIFY(success);
     QVERIFY(errorString.isEmpty());
