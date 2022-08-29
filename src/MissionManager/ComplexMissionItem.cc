@@ -95,10 +95,10 @@ void ComplexMissionItem::_savePresetJson(const QString& name, QJsonObject& prese
     QFile jsonFile(fileName);
 
     if (!jsonFile.open(QIODevice::WriteOnly)) {
-        //qDebug() << "Couldn't open .json file.";
+        qDebug() << "Couldn't open .json file.";
     }
 
-    //qDebug() << "Saving survey preset to JSON";
+    qDebug() << "Saving survey preset to JSON";
     auto jsonDoc = QJsonDocument(jsonObj);
     jsonFile.write(jsonDoc.toJson());
     #endif

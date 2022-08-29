@@ -125,7 +125,7 @@ AnalyzePage {
                     width:      _butttonWidth
                     onClicked: {
                         if (!QGroundControl.multiVehicleManager.activeVehicle || QGroundControl.multiVehicleManager.activeVehicle.isOfflineEditingVehicle) {
-                            mainWindow.showMessageDialog(qsTr("Log Refresh"), qsTr("You must be connected to a vehicle in order to download logs."))
+                            mainWindow.showMessageAllDialog(qsTr("Log Refresh"), qsTr("You must be connected to a vehicle in order to download logs."))
                         } else {
                             logController.refresh()
                         }

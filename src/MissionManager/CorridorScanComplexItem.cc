@@ -283,9 +283,9 @@ void CorridorScanComplexItem::_rebuildTransectsPhase1(void)
             }
 
 #if 0
-            //qDebug() << "transect debug";
+            qDebug() << "transect debug";
             for (const TransectStyleComplexItem::CoordInfo_t& coordInfo: transect) {
-                //qDebug() << coordInfo.coordType;
+                qDebug() << coordInfo.coordType;
             }
 #endif
 

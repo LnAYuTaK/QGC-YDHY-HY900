@@ -269,7 +269,7 @@ void LandingComplexItemTest::_testSaveLoad(void)
     SimpleLandingComplexItem* newItem = new SimpleLandingComplexItem(_masterController, false /* flyView */);
     bool loadSuccess = newItem->_load(saveObject, 0 /* sequenceNumber */, SimpleLandingComplexItem::jsonComplexItemTypeValue, false /* useDeprecatedRelAltKeys */, errorString);
     if (!loadSuccess) {
-        //qDebug() << "_load failed" << errorString;
+        qDebug() << "_load failed" << errorString;
     }
     QVERIFY(loadSuccess);
     QVERIFY(errorString.isEmpty());
@@ -284,7 +284,7 @@ void LandingComplexItemTest::_testSaveLoad(void)
     newItem = new SimpleLandingComplexItem(_masterController, false /* flyView */);
     loadSuccess = newItem->_load(saveObject, 0 /* sequenceNumber */, SimpleLandingComplexItem::jsonComplexItemTypeValue, true /* useDeprecatedRelAltKeys */, errorString);
     if (!loadSuccess) {
-        //qDebug() << "_load failed" << errorString;
+        qDebug() << "_load failed" << errorString;
     }
     QVERIFY(loadSuccess);
     QVERIFY(errorString.isEmpty());
@@ -301,7 +301,7 @@ void LandingComplexItemTest::_testSaveLoad(void)
     newItem = new SimpleLandingComplexItem(_masterController, false /* flyView */);
     loadSuccess = newItem->_load(saveObject, 0 /* sequenceNumber */, SimpleLandingComplexItem::jsonComplexItemTypeValue, false /* useDeprecatedRelAltKeys */, errorString);
     if (!loadSuccess) {
-        //qDebug() << "_load failed" << errorString;
+        qDebug() << "_load failed" << errorString;
     }
     QVERIFY(loadSuccess);
     QVERIFY(errorString.isEmpty());

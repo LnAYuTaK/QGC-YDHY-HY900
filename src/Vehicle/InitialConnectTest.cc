@@ -27,7 +27,7 @@ void InitialConnectTest::_performTestCases(void)
     };
 
     for (const struct TestCase_s& testCase: rgTestCases) {
-        //qDebug() << "Testing case failure mode:" << testCase.failureModeStr;
+        qDebug() << "Testing case failure mode:" << testCase.failureModeStr;
         _connectMockLink(MAV_AUTOPILOT_PX4, testCase.failureMode);
         _disconnectMockLink();
     }

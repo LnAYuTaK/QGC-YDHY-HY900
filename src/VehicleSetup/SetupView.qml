@@ -268,21 +268,21 @@ Rectangle {
 //                onClicked:          showPanel(this, "JoystickConfig.qml")
 //            }
 
-            Repeater {
-                id:     componentRepeater
-                model:  _fullParameterVehicleAvailable ? QGroundControl.multiVehicleManager.activeVehicle.autopilot.vehicleComponents : 0
+//            Repeater {
+//                id:     componentRepeater
+//                model:  _fullParameterVehicleAvailable ? QGroundControl.multiVehicleManager.activeVehicle.autopilot.vehicleComponents : 0
 
-                SubMenuButton {
-                    imageResource:      modelData.iconResource
-                    setupIndicator:     modelData.requiresSetup
-                    setupComplete:      modelData.setupComplete
-                    exclusiveGroup:     setupButtonGroup
-                    text:               modelData.name
-                    visible:            modelData.setupSource.toString() !== ""
-                    Layout.fillWidth:   true
-                    onClicked:          showVehicleComponentPanel(modelData)
-                }
-            }
+//                SubMenuButton {
+//                    imageResource:      modelData.iconResource
+//                    setupIndicator:     modelData.requiresSetup
+//                    setupComplete:      modelData.setupComplete
+//                    exclusiveGroup:     setupButtonGroup
+//                    text:               modelData.name
+//                    visible:            modelData.setupSource.toString() !== ""
+//                    Layout.fillWidth:   true
+//                    onClicked:          showVehicleComponentPanel(modelData)
+//                }
+//            }
 
             SubMenuButton {
                 setupIndicator:     false

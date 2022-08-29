@@ -218,5 +218,13 @@
         <file>resources/ImageRes/shezhitianchong.svg</file>
         <file>resources/ImageRes/shezhixitongshezhigongnengshezhishuxing.svg</file>
         <file>resources/ImageRes/yonghu.svg</file>
+        <file>resources/ImageRes/bitbug_favicon64x64.ico</file>
+        <file>resources/ImageRes/bitbug_favicon32x32-2.svg</file>
+        <file>resources/ImageRes/bitbug_favicon128x128-2.svg</file>
+        <file>resources/ImageRes/bitbug_favicon32x32-2.ico</file>
+        <file>resources/ImageRes/bitbug_favicon64x64.svg</file>
+        <file>resources/ImageRes/bitbug_favicon32x32-2  (1).svg</file>
+        <file>resources/ImageRes/bitbug_favicon64x64-1 .svg</file>
+        <file>resources/ImageRes/bitbug_favicon128x128.svg</file>
     </qresource>
 </RCC>

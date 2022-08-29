@@ -1302,17 +1302,17 @@ FactMetaData* FactMetaData::createFromJsonObject(const QJsonObject& json, QMap<Q
 
     bool foundBitmask = false;
     if (!_parseValuesArray(json, rgDescriptions, rgDoubleValues, errorString)) {
-       // qWarning() << QStringLiteral("FactMetaData::createFromJsonObject _parseValueDescriptionArray for %1 failed. %2").arg(metaData->_name).arg(errorString);
+        qWarning() << QStringLiteral("FactMetaData::createFromJsonObject _parseValueDescriptionArray for %1 failed. %2").arg(metaData->_name).arg(errorString);
     }
     if (rgDescriptions.isEmpty()) {
         if (!_parseBitmaskArray(json, rgDescriptions, rgIntValues, errorString)) {
-         //   qWarning() << QStringLiteral("FactMetaData::createFromJsonObject _parseBitmaskArray for %1 failed. %2").arg(metaData->_name).arg(errorString);
+            qWarning() << QStringLiteral("FactMetaData::createFromJsonObject _parseBitmaskArray for %1 failed. %2").arg(metaData->_name).arg(errorString);
         }
         foundBitmask = rgDescriptions.count() != 0;
     }
     if (rgDescriptions.isEmpty()) {
         if (!_parseEnum(json, defineMap, rgDescriptions, rgStringValues, errorString)) {
-       //qWarning() << QStringLiteral("FactMetaData::createFromJsonObject _parseEnum for %1 failed. %2").arg(metaData->_name).arg(errorString);
+            qWarning() << QStringLiteral("FactMetaData::createFromJsonObject _parseEnum for %1 failed. %2").arg(metaData->_name).arg(errorString);
         }
     }
 
@@ -1328,10 +1328,10 @@ FactMetaData* FactMetaData::createFromJsonObject(const QJsonObject& json, QMap<Q
                 if (metaData->convertAndValidateRaw(rawValueVariant, false /* validate */, convertedValueVariant, errorString)) {
                     metaData->addEnumInfo(rgDescriptions[i], convertedValueVariant);
                 } else {
-                    //qWarning() << QStringLiteral("FactMetaData::createFromJsonObject convertAndValidateRaw on enum value for %1 failed.").arg(metaData->_name)
-                      //         << " type:" << metaData->type()
-                        //       << " value:" << rawValueVariant
-                         //      << " error:" << errorString;
+                    qWarning() << QStringLiteral("FactMetaData::createFromJsonObject convertAndValidateRaw on enum value for %1 failed.").arg(metaData->_name)
+                               << " type:" << metaData->type()
+                               << " value:" << rawValueVariant
+                               << " error:" << errorString;
                 }
             }
         }

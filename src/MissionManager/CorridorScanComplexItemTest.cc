@@ -158,7 +158,7 @@ void CorridorScanComplexItemTest::_testItemCount(void)
 
     QList<MissionItem*> items;
     for (const TestCase_t& testCase : rgTestCases) {
-        //qDebug() << "triggerInTurnAround:hasTurnaround" << testCase.triggerInTurnAround << testCase.hasTurnaround;
+        qDebug() << "triggerInTurnAround:hasTurnaround" << testCase.triggerInTurnAround << testCase.hasTurnaround;
         _corridorItem->cameraTriggerInTurnAround()->setRawValue(testCase.triggerInTurnAround);
         _corridorItem->turnAroundDistance()->setRawValue(testCase.hasTurnaround ? 50 : 0);
         _corridorItem->appendMissionItems(items, this);
@@ -213,7 +213,7 @@ QList<MAV_CMD> CorridorScanComplexItemTest::_createExpectedCommands(bool hasTurn
 
 void CorridorScanComplexItemTest::_testItemGenerationWorker(bool imagesInTurnaround, bool hasTurnaround, bool useConditionGate, const QList<MAV_CMD>& expectedCommands)
 {
-    //qDebug() << QStringLiteral("_testItemGenerationWorker imagesInTuraround:%1 turnaround:%2 gate:%3").arg(imagesInTurnaround).arg(hasTurnaround).arg(useConditionGate);
+    qDebug() << QStringLiteral("_testItemGenerationWorker imagesInTuraround:%1 turnaround:%2 gate:%3").arg(imagesInTurnaround).arg(hasTurnaround).arg(useConditionGate);
 
     _corridorItem->turnAroundDistance()->setRawValue(hasTurnaround ? 50 : 0);
     _corridorItem->cameraTriggerInTurnAround()->setRawValue(imagesInTurnaround);

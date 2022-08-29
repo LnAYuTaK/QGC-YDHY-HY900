@@ -119,7 +119,7 @@ Map {
         target:             QGroundControl.settingsManager.flightMapSettings.mapProvider
         function onRawValueChanged() { updateActiveMapType() }
     }
-
+    //地图
     /// Ground Station location
     MapQuickItem {
         anchorPoint.x:  sourceItem.width / 2
@@ -129,7 +129,7 @@ Map {
 
         sourceItem: Image {
             id:             mapItemImage
-            source:         isNaN(gcsHeading) ? "/res/QGCLogoFull" : "/res/QGCLogoArrow"
+            source:         isNaN(gcsHeading) ? "qrc:/qmlimages/resources/ImageRes/bitbug_favicon32x32-2.svg" : ""
             mipmap:         true
             antialiasing:   true
             fillMode:       Image.PreserveAspectFit

@@ -168,8 +168,7 @@ bool JsonHelper::isJsonFile(const QByteArray& bytes, QJsonDocument& jsonDoc, QSt
     } else {
         int startPos = qMax(0, parseError.offset - 100);
         int length = qMin(bytes.count() - startPos, 200);
-        Q_UNUSED(length)
-        //qDebug() << QStringLiteral("Json read error '%1'").arg(bytes.mid(startPos, length).constData());
+        qDebug() << QStringLiteral("Json read error '%1'").arg(bytes.mid(startPos, length).constData());
         errorString = parseError.errorString();
         return false;
     }

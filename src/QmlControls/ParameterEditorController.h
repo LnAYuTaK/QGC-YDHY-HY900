@@ -17,8 +17,7 @@
 #include "FactPanelController.h"
 #include "QmlObjectListModel.h"
 #include "ParameterManager.h"
-//参数控制器  //
-// ParameterEditorController  -> ParameterEditorCategory []  -> ParameterEditorGroup[]
+
 class ParameterEditorGroup : public QObject
 {
     Q_OBJECT

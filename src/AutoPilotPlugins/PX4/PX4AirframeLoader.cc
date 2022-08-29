@@ -119,7 +119,7 @@ void PX4AirframeLoader::loadAirframeMetaData(void)
                 }
                 if (intVersion < 1) {
                     // We can't read these old files
-                    //qDebug() << "Airframe version stamp too old, skipping load. Found:" << intVersion << "Want: 3 File:" << airframeFilename;
+                    qDebug() << "Airframe version stamp too old, skipping load. Found:" << intVersion << "Want: 3 File:" << airframeFilename;
                     return;
                 }
 
@@ -131,7 +131,7 @@ void PX4AirframeLoader::loadAirframeMetaData(void)
             } else if (elementName == "airframe_group") {
                 if (xmlState != XmlStateFoundVersion) {
                     // We didn't get a version stamp, assume older version we can't read
-                    //qDebug() << "Parameter version stamp not found, skipping load" << airframeFilename;
+                    qDebug() << "Parameter version stamp not found, skipping load" << airframeFilename;
                     return;
                 }
                 xmlState = XmlStateFoundGroup;

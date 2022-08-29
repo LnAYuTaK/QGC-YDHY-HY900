@@ -499,13 +499,13 @@ static void _pauseVehicleThenChangeAltResultHandler(void* resultHandlerData, int
     if (commandResult != MAV_RESULT_ACCEPTED) {
         switch (failureCode) {
         case Vehicle::MavCmdResultCommandResultOnly:
-            //qDebug() << QStringLiteral("MAV_CMD_DO_REPOSITION error(%1)").arg(commandResult);
+            qDebug() << QStringLiteral("MAV_CMD_DO_REPOSITION error(%1)").arg(commandResult);
             break;
         case Vehicle::MavCmdResultFailureNoResponseToCommand:
-            //qDebug() << "MAV_CMD_DO_REPOSITION no response from vehicle";
+            qDebug() << "MAV_CMD_DO_REPOSITION no response from vehicle";
             break;
         case Vehicle::MavCmdResultFailureDuplicateCommand:
-            //qDebug() << "Internal Error: MAV_CMD_DO_REPOSITION could not be sent due to duplicate command";
+            qDebug() << "Internal Error: MAV_CMD_DO_REPOSITION could not be sent due to duplicate command";
             break;
         }
     }

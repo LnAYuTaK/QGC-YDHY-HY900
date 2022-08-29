@@ -405,7 +405,7 @@ QVariant Fact::rawDefaultValue(void) const
 {
     if (_metaData) {
         if (!_metaData->defaultValueAvailable()) {
-            //qDebug() << "Access to unavailable default value";
+            qDebug() << "Access to unavailable default value";
         }
         return _metaData->rawDefaultValue();
     } else {
@@ -418,7 +418,7 @@ QVariant Fact::cookedDefaultValue(void) const
 {
     if (_metaData) {
         if (!_metaData->defaultValueAvailable()) {
-            //qDebug() << "Access to unavailable default value";
+            qDebug() << "Access to unavailable default value";
         }
         return _metaData->cookedDefaultValue();
     } else {

@@ -116,7 +116,7 @@ Item {
         anchors.right:              parent.right
         width:                      _rightPanelWidth*1.5
         spacing:                    _toolsMargin
-        visible:                    QGroundControl.corePlugin.options.flyView.showInstrumentPanel && multiVehiclePanelSelector.showSingleVehiclePanel
+        visible:                    true
         availableHeight:            parent.height - y - _toolsMargin
 
         property real rightInset: visible ? parent.width - x : 0
@@ -125,11 +125,32 @@ Item {
     ParameterView{
              id : parameterView
              anchors.top:          instrumentPanel.bottom
-             anchors.bottom:       parent.bottom
              anchors.right:        parent.right
              width:                parent.width*0.2
              color:                "black"
+             visible:  true
      }
+//    QGCButton {
+//        id :hidebutton
+//        text:           qsTr("隐藏")
+//        visible:   true
+//        width:  parameterView.width
+//        height: 25
+//        anchors.bottom : parent.bottom
+//        anchors.right:parent.right
+//        onClicked: {
+//            if(parameterView.visible) {
+//                parameterView.visible = false
+//                instrumentPanel.visible = false
+//                hidebutton.text ="显示参数"
+//            }
+//            else {
+//                parameterView.visible = true
+//                instrumentPanel.visible = true
+//                hidebutton.text ="隐藏"
+//            }
+//        }
+//    }
 
 //    QGCPipOverlay {
 //        id:                     _pipOverlay

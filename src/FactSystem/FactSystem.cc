@@ -17,8 +17,6 @@
 
 #include <QtQml>
 
-//Fact System 用于整个qgc 的数据管理
-//
 const char* FactSystem::_factSystemQmlUri = "QGroundControl.FactSystem";
 
 FactSystem::FactSystem(QGCApplication* app, QGCToolbox* toolbox)

@@ -208,7 +208,7 @@ QVariantList& QGCCorePlugin::analyzePages()
 {
 
 
-    #if defined(HY_900)
+    #if !defined(HY_900)
     if (!_p->analyzeList.count()) {
         _p->analyzeList.append(QVariant::fromValue(new QmlComponentInfo(tr("Log Download"),     QUrl::fromUserInput("qrc:/qml/LogDownloadPage.qml"),        QUrl::fromUserInput("qrc:/qmlimages/LogDownloadIcon"))));
 #if !defined(__mobile__)

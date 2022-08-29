@@ -45,6 +45,7 @@ Rectangle {
         visible:        qgcPal.globalTheme === QGCPalette.Light
     }
 
+
     Rectangle {
         anchors.fill:   viewButtonRow
         visible:        currentToolbar === flyViewToolbar
@@ -68,7 +69,7 @@ Rectangle {
             id:                     currentButton
             Layout.preferredHeight: viewButtonRow.height
             //修改公司图标
-            icon.source:            "/res/QGCLogoFull"
+            icon.source:            "qrc:/qmlimages/resources/ImageRes/bitbug_favicon128x128.svg"
             logo:                   true
             //2022 8.22
             onClicked:              mainWindow.showMenuToolStrip()
@@ -87,27 +88,27 @@ Rectangle {
         }
     }
 
-    QGCFlickable {
-        id:                     toolsFlickable
-        anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5
-        anchors.left:           viewButtonRow.right
-        anchors.bottomMargin:   1
-        anchors.top:            parent.top
-        anchors.bottom:         parent.bottom
-        anchors.right:          parent.right
-        contentWidth:           indicatorLoader.x + indicatorLoader.width
-        flickableDirection:     Flickable.HorizontalFlick
+//    QGCFlickable {
+//        id:                     toolsFlickable
+//        anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5
+//        anchors.left:           viewButtonRow.right
+//        anchors.bottomMargin:   1
+//        anchors.top:            parent.top
+//        anchors.bottom:         parent.bottom
+//        anchors.right:          parent.right
+//        contentWidth:           indicatorLoader.x + indicatorLoader.width
+//        flickableDirection:     Flickable.HorizontalFlick
 
-        Loader {
-            id:                 indicatorLoader
-            anchors.left:       parent.left
-            anchors.top:        parent.top
-            anchors.bottom:     parent.bottom
-            source:             currentToolbar === flyViewToolbar ?
-                                    "qrc:/toolbar/MainToolBarIndicators.qml" :
-                                    (currentToolbar == planViewToolbar ? "qrc:/qml/PlanToolBarIndicators.qml" : "")
-        }
-    }
+//        Loader {
+//            id:                 indicatorLoader
+//            anchors.left:       parent.left
+//            anchors.top:        parent.top
+//            anchors.bottom:     parent.bottom
+//            source:             currentToolbar === flyViewToolbar ?
+//                                    "qrc:/toolbar/MainToolBarIndicators.qml" :
+//                                    (currentToolbar == planViewToolbar ? "qrc:/qml/PlanToolBarIndicators.qml" : "")
+//        }
+//    }
 
     //-------------------------------------------------------------------------
     //-- Branding Logo

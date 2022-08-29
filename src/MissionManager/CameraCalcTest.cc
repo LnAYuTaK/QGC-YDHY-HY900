@@ -72,7 +72,7 @@ void CameraCalcTest::_testDirty(void)
             << _cameraCalc->adjustedFootprintSide()
             << _cameraCalc->adjustedFootprintFrontal();
     for(Fact* fact: rgFacts) {
-        //qDebug() << fact->name();
+        qDebug() << fact->name();
         QVERIFY(!_cameraCalc->dirty());
         if (fact->typeIsBool()) {
             fact->setRawValue(!fact->rawValue().toBool());

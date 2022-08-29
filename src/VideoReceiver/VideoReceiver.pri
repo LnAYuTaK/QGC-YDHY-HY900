@@ -36,8 +36,6 @@ LinuxBuild {
     }
 } else:WindowsBuild {
     #- gstreamer installed by default under c:/gstreamer
-
-# 2022 8.27 修改  // 注意填写gstreamer本地库路径
     GST_ROOT = e:/gstreamer/1.0/msvc_x86_64
 
     exists($$GST_ROOT) {
@@ -65,7 +63,6 @@ LinuxBuild {
     }
 } else:AndroidBuild {
     #- gstreamer assumed to be installed in $$PWD/../../gstreamer-1.0-android-universal-1.18.5/***
-    # 放在本路径下不要修改位置  //只保留armv7版本// 官网下载//
     contains(ANDROID_TARGET_ARCH, armeabi-v7a) {
         GST_ROOT = $$PWD/../../gstreamer-1.0-android-universal-1.18.5/armv7
     } else:contains(ANDROID_TARGET_ARCH, arm64-v8a) {

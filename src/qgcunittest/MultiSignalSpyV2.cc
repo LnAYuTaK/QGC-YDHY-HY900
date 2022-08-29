@@ -247,10 +247,10 @@ void MultiSignalSpyV2::_printSignalState(quint64 mask)
 {
     for (int i=0; i<_rgSignalNames.count(); i++) {
         bool expected = (1ll << i) & mask;
-        Q_UNUSED(expected)
+
         QSignalSpy* spy = _rgSpys[i];
         Q_ASSERT(spy != nullptr);
-        //qDebug() << "Signal index:" << i << "count:" << spy->count() << "expected:" << expected << _rgSignalNames[i];
+        qDebug() << "Signal index:" << i << "count:" << spy->count() << "expected:" << expected << _rgSignalNames[i];
     }
 }
 

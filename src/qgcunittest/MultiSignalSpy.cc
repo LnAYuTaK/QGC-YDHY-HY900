@@ -44,7 +44,7 @@ bool MultiSignalSpy::init(QObject*        signalEmitter,    ///< [in] object whi
                           size_t          cSignals)         ///< [in] numbers of signals in rgSignals
 {
     if (!signalEmitter || !rgSignals || cSignals == 0) {
-        //qDebug() << "Invalid arguments";
+        qDebug() << "Invalid arguments";
         return false;
     }
     
@@ -58,7 +58,7 @@ bool MultiSignalSpy::init(QObject*        signalEmitter,    ///< [in] object whi
     for (size_t i=0; i<_cSignals; i++) {
         _rgSpys[i] = new QSignalSpy(_signalEmitter, _rgSignals[i]);
         if (!_rgSpys[i]->isValid()) {
-            //qDebug() << "Invalid signal: index" << i;
+            qDebug() << "Invalid signal: index" << i;
             return false;
         }
     }
@@ -74,7 +74,7 @@ bool MultiSignalSpy::_checkSignalByMaskWorker(quint32 mask, bool multipleSignals
             Q_ASSERT(spy != nullptr);
             
             if ((multipleSignalsAllowed && spy->count() ==  0) || (!multipleSignalsAllowed && spy->count() != 1)) {
-                //qDebug() << "Failed index:" << i;
+                qDebug() << "Failed index:" << i;
                 _printSignalState(mask);
                 return false;
             }
@@ -235,10 +235,10 @@ void MultiSignalSpy::_printSignalState(quint32 mask)
 {
     for (size_t i=0; i<_cSignals; i++) {
         bool expected = (1 << i) & mask;
-        Q_UNUSED(expected)
+
         QSignalSpy* spy = _rgSpys[i];
         Q_ASSERT(spy != nullptr);
-        //qDebug() << "Signal index:" << i << "count:" << spy->count() << "expected:" << expected << _rgSignals[i];
+        qDebug() << "Signal index:" << i << "count:" << spy->count() << "expected:" << expected << _rgSignals[i];
     }
 }
 
