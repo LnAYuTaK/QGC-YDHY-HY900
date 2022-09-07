@@ -226,5 +226,10 @@
         <file>resources/ImageRes/bitbug_favicon32x32-2  (1).svg</file>
         <file>resources/ImageRes/bitbug_favicon64x64-1 .svg</file>
         <file>resources/ImageRes/bitbug_favicon128x128.svg</file>
+        <file>resources/ImageRes/a-13Ashenglve.svg</file>
+        <file>resources/ImageRes/ellipsis.svg</file>
+        <file>resources/ImageRes/shenglve.svg</file>
+        <file>resources/ImageRes/shenglvehao.svg</file>
+        <file>resources/ImageRes/xianxingtubiaozhizuomoban-25.svg</file>
     </qresource>
 </RCC>

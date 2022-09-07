@@ -228,7 +228,7 @@ FlightMap {
         id: obstacleDistance
         showText: !pipMode
     }
-
+    //航线轨迹
     // Add trajectory lines to the map
     MapPolyline {
         id:         trajectoryPolyline

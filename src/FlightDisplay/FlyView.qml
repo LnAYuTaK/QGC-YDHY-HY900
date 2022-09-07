@@ -74,7 +74,6 @@ Item {
         leftEdgeBottomInset:    _pipOverlay.visible ? _pipOverlay.x + _pipOverlay.width : 0
         bottomEdgeLeftInset:    _pipOverlay.visible ? parent.height - _pipOverlay.y : 0
     }
-
     //
     FlyViewWidgetLayer {
         id:                     widgetLayer

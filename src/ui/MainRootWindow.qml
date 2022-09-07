@@ -28,6 +28,7 @@ ApplicationWindow {
     minimumWidth:   ScreenTools.isMobile ? Screen.width  : Math.min(ScreenTools.defaultFontPixelWidth * 100, Screen.width)
     minimumHeight:  ScreenTools.isMobile ? Screen.height : Math.min(ScreenTools.defaultFontPixelWidth * 50, Screen.height)
     visible:        true
+    color: 'transparent'
 
     Component.onCompleted: {
         //-- Full screen on mobile or tiny screens
@@ -159,6 +160,8 @@ ApplicationWindow {
         toolDrawer.visible      = true
     }
 
+
+//-----------------------------------------------------------
     //左侧的导航栏
     function showMenuToolStrip(){
 
@@ -210,7 +213,12 @@ ApplicationWindow {
         showTool(qsTr("Application Settings"), "AppSettings.qml", "/res/QGCLogoWhite")
     }
 
-    //-------------------------------------------------------------------------
+
+ //-------------------------------------------------------------------
+
+
+
+  //-------------------------------------------------------------------------
     //-- Global simple message dialog
 
     function showMessageDialog(dialogTitle, dialogText, buttons = StandardButton.Ok, acceptFunction = null) {
@@ -309,11 +317,11 @@ ApplicationWindow {
     }
 
     //-------------------------------------------------------------------------
-    /// Toolbar
+    // Toolbar
     header: MainToolBar {
         id:         toolbar
         height:     ScreenTools.toolbarHeight
-        visible:    !QGroundControl.videoManager.fullScreen
+        visible:    false/*!QGroundControl.videoManager.fullScreen/*/
     }
 
     footer: LogReplayStatusBar {
@@ -453,6 +461,21 @@ ApplicationWindow {
     FlyView {
         id:             flightView
         anchors.fill:   parent
+        QGCToolBarButton {
+            id:                     currentButton
+            anchors.top :parent
+            //修改公司图标
+            icon.source:            "qrc:/qmlimages/resources/ImageRes/shenglve.svg"
+            logo:                   true
+            //2022 8.22
+            onClicked:              toolDrawerSelect.visible =true
+
+        }
+        DrawerPage{
+
+           id: toolDrawerSelect
+        }
+
     }
 
     PlanView {
@@ -468,7 +491,7 @@ ApplicationWindow {
         //跟顶部的距离
         anchors.topMargin:       10
         anchors.left:            parent.left
-        anchors.top:             parent.top
+        anchors.top :            currentButton.buttom
         z:                       QGroundControl.zOrderWidgets
         maxHeight:               parent.height
         visible:                 false
@@ -593,6 +616,7 @@ ApplicationWindow {
                 onPopout:               toolDrawer.visible = false
             }
         }
+
     }
 
     //-------------------------------------------------------------------------

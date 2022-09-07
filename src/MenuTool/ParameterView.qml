@@ -40,8 +40,8 @@ Rectangle {
   property string _gpsCount          : "gps卫星颗数: "
   property string _gps2Count         : "gps2卫星颗数: "   
 //
-  property string _gps         : "gps状态,颗数: "
-  property string _gps2         : "gps2状态,颗数: "
+  property string _gps               : "gps状态,颗数: "
+  property string _gps2              : "gps2状态,颗数: "
   property string _batteryVoltage    : "电池电压: "
   property string _altitudeRelative  : "相对海拔高度: "
   property string _groundSpeed       : "飞行速度: "
@@ -151,53 +151,18 @@ Rectangle {
             color:_LabelColorG
          }
      }
-//     Label{
-//           id :gpsState
-//           width:parent.width
-//           font.pointSize: pointSize
-//           color:"white"
-//           horizontalAlignment: Text.AlignHCenter
-//           text: _activeVehicle ? _gpsState+_activeVehicle.gps.lock.enumStringValue : _gpsState+qsTr("N/A", "No data to display")
-//           background : Rectangle{
-//               color:_LabelColorB
-//           }
-//       }
-
-//      Label{
-//           id :gps2Count
-//           width:parent.width
-//           font.pointSize: pointSize
-//           color:"white"
-//           horizontalAlignment: Text.AlignHCenter
-//           text: _activeVehicle ? _gpsCount+_activeVehicle.gps2.count.valueString+"颗": _gpsCount+qsTr("N/A", "No data to display")
-//           background : Rectangle{
-//               color:_LabelColorG
-//           }
-//       }
-//       //GPS2
-//       Label{
-//           id :gps2State
-//           width:parent.width
-//           font.pointSize: pointSize
-//           color:"white"
-//           horizontalAlignment: Text.AlignHCenter
-//           text: _activeVehicle ? _gps2State+_activeVehicle.gps2.lock.enumStringValue :_gps2State+qsTr("N/A", "No data to display")
-//           background : Rectangle{
-//               color:_LabelColorB
-//           }
-//       }
       //电池电压
-       Label{
-           id : batteryVoltage
-           width:parent.width
-           font.pointSize: pointSize
-           color:"white"
-           horizontalAlignment: Text.AlignHCenter
-           text: _activeVehicle ?_batteryVoltage+_activeVehicle.batteries.get(0).voltage.valueString+"v":_batteryVoltage+qsTr("N/A", "No data to display")
-           background : Rectangle{
-               color:_LabelColorB
-           }
-       }
+    Label{
+        id : batteryVoltage
+        width:parent.width
+        font.pointSize: pointSize
+        color:"white"
+        horizontalAlignment: Text.AlignHCenter
+        text: _activeVehicle ?_batteryVoltage+_activeVehicle.batteries.get(0).voltage.valueString+"v":_batteryVoltage+qsTr("N/A", "No data to display")
+        background : Rectangle{
+            color:_LabelColorB
+        }
+     }
        //海拔相对高度
         Label{
           id :  altitudeRelative

@@ -119,7 +119,7 @@ Map {
         target:             QGroundControl.settingsManager.flightMapSettings.mapProvider
         function onRawValueChanged() { updateActiveMapType() }
     }
-    //地图
+    //地图显示当前位置图标
     /// Ground Station location
     MapQuickItem {
         anchorPoint.x:  sourceItem.width / 2

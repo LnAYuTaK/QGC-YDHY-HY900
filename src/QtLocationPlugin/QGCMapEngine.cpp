@@ -234,7 +234,7 @@ QGCMapEngine::hashToType(const QString& hash)
 }
 
 //-----------------------------------------------------------------------------
-	QGCFetchTileTask*
+QGCFetchTileTask*
 QGCMapEngine::createFetchTileTask(QString type, int x, int y, int z)
 {
 	QString hash = getTileHash(type, x, y, z);
@@ -243,7 +243,7 @@ QGCMapEngine::createFetchTileTask(QString type, int x, int y, int z)
 }
 
 //-----------------------------------------------------------------------------
-	QGCTileSet
+QGCTileSet
 QGCMapEngine::getTileCount(int zoom, double topleftLon, double topleftLat, double bottomRightLon, double bottomRightLat, QString mapType)
 {
 	if(zoom <  1) zoom = 1;

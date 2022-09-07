@@ -292,6 +292,7 @@
         <file alias="QGroundControl/MenuTool/qmldir">src/QmlControls/QGroundControl/MenuTool/qmldir</file>
         <file alias="QGroundControl/MenuTool/ParameterView.qml">src/MenuTool/ParameterView.qml</file>
         <file alias="QGroundControl/MenuTool/VersionView.qml">src/MenuTool/VersionView.qml</file>
+        <file>DrawerPage.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="UnitsFirstRunPrompt.qml">src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml</file>

@@ -18,7 +18,6 @@ class FlightMapSettings : public SettingsGroup
 public:
     FlightMapSettings(QObject* parent = nullptr);
 
-
     DEFINE_SETTING_NAME_GROUP()
     DEFINE_SETTINGFACT(mapProvider)
     DEFINE_SETTINGFACT(mapType)
