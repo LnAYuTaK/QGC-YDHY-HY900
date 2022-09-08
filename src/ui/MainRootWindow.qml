@@ -463,20 +463,22 @@ ApplicationWindow {
         anchors.fill:   parent
         QGCToolBarButton {
             id:                     currentButton
-            anchors.top :parent
+            anchors.top :parent.top
             //修改公司图标
             icon.source:            "qrc:/qmlimages/resources/ImageRes/shenglve.svg"
             logo:                   true
             //2022 8.22
             onClicked:              toolDrawerSelect.visible =true
-
         }
-        DrawerPage{
 
-           id: toolDrawerSelect
-        }
 
     }
+    DrawerPage{
+       id: toolDrawerSelect
+
+    }
+
+
 
     PlanView {
         id:             planView

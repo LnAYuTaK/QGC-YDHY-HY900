@@ -29,7 +29,7 @@ Rectangle {
         __rightPanel.source = QGroundControl.corePlugin.settingsPages[QGroundControl.corePlugin.defaultSettings].url
     }
 
-    QGCFlickable {
+   QGCFlickable {
         id:                 buttonList
         width:              buttonColumn.width
         anchors.topMargin:  _verticalMargin

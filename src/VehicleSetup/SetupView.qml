@@ -58,7 +58,7 @@ Rectangle {
         } else {
             panelLoader.setSourceComponent(disconnectedVehicleSummaryComponent)
         }
-        summaryButton.checked = true
+        //summaryButton.checked = true
     }
 
     function showPanel(button, qmlSource) {

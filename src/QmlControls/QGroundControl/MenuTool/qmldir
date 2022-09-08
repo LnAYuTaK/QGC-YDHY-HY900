@@ -6,3 +6,6 @@ FlightMsgPage          1.0     FlightMsgPage.qml
 ParameterView          1.0     ParameterView.qml
 ConnectView            1.0     ConnectView.qml
 VersionView            1.0     VersionView.qml
+DrawerPage             1.0     DrawerPage.qml
+DrawSwipeView          1.0     DrawSwipeView.qml
+DrawerFlightPlan       1.0     DrawerFlightPlan.qml

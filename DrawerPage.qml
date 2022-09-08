@@ -17,120 +17,51 @@ Drawer {
     height:         mainWindow.height
     edge:           Qt.LeftEdge
     dragMargin:     0
-    closePolicy:    Popup.CloseOnPressOutsideParent|Popup.CloseOnPressOutside
-    interactive:    false
     visible:        false
+    modal: true
+    opacity : 1
+    closePolicy:  Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
-    Rectangle {
-        id:             toolDrawerSelectToolbar
-        anchors.left:   parent.left
-        anchors.right:  parent.right
-        anchors.top:    parent.top
-        height:         ScreenTools.toolbarHeight
-        color:          "black"
-        RowLayout {
-            anchors.fill:parent
-            QGCLabel{
-                id:planLabel
-                text:"任务规划"
-                font.pointSize:         15
-                wrapMode:               QGCLabel.WrapAnywhere
-                 color:                 qgcPal.buttonText
-                 QGCMouseArea{
-                     anchors.fill:parent
-                       onClicked: {
-
-                       }
-                }
-
-            }
-            Rectangle{
-                color:"white"
-                height:parent.height
-                width:2
-            }
-
-            QGCLabel{
-                text:"通讯连接"
-                font.pointSize:         15
-                wrapMode:               QGCLabel.WrapAnywhere
-                 color:             qgcPal.buttonText
-                 QGCMouseArea{
-                     anchors.fill:parent
-                     onClicked: {
-                         toolDrawerSelectLoader.sourceComponent = connectView
-                     }
-                }
-            }
-            Rectangle{
-                color:"white"
-                height:parent.height
-                width:2
-            }
-
-            QGCLabel{
-                text:"飞控参数"
-                font.pointSize:         15
-                wrapMode:               QGCLabel.WrapAnywhere
-                 color:             qgcPal.buttonText
-                 QGCMouseArea{
-                     anchors.fill:parent
-                     onClicked: {
-
-
-                     }
-                }
-            }
-            Rectangle{
-                color:"white"
-                height:parent.height
-                width:2
-            }
-
-            QGCLabel{
-                text:"版本说明"
-                font.pointSize:         15
-                wrapMode:               QGCLabel.WrapAnywhere
-                 color:             qgcPal.buttonText
-                 QGCMouseArea{
-                     anchors.fill:parent
-                     onClicked: {
-                          toolDrawerSelectLoader.sourceComponent = versionView
-
-                     }
-                }
-            }
+    TabBar {
+        id: bar
+        width: parent.width
+        currentIndex:swipeView.currentIndex
+        TabButton {
+            text: qsTr("任务规划")
+        }
+        TabButton {
+            text: qsTr("通信连接")
+        }
+        TabButton {
+            text: qsTr("飞控参数")
 
         }
+        TabButton {
+            text: qsTr("版本更新")
+        }
     }
-    Loader {
-        id:             toolDrawerSelectLoader
-        anchors.left:   parent.left
-        anchors.right:  parent.right
-        anchors.top:    toolDrawerSelectToolbar.bottom
-        anchors.bottom: parent.bottom
 
-    }
-    //默认是连接界面
-     Component.onCompleted: toolDrawerSelectLoader.sourceComponent =connectView
-    Component {
-        id:connectView
-       ConnectView {
-           anchors.fill:parent
+    SwipeView  {
+        id :swipeView
+        width: parent.width
+        anchors.top: bar.bottom
+        height: parent.height
+        clip: true
+        currentIndex: bar.currentIndex
+        DrawerFlightPlan{
+            id:planView
+        }
+        ConnectView{
+            id:connectView
+        }
+        ParameterEditor{
+            id:setUpView
+        }
+        VersionView{
+            id:versionView
         }
     }
-    Component {
-        id:setupView
-       SetupView {
-           anchors.fill:parent
-        }
-    }
-    Component {
-        id:versionView
-        VersionView {
-            anchors.fill:parent
-        }
-    }
+
 }
 
 
