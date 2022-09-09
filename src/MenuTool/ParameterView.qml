@@ -25,7 +25,6 @@ Rectangle {
   property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
   //字体大小
   property real   pointSize:   ScreenTools.defaultFontPointSize*0.7
-
   property string _LabelColorG :"gray"
   property string _LabelColorB :"blcak"
 
@@ -51,8 +50,8 @@ Rectangle {
   property string _linksignal        : "链路信号: "
   property string _motorTemp         : "电机温度: "
   property string _escTemp           : "电调温度: "
-
   Column{
+       id:_parameter
        anchors.fill :parent
        spacing :0
        //飞行模式
@@ -243,6 +242,7 @@ Rectangle {
         }
         //
     }
+
  }
 
 

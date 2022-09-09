@@ -32,6 +32,14 @@ import QGroundControl.Vehicle       1.0
 //2022 822
 import QGroundControl.MenuTool      1.0
 
+import QtQuick.Controls.Styles  1.4
+import QtQuick.Dialogs          1.2
+import QtLocation               5.3
+import QtPositioning            5.3
+import QtQuick.Layouts          1.2
+
+
+
 // This is the ui overlay layer for the widgets/tools for Fly View
 Item {
     id: _root
@@ -108,18 +116,39 @@ Item {
         height:             parent.height - y - _toolsMargin
         visible:            !multiVehiclePanelSelector.showSingleVehiclePanel
     }
+
+//2022 9.9
+    QGCToolBarButton {
+        id:            currentButton
+        anchors.right :instrumentPanel.left
+        anchors.top :parent.top
+        icon.source:            "qrc:/qmlimages/resources/ImageRes/xiala_1.svg"
+        logo:                   true
+        onClicked:  parameterVisable()
+    }
+    function parameterVisable(){
+        if(parameterView.visible) {
+            parameterView.visible = false
+            instrumentPanel.visible = false
+        }
+        else {
+            parameterView.visible = true
+            instrumentPanel.visible = true
+        }
+    }
+
+
     //罗盘
     FlyViewInstrumentPanel {
         id:                         instrumentPanel
-        anchors.margins:            _toolsMargin
-        anchors.top:                multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
+        anchors.top:                currentButton.buttom
         anchors.right:              parent.right
         width:                      _rightPanelWidth*1.5
         spacing:                    _toolsMargin
         visible:                    true
-        availableHeight:            parent.height - y - _toolsMargin
+        //availableHeight:            parent.height - y - _toolsMargin
 
-        property real rightInset: visible ? parent.width - x : 0
+       // property real rightInset: visible ? parent.width - x : 0
     }
 
     ParameterView{

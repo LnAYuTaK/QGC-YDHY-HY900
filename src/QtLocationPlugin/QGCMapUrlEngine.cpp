@@ -32,6 +32,8 @@ QGC_LOGGING_CATEGORY(QGCMapUrlEngineLog, "QGCMapUrlEngineLog")
 #include <QString>
 #include <QTimer>
 
+
+
 //-----------------------------------------------------------------------------
 UrlFactory::UrlFactory() : _timeout(5 * 1000) {
 
@@ -52,6 +54,11 @@ UrlFactory::UrlFactory() : _timeout(5 * 1000) {
     _providersTable["Statkart Topo"] = new StatkartMapProvider(this);
 
     _providersTable["Eniro Topo"] = new EniroMapProvider(this);
+
+    _providersTable["TianDiTu SatelliteMap"] =new TianDiTuSatelliteMapProvider(this);
+    _providersTable["TianDiTu TextMap"] =new TianDiTuTextMapProvider(this);
+
+
 
     // To be add later on Token entry !
     //_providersTable["Esri World Street"] = new EsriWorldStreetMapProvider(this);

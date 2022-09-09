@@ -231,5 +231,8 @@
         <file>resources/ImageRes/shenglve.svg</file>
         <file>resources/ImageRes/shenglvehao.svg</file>
         <file>resources/ImageRes/xianxingtubiaozhizuomoban-25.svg</file>
+        <file>resources/ImageRes/xiala.svg</file>
+        <file>resources/ImageRes/xiala_1.svg</file>
+        <file>resources/ImageRes/xiala_2.svg</file>
     </qresource>
 </RCC>

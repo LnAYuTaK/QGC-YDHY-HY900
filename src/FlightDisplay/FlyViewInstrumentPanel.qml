@@ -20,15 +20,14 @@ Column {
     id:         _root
     spacing:    _toolsMargin
     z:          QGroundControl.zOrderWidgets
-
     property real availableHeight
 
-    AirspaceControl {
-        id:                 airspaceControl
-        width:              parent.width
-        planView:           false
-        visible:            QGroundControl.airmapSupported ? QGroundControl.settingsManager.airMapSettings.enableAirMap.rawValue : false
-    }
+//    AirspaceControl {
+//        id:                 airspaceControl
+//        width:              parent.width
+//        planView:           false
+//        visible:            QGroundControl.airmapSupported ? QGroundControl.settingsManager.airMapSettings.enableAirMap.rawValue : false
+//    }
 
     FlightDisplayViewWidgets {
         id:                 flightDisplayViewWidgets

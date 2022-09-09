@@ -23,6 +23,17 @@ import QGroundControl.FactControls  1.0
 Item {
     id:         _root
 
+    Rectangle {
+        visible:            true
+        anchors.fill:       parent
+        color:  qgcPal.window
+    }
+    QGCPalette {
+        id:                 qgcPal
+    }
+
+
+    property bool   _isactvehicle:QGroundControl.multiVehicleManager.activeVehicle? true:false
     property Fact   _editorDialogFact: Fact { }
     property int    _rowHeight:         ScreenTools.defaultFontPixelHeight * 2
     property int    _rowWidth:          10 // Dynamic adjusted at runtime

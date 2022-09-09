@@ -11,15 +11,18 @@ import QGroundControl.ScreenTools   1.0
 import QGroundControl.FlightDisplay 1.0
 import QGroundControl.FlightMap     1.0
 import QGroundControl.MenuTool      1.0
+
+
 Drawer {
     id:             toolDrawerSelect
     width:          mainWindow.width*0.8
     height:         mainWindow.height
     edge:           Qt.LeftEdge
-    dragMargin:     0
+    dragMargin:     -10
     visible:        false
     modal: true
-    opacity : 1
+    opacity : 0.99
+    interactive : true
     closePolicy:  Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
     TabBar {

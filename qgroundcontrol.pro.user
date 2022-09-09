@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 8.0.0, 2022-09-08T17:53:46. -->
+<!-- Written by QtCreator 8.0.0, 2022-09-09T17:15:47. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -67,7 +67,10 @@
     <value type="bool" key="AutoTest.Framework.QtQuickTest">true</value>
     <value type="bool" key="AutoTest.Framework.QtTest">true</value>
    </valuemap>
-   <valuemap type="QVariantMap" key="AutoTest.CheckStates"/>
+   <valuemap type="QVariantMap" key="AutoTest.CheckStates">
+    <value type="Qt::CheckState" key="1@C:/Users/Administrator/Desktop/QGCYDHYHY900/QGC-YDHY-HY900/src/qgcunittest/UnitTest.cc:_linkDeleted">Checked</value>
+    <value type="Qt::CheckState" key="1@C:/Users/Administrator/Desktop/QGCYDHYHY900/QGC-YDHY-HY900/src/qgcunittest/UnitTest.h:UnitTest">Checked</value>
+   </valuemap>
    <value type="int" key="AutoTest.RunAfterBuild">0</value>
    <value type="bool" key="AutoTest.UseGlobal">true</value>
    <valuemap type="QVariantMap" key="ClangTools">
@@ -88,7 +91,7 @@
    <value type="QString" key="DeviceType">Android.Device.Type</value>
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Android Qt 5.15.2 Clang Multi-Abi</value>
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Android Qt 5.15.2 Clang Multi-Abi</value>
-   <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">{a3c5f1ab-25b7-46fe-bb5e-93b7e36cc555}</value>
+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">{6c853834-80fb-4714-82a1-616664b4fb9d}</value>
    <value type="qlonglong" key="ProjectExplorer.Target.ActiveBuildConfiguration">0</value>
    <value type="qlonglong" key="ProjectExplorer.Target.ActiveDeployConfiguration">0</value>
    <value type="qlonglong" key="ProjectExplorer.Target.ActiveRunConfiguration">0</value>
@@ -294,18 +297,11 @@
      <value type="QString">13</value>
      <value type="QString">14</value>
     </valuelist>
-    <valuelist type="QVariantList" key="Android.PostStartShellCmdListKey">
-     <value type="QString"></value>
-    </valuelist>
-    <valuelist type="QVariantList" key="Android.PreStartShellCmdListKey">
-     <value type="QString"></value>
-    </valuelist>
     <valuelist type="QVariantList" key="CustomOutputParsers"/>
-    <value type="int" key="PE.EnvironmentAspect.Base">0</value>
+    <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">qgroundcontrol</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.AndroidRunConfiguration:C:/Users/Administrator/Desktop/QGCYDHYHY900/QGC-YDHY-HY900/qgroundcontrol.pro</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">C:/Users/Administrator/Desktop/QGCYDHYHY900/QGC-YDHY-HY900/qgroundcontrol.pro</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.CustomExecutableRunConfiguration</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey"></value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>

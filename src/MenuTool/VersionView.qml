@@ -28,7 +28,7 @@ Rectangle {
     flickableDirection: Flickable.VerticalFlick
     Item {
         id:     outerItem
-        width:  Math.max(versionView.width, view.width)
+        width:  versionView.width
         height: view.height
             ColumnLayout{
                 id:view

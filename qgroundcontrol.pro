@@ -252,6 +252,7 @@ QT += \
     opengl \
     positioning \
     qml \
+    charts \
     quick \
     quickcontrols2 \
     quickwidgets \

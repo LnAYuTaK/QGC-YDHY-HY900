@@ -100,6 +100,15 @@ Map {
             }
         }
     }
+    //增加文字底片
+    function updateActiveMapTypeText(control,para) {
+           for (var i = 0; i < control.supportedMapTypes.length; i++) {
+               if (para === control.supportedMapTypes[i].name) {
+                   control.activeMapType = control.supportedMapTypes[i]
+                   return
+               }
+           }
+       }
 
     on_ActiveVehicleCoordinateChanged: _possiblyCenterToVehiclePosition()
 
@@ -142,4 +151,30 @@ Map {
             }
         }
     }
+    //文字透明底片
+    Map {
+          anchors.fill: parent
+          plugin: Plugin {
+              name: "QGroundControl"
+          }
+          gesture.enabled: false
+          center: parent.center
+          color: 'transparent'
+          minimumFieldOfView: parent.minimumFieldOfView
+          maximumFieldOfView: parent.maximumFieldOfView
+          minimumTilt: parent.minimumTilt
+          maximumTilt: parent.maximumTilt
+          minimumZoomLevel: parent.minimumZoomLevel
+          maximumZoomLevel: parent.maximumZoomLevel
+          zoomLevel: parent.zoomLevel
+          tilt: parent.tilt;
+          bearing: parent.bearing
+          fieldOfView: parent.fieldOfView
+          z: parent.z + 1;
+          Component.onCompleted: {
+              updateActiveMapTypeText(this,"TianDiTu TextMap");
+          }
+
+     }
+
 } // Map

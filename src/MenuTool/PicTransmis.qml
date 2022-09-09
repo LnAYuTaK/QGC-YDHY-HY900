@@ -127,8 +127,6 @@ Rectangle{
             visible:                fact.visible
             indexModel:             false
         }
-
-
                 Item { width: 1; height: 1}
                 FactCheckBox {
                     text:       qsTr("Disable When Disarmed")

@@ -31,6 +31,7 @@ HEADERS += \
     $$PWD/EsriMapProvider.h \
     $$PWD/MapboxMapProvider.h \
     $$PWD/QGCTileSet.h \
+    $$PWD/TianDiTuMapProvider.h
 
 
 SOURCES += \
@@ -51,6 +52,7 @@ SOURCES += \
     $$PWD/GenericMapProvider.cpp \
     $$PWD/EsriMapProvider.cpp \
     $$PWD/MapboxMapProvider.cpp \
+    $$PWD/TianDituMapProvider.cpp
 
 OTHER_FILES += \
     $$PWD/qgc_maps_plugin.json
