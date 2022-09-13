@@ -427,9 +427,7 @@ Item {
             allowVehicleLocationCenter: false
             gesture.flickDeceleration:  3000
             mapName:                    "OfflineMap"
-
             property bool isSatelliteMap: activeMapType.name.indexOf("Satellite") > -1 || activeMapType.name.indexOf("Hybrid") > -1
-
             MapRectangle {
                 id:             mapBoundary
                 border.width:   2

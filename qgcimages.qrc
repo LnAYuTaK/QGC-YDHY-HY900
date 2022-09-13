@@ -234,5 +234,12 @@
         <file>resources/ImageRes/xiala.svg</file>
         <file>resources/ImageRes/xiala_1.svg</file>
         <file>resources/ImageRes/xiala_2.svg</file>
+        <file>resources/ImageRes/dingwei.svg</file>
+        <file>resources/ImageRes/dingwei_.svg</file>
+        <file>resources/ImageRes/dingwei_1.svg</file>
+        <file>resources/ImageRes/dingwei_2.svg</file>
+        <file>resources/ImageRes/dingwei_3.svg</file>
+        <file>resources/ImageRes/dingweidaohang.svg</file>
+        <file>resources/ImageRes/tianqidingwei.svg</file>
     </qresource>
 </RCC>

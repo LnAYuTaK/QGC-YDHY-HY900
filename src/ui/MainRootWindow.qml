@@ -28,7 +28,6 @@ ApplicationWindow {
     minimumWidth:   ScreenTools.isMobile ? Screen.width  : Math.min(ScreenTools.defaultFontPixelWidth * 100, Screen.width)
     minimumHeight:  ScreenTools.isMobile ? Screen.height : Math.min(ScreenTools.defaultFontPixelWidth * 50, Screen.height)
     visible:        true
-    color: 'transparent'
 
     Component.onCompleted: {
         //-- Full screen on mobile or tiny screens
@@ -212,8 +211,6 @@ ApplicationWindow {
     function showSettingsTool() {
         showTool(qsTr("Application Settings"), "AppSettings.qml", "/res/QGCLogoWhite")
     }
-
-
  //-------------------------------------------------------------------
 
 
@@ -472,7 +469,7 @@ ApplicationWindow {
         }
 
 
-    }
+//    }
     DrawerPage{
        id: toolDrawerSelect
 
@@ -785,4 +782,5 @@ ApplicationWindow {
             indicatorPopup.currentIndicator = null
         }
     }
+  }
 }

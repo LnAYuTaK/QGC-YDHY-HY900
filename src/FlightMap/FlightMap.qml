@@ -138,7 +138,7 @@ Map {
 
         sourceItem: Image {
             id:             mapItemImage
-            source:         isNaN(gcsHeading) ? "qrc:/qmlimages/resources/ImageRes/bitbug_favicon32x32-2.svg" : ""
+            source:         isNaN(gcsHeading) ? "qrc:/qmlimages/resources/ImageRes/tianqidingwei.svg" : ""
             mipmap:         true
             antialiasing:   true
             fillMode:       Image.PreserveAspectFit

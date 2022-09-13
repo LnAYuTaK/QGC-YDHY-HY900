@@ -223,11 +223,14 @@ Item {
 //        property bool _verticalCenter: !QGroundControl.settingsManager.flyViewSettings.alternateInstrumentPanel.rawValue
 //    }
 
+
+
+//黑点
     TelemetryValuesBar {
         id:                 telemetryPanel
         x:                  recalcXPosition()
         anchors.margins:    _toolsMargin
-
+        visible: false
         // States for custom layout support
         states: [
             State {
@@ -336,7 +339,7 @@ Item {
 //        anchors.centerIn:   parent
 //        z:                  QGroundControl.zOrderTopMost
 //    }
-
+     //比例尺
     MapScale {
         id:                 mapScale
         anchors.margins:    _toolsMargin
