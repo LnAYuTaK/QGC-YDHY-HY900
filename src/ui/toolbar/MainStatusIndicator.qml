@@ -127,6 +127,8 @@ RowLayout {
         visible:                vtolModeLabel.visible
     }
 
+
+    //电压
     QGCLabel {
         id:                     vtolModeLabel
         Layout.preferredHeight: _root.height
@@ -193,7 +195,7 @@ RowLayout {
                         Layout.alignment:   Qt.AlignHCenter
                         text:               qsTr("Sensor Status")
                     }
-
+                    //
                     GridLayout {
                         rowSpacing:     _spacing
                         columnSpacing:  _spacing

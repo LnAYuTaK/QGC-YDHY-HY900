@@ -36,8 +36,8 @@ Item {
     property alias  _windowContentItem: window.contentItem
     property bool   _isExpanded:        true
     property real   _pipSize:           parent.width * 0.2
-    property real   _maxSize:           0.75                // Percentage of parent control size
-    property real   _minSize:           0.10
+//    property real   _maxSize:           0.75                // Percentage of parent control size
+//    property real   _minSize:           0.10
     property bool   _componentComplete: false
 
     Component.onCompleted: {
@@ -147,15 +147,15 @@ Item {
         }
 
         // Drag
-        onPositionChanged: {
-            if (pipResize.pressed) {
-                var parentWidth = _root.parent.width
-                var newWidth = pipResize.initialWidth + mouse.x - pipResize.initialX
-                if (newWidth < parentWidth * _maxSize && newWidth > parentWidth * _minSize) {
-                    _pipSize = newWidth
-                }
-            }
-        }
+//        onPositionChanged: {
+//            if (pipResize.pressed) {
+//                var parentWidth = _root.parent.width
+//                var newWidth = pipResize.initialWidth + mouse.x - pipResize.initialX
+//                if (newWidth < parentWidth * _maxSize && newWidth > parentWidth * _minSize) {
+//                    _pipSize = newWidth
+//                }
+//            }
+//        }
     }
 
     // Resize icon
@@ -181,11 +181,11 @@ Item {
                 return
             }
             var parentWidth = _root.parent.width
-            if (_root.width > parentWidth * _maxSize) {
-                _pipSize = parentWidth * _maxSize
-            } else if (_root.width < parentWidth * _minSize) {
-                _pipSize = parentWidth * _minSize
-            }
+//            if (_root.width > parentWidth * _maxSize) {
+//                _pipSize = parentWidth * _maxSize
+//            } else if (_root.width < parentWidth * _minSize) {
+//                _pipSize = parentWidth * _minSize
+//            }
         }
     }
 

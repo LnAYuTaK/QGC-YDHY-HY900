@@ -60,8 +60,8 @@ ApplicationWindow {
                 var component = Qt.createComponent(QGroundControl.corePlugin.firstRunPromptResource(rgPromptIds[nextPromptIdIndex]));
                 currentDialog = component.createObject(mainWindow)
                 currentDialog.closed.connect(nextPrompt)
-                currentDialog.open()
-                nextPromptIdIndex++
+//                currentDialog.open()
+//                nextPromptIdIndex++
             } else {
                 currentDialog = null
                 showPreFlightChecklistIfNeeded()
@@ -163,10 +163,6 @@ ApplicationWindow {
 //-----------------------------------------------------------
     //左侧的导航栏
     function showMenuToolStrip(){
-
-        if (!flightView.visible) {
-            mainWindow.showPreFlightChecklistIfNeeded()
-        }
         viewSwitch(toolbar.flyViewToolbar)
         flightView.visible = true
        if(!menuToolStrip.visible){

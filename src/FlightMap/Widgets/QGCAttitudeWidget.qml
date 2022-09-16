@@ -38,6 +38,11 @@ Item {
 
     QGCPalette { id: qgcPal; colorGroupEnabled: enabled }
 
+    QGCArtificialHorizon {
+        rollAngle:          _rollAngle
+        pitchAngle:         _pitchAngle
+        anchors.fill:       parent
+    }
     Item {
         id:             instrument
         anchors.fill:   parent
@@ -45,30 +50,31 @@ Item {
 
         //----------------------------------------------------
         //-- Artificial Horizon
-        QGCArtificialHorizon {
-            rollAngle:          _rollAngle
-            pitchAngle:         _pitchAngle
-            anchors.fill:       parent
-        }
+//        QGCArtificialHorizon {
+//            rollAngle:          _rollAngle
+//            pitchAngle:         _pitchAngle
+//            anchors.fill:       parent
+//        }
         //----------------------------------------------------
         //-- Pointer
         Image {
             id:                 pointer
-            source:             "/qmlimages/attitudePointer.svg"
+            source:"qrc:/qmlimages/src/FlightMap/Images/attitudePointer.png"
             mipmap:             true
             fillMode:           Image.PreserveAspectFit
             anchors.fill:       parent
             sourceSize.height:  parent.height
+
         }
         //----------------------------------------------------
         //-- Instrument Dial
         Image {
             id:                 instrumentDial
-            source:             "/qmlimages/attitudeDial.svg"
+            source:             "qrc:/qmlimages/src/FlightMap/Images/attitudeDial.png"
             mipmap:             true
             fillMode:           Image.PreserveAspectFit
             anchors.fill:       parent
-            sourceSize.height:  parent.height
+            sourceSize.height:  parent.height*3
             transform: Rotation {
                 origin.x:       root.width  / 2
                 origin.y:       root.height / 2
@@ -113,14 +119,14 @@ Item {
         maskSource: mask
     }
 
-    Rectangle {
-        id:             borderRect
-        anchors.fill:   parent
-        radius:         width / 2
-        color:          Qt.rgba(0,0,0,0)
-        border.color:   qgcPal.text
-        border.width:   1
-    }
+//    Rectangle {
+//        id:             borderRect
+//        anchors.fill:   parent
+//        radius:         width / 2
+//        color:          Qt.rgba(0,0,0,0)
+//        border.color:   qgcPal.text
+//        border.width:   1
+//    }
 
     QGCLabel {
         anchors.bottomMargin:       Math.round(ScreenTools.defaultFontPixelHeight * .75)

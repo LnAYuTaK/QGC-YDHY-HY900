@@ -59,6 +59,7 @@ Item {
     property real   _toolsMargin:           ScreenTools.defaultFontPixelWidth * 0.75
     property rect   _centerViewport:        Qt.rect(0, 0, width, height)
     property real   _rightPanelWidth:       ScreenTools.defaultFontPixelWidth * 10
+    property real   _defaltPixSize:         ScreenTools.defaultFontPixelWidth
 
     QGCToolInsets {
         id:                     _totalToolInsets
@@ -117,14 +118,18 @@ Item {
         visible:            !multiVehiclePanelSelector.showSingleVehiclePanel
     }
 
-//2022 9.9
-    QGCToolBarButton {
+//2022 9.9右侧隐藏左右箭头16X16
+    Image {
         id:            currentButton
-        anchors.right :instrumentPanel.left
-        anchors.top :parent.top
-        icon.source:            "qrc:/qmlimages/resources/ImageRes/xiala_1.svg"
-        logo:                   true
-        onClicked:  parameterVisable()
+        anchors.right :  instrumentPanel.visible== true?instrumentPanel.left:parent.right
+        source:     instrumentPanel.visible== true? "qrc:/qmlimages/resources/ImageRes/youjiantou.svg":"qrc:/qmlimages/resources/ImageRes/zuojiantou.svg"
+       // logo:            true
+        //onClicked:  parameterVisable()
+        MouseArea{
+            anchors.fill :parent
+            onClicked: parameterVisable()
+        }
+
     }
     function parameterVisable(){
         if(parameterView.visible) {
@@ -141,11 +146,12 @@ Item {
     //罗盘
     FlyViewInstrumentPanel {
         id:                         instrumentPanel
-        anchors.top:                currentButton.buttom
+        anchors.top:                parent.top
         anchors.right:              parent.right
         width:                      _rightPanelWidth*1.5
-        spacing:                    _toolsMargin
+       // spacing:                    _toolsMargin
         visible:                    true
+        anchors.horizontalCenter:   parameterView.horizontalCenter
         //availableHeight:            parent.height - y - _toolsMargin
 
        // property real rightInset: visible ? parent.width - x : 0
@@ -155,31 +161,12 @@ Item {
              id : parameterView
              anchors.top:          instrumentPanel.bottom
              anchors.right:        parent.right
+             anchors.bottom :parent.bottom
              width:                parent.width*0.2
              color:                "black"
              visible:  true
      }
-//    QGCButton {
-//        id :hidebutton
-//        text:           qsTr("隐藏")
-//        visible:   true
-//        width:  parameterView.width
-//        height: 25
-//        anchors.bottom : parent.bottom
-//        anchors.right:parent.right
-//        onClicked: {
-//            if(parameterView.visible) {
-//                parameterView.visible = false
-//                instrumentPanel.visible = false
-//                hidebutton.text ="显示参数"
-//            }
-//            else {
-//                parameterView.visible = true
-//                instrumentPanel.visible = true
-//                hidebutton.text ="隐藏"
-//            }
-//        }
-//    }
+
 
 //    QGCPipOverlay {
 //        id:                     _pipOverlay
@@ -224,8 +211,6 @@ Item {
 //    }
 
 
-
-//黑点
     TelemetryValuesBar {
         id:                 telemetryPanel
         x:                  recalcXPosition()
@@ -340,17 +325,6 @@ Item {
 //        z:                  QGroundControl.zOrderTopMost
 //    }
      //比例尺
-    MapScale {
-        id:                 mapScale
-        anchors.margins:    _toolsMargin
-        anchors.left:       toolStrip.right
-        anchors.top:        parent.top
-        mapControl:         _mapControl
-        buttonsOnLeft:      false
-        visible:            !ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale && mapControl.pipState.state === mapControl.pipState.fullState
-
-        property real centerInset: visible ? parent.height - y : 0
-    }
 
     Component {
         id: preFlightChecklistPopup

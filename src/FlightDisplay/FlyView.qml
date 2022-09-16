@@ -74,14 +74,14 @@ Item {
         leftEdgeBottomInset:    _pipOverlay.visible ? _pipOverlay.x + _pipOverlay.width : 0
         bottomEdgeLeftInset:    _pipOverlay.visible ? parent.height - _pipOverlay.y : 0
     }
-    //
+
     FlyViewWidgetLayer {
         id:                     widgetLayer
         anchors.top:            parent.top
-        anchors.bottom:         _pipOverlay.top
+        anchors.bottom:         parent.bottom
         anchors.left:           parent.left
         anchors.right:          guidedValueSlider.visible ? guidedValueSlider.left : parent.right
-        anchors.margins:        _toolsMargin
+        //anchors.margins:        _toolsMargin
         z:                      _fullItemZorder + 1
         parentToolInsets:       _toolInsets
         mapControl:             _mapControl
@@ -146,14 +146,27 @@ Item {
         mapName:                "FlightDisplayView"
     }
 
+    //比例尺
+    MapScale {
+        id:                 mapScale
+        anchors.margins:    _toolsMargin
+        anchors.left:       _pipOverlay.right
+        anchors.bottom :    parent.bottom
+        mapControl:         _mapControl
+        buttonsOnLeft:      false
+        visible:            !ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale && mapControl.pipState.state === mapControl.pipState.fullState
+        property real centerInset: visible ? parent.height - y : 0
+    }
+
+
     FlyViewVideo {
         id: videoControl
     }
 
-
+    //左下角视频
     QGCPipOverlay {
         id:                     _pipOverlay
-        anchors.left:          parent.left
+        anchors.left:           parent.left
         anchors.bottom:         parent.bottom
 //        anchors.margins:        _toolsMargin
         item1IsFullSettingsKey: "MainFlyWindowIsMap"

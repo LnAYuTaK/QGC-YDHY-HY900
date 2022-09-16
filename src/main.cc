@@ -237,6 +237,8 @@ void sigHandler(int s)
 
 int main(int argc, char *argv[])
 {
+
+
 #ifndef __mobile__
     // We make the runguard key different for custom and non custom
     // builds, so they can be executed together in the same device.

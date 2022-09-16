@@ -43,9 +43,9 @@ Item {
                 dist = Math.round(dist / 100)
                 dist = dist / 10
             }
-            dist = dist + qsTr(" km")
+            dist = dist +" KM"
         } else {
-            dist = dist + qsTr(" m")
+            dist = dist + " M"
         }
         return dist
     }

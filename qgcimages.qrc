@@ -208,14 +208,7 @@
         <file>resources/ImageRes/lianjie.svg</file>
         <file>resources/ImageRes/renwu.svg</file>
         <file>resources/ImageRes/shezhi.svg</file>
-        <file>resources/ImageRes/shezhi_1.svg</file>
         <file>resources/ImageRes/shezhi_2.svg</file>
-        <file>resources/ImageRes/shezhi_3.svg</file>
-        <file>resources/ImageRes/shezhi_4.svg</file>
-        <file>resources/ImageRes/shezhi_5.svg</file>
-        <file>resources/ImageRes/shezhi_6.svg</file>
-        <file>resources/ImageRes/shezhi_7.svg</file>
-        <file>resources/ImageRes/shezhitianchong.svg</file>
         <file>resources/ImageRes/shezhixitongshezhigongnengshezhishuxing.svg</file>
         <file>resources/ImageRes/yonghu.svg</file>
         <file>resources/ImageRes/bitbug_favicon64x64.ico</file>
@@ -239,7 +232,13 @@
         <file>resources/ImageRes/dingwei_1.svg</file>
         <file>resources/ImageRes/dingwei_2.svg</file>
         <file>resources/ImageRes/dingwei_3.svg</file>
-        <file>resources/ImageRes/dingweidaohang.svg</file>
         <file>resources/ImageRes/tianqidingwei.svg</file>
+        <file>resources/ImageRes/youce.svg</file>
+        <file>resources/ImageRes/youjiantou.svg</file>
+        <file>resources/ImageRes/zuoce.svg</file>
+        <file>resources/ImageRes/zuocelan.svg</file>
+        <file>resources/ImageRes/zuojiantou.svg</file>
+        <file>src/FlightMap/Images/attitudePointer.png</file>
+        <file>src/FlightMap/Images/attitudeDial.png</file>
     </qresource>
 </RCC>

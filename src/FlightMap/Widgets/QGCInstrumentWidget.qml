@@ -31,22 +31,25 @@ ColumnLayout {
 
     Rectangle {
         id:                 visualInstrument
-        height:             _outerRadius * 2
+        height:             _outerRadius * 2.5
         Layout.fillWidth:   true
-        radius:             _outerRadius
+        //radius:             _outerRadius
         color:              qgcPal.window
 
         DeadMouseArea { anchors.fill: parent }
-
+        //
         QGCAttitudeWidget {
             id:                     attitude
-            anchors.leftMargin:     _topBottomMargin
-            anchors.left:           parent.left
-            size:                   _innerRadius * 2
+
+//            anchors.leftMargin:     _topBottomMargin
+//            anchors.left:           parent.left
+            anchors.fill :parent
+            size:                   _innerRadius * 4
             vehicle:                globals.activeVehicle
             anchors.verticalCenter: parent.verticalCenter
         }
 
+        //罗盘
         QGCCompassWidget {
             id:                     compass
             anchors.leftMargin:     _spacing
@@ -54,6 +57,7 @@ ColumnLayout {
             size:                   _innerRadius * 2
             vehicle:                globals.activeVehicle
             anchors.verticalCenter: parent.verticalCenter
+            visible: false
         }
     }
 

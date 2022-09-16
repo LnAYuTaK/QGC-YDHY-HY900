@@ -26,6 +26,6 @@ Loader {
     width:  parent.width
     source: QGroundControl.settingsManager.flyViewSettings.alternateInstrumentPanel.rawValue ?
                 "qrc:/qml/QGCInstrumentWidgetAlternate.qml" : "qrc:/qml/QGCInstrumentWidget.qml"
-
+   // source: "qrc:/qml/QGCInstrumentWidgetAlternate.qml"
     property var missionController
 }
