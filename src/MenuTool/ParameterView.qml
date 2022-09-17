@@ -24,23 +24,30 @@ Rectangle {
   color:"black"
   //当前活跃无人机
   property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
+  property bool   _rcRSSIAvailable:   _activeVehicle ? _activeVehicle.rcRSSI > 0 && _activeVehicle.rcRSSI <= 100 : false
+  property var    _batteryGroup:                  globals.activeVehicle && globals.activeVehicle.batteries.count ? globals.activeVehicle.batteries.get(0) : undefined
+  property var    _batteryValue:                  _batteryGroup ? _batteryGroup.percentRemaining.value : 0
   //字体大小
   property real   pointSize:   ScreenTools.defaultFontPointSize*0.7
+
+  property real   _defaultLabelHeight:  ScreenTools.defaultFontPixelWidth*3
   property string _LabelColorG :"gray"
   property string _LabelColorB :"black"
 
+  //Time to Minute
+  function secondString(sec){
+      var hours   = Math.floor(sec/ 3600)
+      var minutes = Math.floor(sec % 3600 / 60)
+      var seconds = Math.floor(sec % 3600 % 60)
+      var minStr  = String((minutes)+(hours*60))
+      var secStr  = String(seconds)
+      return  minStr +"min"+ secStr
+  }
   property string _pitch             : "俯仰角: "
   property string _roll              : "滚转角: "
   property string _heading           : "偏航角: "
   property string _equipmentState    : "设备状态: "
   property string _flghtMode         : "飞行模式: "
-//
-
-  property string _gpsState          : "gps状态: "
-  property string _gps2State         : "gps2状态: "
-  property string _gpsCount          : "gps卫星颗数: "
-  property string _gps2Count         : "gps2卫星颗数: "
-//
   property string _gps               : "卫星定位: "
   property string _gps2              : "卫星定位2: "
   property string _batteryVoltage    : "电池电压: "
@@ -56,6 +63,7 @@ Rectangle {
        id:_parameter
        anchors.fill :parent
        spacing :0
+
        //俯仰角
        ParameterLabel{
            id:pitch
@@ -95,7 +103,6 @@ Rectangle {
            model:                  _flightModes
            font.pointSize:         pointSize
            centeredLabel:  true
-
            height:pitch.height
            currentIndex:           -1
            sizeToContents:         true
@@ -128,7 +135,7 @@ Rectangle {
            id:gps
            width:parent.width
            parameterName:_gps
-           value:_activeVehicle ?_activeVehicle.gps.lock.enumStrings+"·"+_activeVehicle.gps.count.valueString:qsTr("N/A·N/A")
+           value:_activeVehicle ?_activeVehicle.gps.lock.enumStringValue+"·"+_activeVehicle.gps.count.valueString:qsTr("N/A·N/A")
            color:_LabelColorG
        }
        //卫星定位2
@@ -136,7 +143,7 @@ Rectangle {
            id:gps2
            width:parent.width
            parameterName:_gps2
-           value:_activeVehicle ?_activeVehicle.gps2.lock.enumStrings+"·"+_activeVehicle.gps2.count.valueString:qsTr("N/A·N/A")
+           value:_activeVehicle ?_activeVehicle.gps2.lock.enumStringValue+"·"+_activeVehicle.gps2.count.valueString:qsTr("N/A·N/A")
            color:_LabelColorB
        }
        //电池电压
@@ -144,7 +151,7 @@ Rectangle {
            id:batteryVoltage
            width:parent.width
            parameterName:_batteryVoltage
-           value:_activeVehicle ?_activeVehicle.batteries.get(0).voltage.valueString+"v":qsTr("N/A", "No data to display")
+           value:_batteryValue+"V"
            color:_LabelColorG
        }
        //海拔高度
@@ -152,7 +159,7 @@ Rectangle {
            id:altitudeRelative
            width:parent.width
            parameterName:_altitudeRelative
-           value:_activeVehicle ?_activeVehicle.altitudeRelative.valueString:qsTr("0m")
+           value:_activeVehicle ?_activeVehicle.altitudeRelative.valueString+"m":qsTr("0m")
            color:_LabelColorB
        }
        //水平飞行速度
@@ -160,7 +167,7 @@ Rectangle {
            id:groundSpeed
            width:parent.width
            parameterName:_groundSpeed
-           value:_activeVehicle ?_activeVehicle.groundSpeed.valueString:qsTr("0m/s")
+           value:_activeVehicle ?_activeVehicle.groundSpeed.valueString+"m/s":qsTr("0m/s")
            color:_LabelColorG
        }
        //升降速度
@@ -168,7 +175,7 @@ Rectangle {
            id:climbRate
            width:parent.width
            parameterName:_climbRate
-           value: _activeVehicle ?_activeVehicle.climbRate.valueString+"0m/s":qsTr("0m/s")
+           value: _activeVehicle ?_activeVehicle.climbRate.valueString+"m/s":qsTr("0m/s")
            color:_LabelColorB
        }
        //飞行时间
@@ -176,15 +183,17 @@ Rectangle {
            id:flightTime
            width:parent.width
            parameterName:_flightTime
-           value: _activeVehicle ?_activeVehicle.groundSpeed.valueString:qsTr("0min")
+           //_activeVehicle.flightTime.value
+           value: _activeVehicle ?secondString(_activeVehicle.flightTime.value):qsTr("0min")
            color:_LabelColorG
        }
+
        //返航距离
        ParameterLabel{
            id:distanceToHome
            width:parent.width
            parameterName:_distanceToHome
-           value: _activeVehicle ?_activeVehicle.distanceToHome.valueString: qsTr("0m")
+           value: _activeVehicle ?_activeVehicle.distanceToHome.valueString+"m": qsTr("0m")
            color:_LabelColorB
        }
        //链路信号
@@ -192,7 +201,7 @@ Rectangle {
            id:linksignal
            width:parent.width
            parameterName:_linksignal
-           //value: _activeVehicle ?_activeVehicle.distanceToHome.valueString: qsTr("0m")
+           value :_rcRSSIAvailable?_activeVehicle.rcRSSI:qsTr("0%")
            color:_LabelColorG
        }
        //电机温度
@@ -200,7 +209,7 @@ Rectangle {
            id:motorTemp
            width:parent.width
            parameterName:_motorTemp
-           //value: _activeVehicle ?_activeVehicle.distanceToHome.valueString: qsTr("0m")
+           value: _activeVehicle ?"0"+"°C"+"·"+"0"+"°C":"N/A"
            color:_LabelColorB
        }
        //电调温度
@@ -208,10 +217,11 @@ Rectangle {
            id:escTemp
            width:parent.width
            parameterName:_escTemp
-           //value: _activeVehicle ?_activeVehicle.distanceToHome.valueString: qsTr("0m")
+           value: _activeVehicle ?"0"+"°C":"N/A"
            color:_LabelColorG
-       }
-    }
+       }   
+   }
+
   //ParameterList
  }
 

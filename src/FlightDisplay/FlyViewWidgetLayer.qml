@@ -129,7 +129,6 @@ Item {
             anchors.fill :parent
             onClicked: parameterVisable()
         }
-
     }
     function parameterVisable(){
         if(parameterView.visible) {

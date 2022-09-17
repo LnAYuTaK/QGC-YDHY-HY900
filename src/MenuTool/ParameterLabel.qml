@@ -4,7 +4,7 @@ import QtQuick.Controls 2.3
 import QGroundControl.ScreenTools           1.0
 Rectangle{
     id : parameterLabel
-    height: ScreenTools.defaultFontPixelHeight/1.5
+    height: ScreenTools.defaultFontPixelHeight*0.8
     property string parameterName :""
     property string value  :"N/A"
     property string textColor  :"white"
