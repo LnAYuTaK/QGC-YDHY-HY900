@@ -15,7 +15,7 @@
 #include "QGCApplication.h"
 #include "MissionManager.h"
 #include "ParameterManager.h"
-
+//2922 9.19修改
 bool ArduCopterFirmwarePlugin::_remapParamNameIntialized = false;
 FirmwarePlugin::remapParamNameMajorVersionMap_t ArduCopterFirmwarePlugin::_remapParamName;
 
@@ -25,18 +25,22 @@ APMCopterMode::APMCopterMode(uint32_t mode, bool settable) :
     setEnumToStringMapping({
         { STABILIZE,    "Stabilize"},
         { ACRO,         "Acro"},
-        { ALT_HOLD,     "Altitude Hold"},
-        { AUTO,         "Auto"},
+      //{ ALT_HOLD,     "Altitude Hold"},
+        { ALT_HOLD,     "定高"},
+      //{ AUTO,         "Auto"},
+        { AUTO,         "自动"},
         { GUIDED,       "Guided"},
         { LOITER,       "Loiter"},
         { RTL,          "RTL"},
         { CIRCLE,       "Circle"},
-        { LAND,         "Land"},
+      //{ LAND,         "Land"},
+        { LAND,         "返航"},
         { DRIFT,        "Drift"},
         { SPORT,        "Sport"},
         { FLIP,         "Flip"},
         { AUTOTUNE,     "Autotune"},
-        { POS_HOLD,     "Position Hold"},
+      //{ POS_HOLD,     "Position Hold"},
+        { POS_HOLD,     "定点"},
         { BRAKE,        "Brake"},
         { THROW,        "Throw"},
         { AVOID_ADSB,   "Avoid ADSB"},
@@ -55,33 +59,33 @@ APMCopterMode::APMCopterMode(uint32_t mode, bool settable) :
 ArduCopterFirmwarePlugin::ArduCopterFirmwarePlugin(void)
 {
     setSupportedModes({
-        APMCopterMode(APMCopterMode::STABILIZE,     true),
-        APMCopterMode(APMCopterMode::ACRO,          true),
-        APMCopterMode(APMCopterMode::ALT_HOLD,      true),
-        APMCopterMode(APMCopterMode::AUTO,          true),
-        APMCopterMode(APMCopterMode::GUIDED,        true),
-        APMCopterMode(APMCopterMode::LOITER,        true),
-        APMCopterMode(APMCopterMode::RTL,           true),
-        APMCopterMode(APMCopterMode::CIRCLE,        true),
-        APMCopterMode(APMCopterMode::LAND,          true),
-        APMCopterMode(APMCopterMode::DRIFT,         true),
-        APMCopterMode(APMCopterMode::SPORT,         true),
-        APMCopterMode(APMCopterMode::FLIP,          true),
-        APMCopterMode(APMCopterMode::AUTOTUNE,      true),
-        APMCopterMode(APMCopterMode::POS_HOLD,      true),
-        APMCopterMode(APMCopterMode::BRAKE,         true),
-        APMCopterMode(APMCopterMode::THROW,         true),
-        APMCopterMode(APMCopterMode::AVOID_ADSB,    true),
-        APMCopterMode(APMCopterMode::GUIDED_NOGPS,  true),
-        APMCopterMode(APMCopterMode::SMART_RTL,     true),
-        APMCopterMode(APMCopterMode::FLOWHOLD,      true),
-        APMCopterMode(APMCopterMode::FOLLOW,        true),
-        APMCopterMode(APMCopterMode::ZIGZAG,        true),
-        APMCopterMode(APMCopterMode::ZIGZAG,        true),
-        APMCopterMode(APMCopterMode::SYSTEMID,      true),
-        APMCopterMode(APMCopterMode::AUTOROTATE,    true),
-        APMCopterMode(APMCopterMode::AUTO_RTL,      true),
-        APMCopterMode(APMCopterMode::TURTLE,        true),
+        APMCopterMode(APMCopterMode::STABILIZE,     false),//
+        APMCopterMode(APMCopterMode::ACRO,          false),
+        APMCopterMode(APMCopterMode::ALT_HOLD,      true),//定高
+        APMCopterMode(APMCopterMode::AUTO,          true),//自动
+        APMCopterMode(APMCopterMode::GUIDED,        false),
+        APMCopterMode(APMCopterMode::LOITER,        false),
+        APMCopterMode(APMCopterMode::RTL,           false),
+        APMCopterMode(APMCopterMode::CIRCLE,        false),
+        APMCopterMode(APMCopterMode::LAND,          true),//降落
+        APMCopterMode(APMCopterMode::DRIFT,         false),
+        APMCopterMode(APMCopterMode::SPORT,         false),
+        APMCopterMode(APMCopterMode::FLIP,          false),
+        APMCopterMode(APMCopterMode::AUTOTUNE,      false),
+        APMCopterMode(APMCopterMode::POS_HOLD,      true),//定点
+        APMCopterMode(APMCopterMode::BRAKE,         false),
+        APMCopterMode(APMCopterMode::THROW,         false),
+        APMCopterMode(APMCopterMode::AVOID_ADSB,    false),
+        APMCopterMode(APMCopterMode::GUIDED_NOGPS,  false),
+        APMCopterMode(APMCopterMode::SMART_RTL,     false),
+        APMCopterMode(APMCopterMode::FLOWHOLD,      false),
+        APMCopterMode(APMCopterMode::FOLLOW,        false),
+        APMCopterMode(APMCopterMode::ZIGZAG,        false),
+        APMCopterMode(APMCopterMode::ZIGZAG,        false),
+        APMCopterMode(APMCopterMode::SYSTEMID,      false),
+        APMCopterMode(APMCopterMode::AUTOROTATE,    false),
+        APMCopterMode(APMCopterMode::AUTO_RTL,      false),
+        APMCopterMode(APMCopterMode::TURTLE,        false),
     });
 
     if (!_remapParamNameIntialized) {

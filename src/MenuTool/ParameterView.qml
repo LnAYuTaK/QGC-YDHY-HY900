@@ -23,16 +23,15 @@ import QGroundControl.FlightMap     1.0
 Rectangle {
   color:"black"
   //当前活跃无人机
-  property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
+  property var    _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
+  //链路信号
   property bool   _rcRSSIAvailable:   _activeVehicle ? _activeVehicle.rcRSSI > 0 && _activeVehicle.rcRSSI <= 100 : false
-  property var    _batteryGroup:                  globals.activeVehicle && globals.activeVehicle.batteries.count ? globals.activeVehicle.batteries.get(0) : undefined
-  property var    _batteryValue:                  _batteryGroup ? _batteryGroup.percentRemaining.value : 0
   //字体大小
   property real   pointSize:   ScreenTools.defaultFontPointSize*0.7
 
   property real   _defaultLabelHeight:  ScreenTools.defaultFontPixelWidth*3
-  property string _LabelColorG :"gray"
-  property string _LabelColorB :"black"
+  property string _LabelColorG :"#4F4F4F"
+  property string _LabelColorB :"#363636"
 
   //Time to Minute
   function secondString(sec){
@@ -93,7 +92,7 @@ Rectangle {
            id:equipmentState
            width:parent.width
            parameterName:_equipmentState
-           value:_activeVehicle ?qsTr("已锁定"):qsTr("已解锁")
+           value:_activeVehicle && _activeVehicle.armed ?qsTr("已解锁"):qsTr("已锁定")
            color:_LabelColorB
        }
        //飞行模式
@@ -104,7 +103,7 @@ Rectangle {
            font.pointSize:         pointSize
            centeredLabel:  true
            height:pitch.height
-           currentIndex:           -1
+           currentIndex:           1
            sizeToContents:         true
            width:parent.width
            property bool showIndicator: true
@@ -151,7 +150,7 @@ Rectangle {
            id:batteryVoltage
            width:parent.width
            parameterName:_batteryVoltage
-           value:_batteryValue+"V"
+           value:_activeVehicle ?_activeVehicle.batteries.get(0).voltage.valueString+"V":qsTr("N/A", "No data to display")
            color:_LabelColorG
        }
        //海拔高度
@@ -184,7 +183,7 @@ Rectangle {
            width:parent.width
            parameterName:_flightTime
            //_activeVehicle.flightTime.value
-           value: _activeVehicle ?secondString(_activeVehicle.flightTime.value):qsTr("0min")
+           value: _activeVehicle ?secondString(_activeVehicle.flightTime.rawValue.toInt()):qsTr("0min")
            color:_LabelColorG
        }
 
@@ -219,7 +218,22 @@ Rectangle {
            parameterName:_escTemp
            value: _activeVehicle ?"0"+"°C":"N/A"
            color:_LabelColorG
-       }   
+       }
+
+       ParameterLabel{
+           id:undetermined
+           width:parent.width
+           parameterName:""
+           value: ""
+           color:_LabelColorB
+       }
+       ParameterLabel{
+           id:undetermined2
+           width:parent.width
+           parameterName:""
+           value: ""
+           color:_LabelColorG
+       }
    }
 
   //ParameterList

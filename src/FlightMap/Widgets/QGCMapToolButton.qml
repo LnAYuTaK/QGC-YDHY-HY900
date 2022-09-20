@@ -14,7 +14,7 @@ Button {
 
     // This fixes the issue with button hover where if a Button is near the edge oa QQuickWidget you can
     // move the mouse fast enough such that the MouseArea does not trigger an onExited. This is turn
-    // cause the hover property to not be cleared correctly.
+    // cause thQGCe hover property to not be cleared correctly.
 
     property bool   __forceHoverOff: false
     property int    __lastGlobalMouseX: 0

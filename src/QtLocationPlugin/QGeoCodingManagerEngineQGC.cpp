@@ -159,7 +159,6 @@ QGeoCodeReply *QGeoCodingManagerEngineQGC::reverseGeocode(const QGeoCoordinate &
     connect(geocodeReply, &QGeoCodeReply::finished, this, &QGeoCodingManagerEngineQGC::replyFinished);
     connect(geocodeReply, SIGNAL(error(QGeoCodeReply::Error,QString)),
             this, SLOT(replyError(QGeoCodeReply::Error,QString)));
-
     return geocodeReply;
 }
 

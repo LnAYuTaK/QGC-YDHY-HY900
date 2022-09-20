@@ -40,16 +40,15 @@ ColumnLayout {
         //
         QGCAttitudeWidget {
             id:                     attitude
-
-//            anchors.leftMargin:     _topBottomMargin
-//            anchors.left:           parent.left
+//          anchors.leftMargin:     _topBottomMargin
+//          anchors.left:           parent.left
             anchors.fill :parent
             size:                   _innerRadius * 4
             vehicle:                globals.activeVehicle
             anchors.verticalCenter: parent.verticalCenter
         }
 
-        //罗盘
+        //罗盘不启用
         QGCCompassWidget {
             id:                     compass
             anchors.leftMargin:     _spacing

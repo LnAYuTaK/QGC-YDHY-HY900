@@ -380,7 +380,9 @@ void QGCApplication::_exitWithError(QString errorMessage)
 
 void QGCApplication::setLanguage()
 {
-    _locale = QLocale::system();
+    //2022 9.19默认中文
+    _locale = QLocale::Chinese;
+
     qDebug() << "System reported locale:" << _locale << "; Name" << _locale.name() << "; Preffered (used in maps): " << (QLocale::system().uiLanguages().length() > 0 ? QLocale::system().uiLanguages()[0] : "None");
 
     QLocale::Language possibleLocale = AppSettings::_qLocaleLanguageID();

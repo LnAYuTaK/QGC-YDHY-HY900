@@ -88,7 +88,7 @@ Map {
                 center = gcsPosition
         }
     }
-
+//锁定天地图不能修改
     function updateActiveMapType() {
         var settings =  QGroundControl.settingsManager.flightMapSettings
         var fullMapName = settings.mapProvider.value + " " + settings.mapType.value
@@ -105,6 +105,7 @@ Map {
            for (var i = 0; i < control.supportedMapTypes.length; i++) {
                if (para === control.supportedMapTypes[i].name) {
                    control.activeMapType = control.supportedMapTypes[i]
+
                    return
                }
            }
@@ -121,12 +122,15 @@ Map {
 
     Connections {
         target:             QGroundControl.settingsManager.flightMapSettings.mapType
-        function onRawValueChanged() { updateActiveMapType() }
+        function onRawValueChanged() {
+            updateActiveMapType()
+        }
     }
 
     Connections {
         target:             QGroundControl.settingsManager.flightMapSettings.mapProvider
-        function onRawValueChanged() { updateActiveMapType() }
+        function onRawValueChanged() {
+            updateActiveMapType() }
     }
     //地图显示当前位置图标
     /// Ground Station location
@@ -173,8 +177,8 @@ Map {
           z: parent.z + 1;
           Component.onCompleted: {
               updateActiveMapTypeText(this,"TianDiTu TextMap");
-          }
 
+          }
      }
 
 } // Map

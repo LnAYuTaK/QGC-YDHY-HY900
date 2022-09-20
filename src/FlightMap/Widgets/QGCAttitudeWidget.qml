@@ -133,7 +133,7 @@ Item {
         anchors.bottom:             parent.bottom
         anchors.horizontalCenter:   parent.horizontalCenter
         text:                       _headingString3
-        color:                      "white"
+        color:                      "black"
         visible:                    showHeading
 
         property string _headingString: vehicle ? vehicle.heading.rawValue.toFixed(0) : "OFF"

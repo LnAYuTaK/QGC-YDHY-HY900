@@ -18,7 +18,7 @@ import QGroundControl.Palette       1.0
 Item {
     id:         _root
     width:      _pipSize
-    height:     _pipSize * (9/16)
+    height:     _pipSize * (12/16)
     z:          pipZOrder + 1
     visible:    item2 && item2.pipState !== item2.pipState.window && show
 
@@ -35,7 +35,7 @@ Item {
     property var    _pipOrWindowItem
     property alias  _windowContentItem: window.contentItem
     property bool   _isExpanded:        true
-    property real   _pipSize:           parent.width * 0.2
+    property real   _pipSize:           parent.width * 0.25
 //    property real   _maxSize:           0.75                // Percentage of parent control size
 //    property real   _minSize:           0.10
     property bool   _componentComplete: false
@@ -165,7 +165,7 @@ Item {
         mipmap: true
         anchors.right:  parent.right
         anchors.top:    parent.top
-        visible:        _isExpanded && (ScreenTools.isMobile || pipMouseArea.containsMouse)
+        visible:       false// _isExpanded && (ScreenTools.isMobile || pipMouseArea.containsMouse)
         height:         ScreenTools.defaultFontPixelHeight * 2.5
         width:          ScreenTools.defaultFontPixelHeight * 2.5
         sourceSize.height:  height
@@ -197,7 +197,7 @@ Item {
         fillMode:       Image.PreserveAspectFit
         anchors.left:   parent.left
         anchors.top:    parent.top
-        visible:        _isExpanded && !ScreenTools.isMobile && pipMouseArea.containsMouse
+        visible:        false//_isExpanded && !ScreenTools.isMobile && pipMouseArea.containsMouse
         height:         ScreenTools.defaultFontPixelHeight * 2.5
         width:          ScreenTools.defaultFontPixelHeight * 2.5
         sourceSize.height:  height

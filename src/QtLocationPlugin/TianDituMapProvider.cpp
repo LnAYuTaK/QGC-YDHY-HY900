@@ -28,18 +28,29 @@ QNetworkRequest TianDiTuMapProvider::getTileURL(const int x,
 }
 
 
-QString TianDiTuSatelliteMapProvider::_getURL(const int x, const int y, const int zoom, QNetworkAccessManager* networkManager) {
+QString TianDiTuSatelliteMapProvider::_getURL(const int x, const int y, const int zoom, QNetworkAccessManager* networkManager)
+{
     Q_UNUSED(networkManager)
-
-   // return SatelliteMapUrl.arg(zoom).arg(x).arg(y);
-    return QStringLiteral("http://t2.tianditu.gov.cn/img_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX=%1&TILEROW=%2&TILECOL=%3&tk=%4").arg(zoom).arg(y).arg(x).arg(QStringLiteral("f729f5d20736567e0be3ce26d3b2ef09"));   //网页版密钥
+    //最大放大18倍
+    if(zoom>18){
+        return "";
+    }
+    return QStringLiteral("http://t2.tianditu.gov.cn/img_w/wmts?SERVICE=WMTS&REQUEST"
+                          "=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSE"
+                          "T=w&FORMAT=tiles&TILEMATRIX=%1&TILEROW=%2&TILECOL=%3&tk=%4")
+                          .arg(zoom).arg(y).arg(x).arg(QStringLiteral("f729f5d20736567e0be3ce26d3b2ef09"));   //网页版密钥
 }
 
 QString TianDiTuTextMapProvider::_getURL(const int x, const int y, const int zoom, QNetworkAccessManager* networkManager) {
     Q_UNUSED(networkManager)
-
-   // return SatelliteMapUrl.arg(zoom).arg(x).arg(y);
-    return QStringLiteral("http://t2.tianditu.gov.cn/cia_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cia&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX=%1&TILEROW=%2&TILECOL=%3&tk=%4").arg(zoom).arg(y).arg(x).arg(QStringLiteral("f729f5d20736567e0be3ce26d3b2ef09"));
+    //最大放大18倍
+    if(zoom>18){
+        return "";
+    }
+    return QStringLiteral("http://t2.tianditu.gov.cn/cia_w/wmts?SERVICE=WMTS&REQUEST"
+                          "=GetTile&VERSION=1.0.0&LAYER=cia&STYLE=default&TILEMATRIXSET"
+                          "=w&FORMAT=tiles&TILEMATRIX=%1&TILEROW=%2&TILECOL=%3&tk=%4")
+                          .arg(zoom).arg(y).arg(x).arg(QStringLiteral("f729f5d20736567e0be3ce26d3b2ef09"));
 
 }
 

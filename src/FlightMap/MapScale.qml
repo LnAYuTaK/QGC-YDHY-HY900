@@ -162,7 +162,7 @@ Item {
                                 (_zoomButtonsVisible ? zoomDownButton.right : (terrainButtonVisible ? terrainButton.right : parent.left)) :
                                 parent.left
         width:              2
-        height:             ScreenTools.defaultFontPixelHeight
+        height:             ScreenTools.defaultFontPixelHeight/3
         color:              _color
     }
 
@@ -180,7 +180,7 @@ Item {
         anchors.top:        leftEnd.top
         anchors.left:       centerLine.right
         width:              2
-        height:             ScreenTools.defaultFontPixelHeight
+        height:             ScreenTools.defaultFontPixelHeight/3
         color:              _color
     }
 

@@ -222,8 +222,6 @@ ApplicationWindow {
         simpleMessageDialogComponent.createObject(mainWindow, { title: dialogTitle, text: dialogText, buttons: buttons, acceptFunction: acceptFunction }).open()
     }
 
-
-
     // This variant is only meant to be called by QGCApplication
     function _showMessageDialog(dialogTitle, dialogText) {
         showMessageDialog(dialogTitle, dialogText)
@@ -468,7 +466,7 @@ ApplicationWindow {
 //    }
     DrawerPage{
        id: toolDrawerSelect
-
+       visible:        false
     }
 
     PlanView {

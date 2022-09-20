@@ -20,12 +20,11 @@ class TianDiTuSatelliteMapProvider : public TianDiTuMapProvider {
     Q_OBJECT
 
   public:
-  TianDiTuSatelliteMapProvider(QObject* parent = nullptr)
-        : TianDiTuMapProvider(
-              QStringLiteral("jpg"),
-              AVERAGE_TILE_SIZE,
-              QGeoMapType::SatelliteMapDay,
-              parent)
+    TianDiTuSatelliteMapProvider(QObject* parent = nullptr)
+        : TianDiTuMapProvider(QStringLiteral("jpg"),
+                              AVERAGE_TILE_SIZE,
+                              QGeoMapType::SatelliteMapDay,
+                              parent)
   {
 
   }
@@ -39,14 +38,13 @@ class TianDiTuTextMapProvider : public TianDiTuMapProvider {
 
   public:
       TianDiTuTextMapProvider(QObject* parent = nullptr)
-        : TianDiTuMapProvider(
-              QStringLiteral("jpg"),
-              AVERAGE_TILE_SIZE,
-             QGeoMapType::SatelliteMapDay,
-              parent)
-  {
+        :TianDiTuMapProvider(QStringLiteral("jpg"),
+                             AVERAGE_TILE_SIZE,
+                             QGeoMapType::SatelliteMapDay,
+                             parent)
+      {
 
-  }
+      }
 
     QString _getURL(const int x, const int y, const int zoom, QNetworkAccessManager* networkManager) override;
 };

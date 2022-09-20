@@ -91,7 +91,7 @@ public:
     /*!
      * @brief Connection type
      *
-     * Pure virtual method returning one of the -TypeXxx types above.
+     * Pure virtual method returning one of the -xx types above.
      * @return The type of links these settings belong to.
      */
     virtual LinkType type() = 0;

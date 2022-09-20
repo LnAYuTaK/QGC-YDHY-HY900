@@ -19,7 +19,6 @@ Drawer {
     height:         mainWindow.height
     edge:           Qt.LeftEdge
     dragMargin:     -10
-    visible:        false
     modal: true
     opacity : 0.99
     interactive : true
@@ -37,7 +36,6 @@ Drawer {
         }
         TabButton {
             text: qsTr("飞控参数")
-
         }
         TabButton {
             text: qsTr("版本更新")
@@ -64,9 +62,7 @@ Drawer {
             id:versionView
         }
     }
-
 }
-
 
    // Component.onCompleted: toolDrawerSelectLoader.sourceComponent
 
