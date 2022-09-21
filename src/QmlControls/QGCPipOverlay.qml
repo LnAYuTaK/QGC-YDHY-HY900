@@ -232,7 +232,7 @@ Item {
         height:                 ScreenTools.defaultFontPixelHeight * 2
         width:                  ScreenTools.defaultFontPixelHeight * 2
         radius:                 ScreenTools.defaultFontPixelHeight / 3
-        visible:                !_isExpanded
+        visible:                false//!_isExpanded
         color:                  _fullItem.pipState.isDark ? Qt.rgba(0,0,0,0.75) : Qt.rgba(0,0,0,0.5)
         Image {
             width:              parent.width  * 0.75

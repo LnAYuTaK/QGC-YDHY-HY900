@@ -27,6 +27,7 @@
 
 #include "QGCMapEngine.h"
 #include "QGCMapTileSet.h"
+#include "QGCMapEngineManager.h"
 
 Q_DECLARE_METATYPE(QGCMapTask::TaskType)
 Q_DECLARE_METATYPE(QGCTile)
@@ -349,16 +350,19 @@ QGCMapEngine::numberToString(quint64 number)
 void
 QGCMapEngine::_updateTotals(quint32 totaltiles, quint64 totalsize, quint32 defaulttiles, quint64 defaultsize)
 {
+
     emit updateTotals(totaltiles, totalsize, defaulttiles, defaultsize);
     quint64 maxSize = static_cast<quint64>(getMaxDiskCache()) * 1024L * 1024L;
-    if(!_prunning && defaultsize > maxSize) {
+    if(!_prunning && (defaulttiles > maxSize)) {
         //-- Prune Disk Cache
         _prunning = true;
-        QGCPruneCacheTask* task = new QGCPruneCacheTask(defaultsize - maxSize);
+        QGCPruneCacheTask* task = new QGCPruneCacheTask(defaulttiles - maxSize);
         connect(task, &QGCPruneCacheTask::pruned, this, &QGCMapEngine::_pruned);
         getQGCMapEngine()->addTask(task);
     }
+
 }
+
 //-----------------------------------------------------------------------------
 void
 QGCMapEngine::_pruned()
@@ -370,7 +374,6 @@ QGCMapEngine::_pruned()
 int
 QGCMapEngine::concurrentDownloads(QString type)
 {
-    Q_UNUSED(type);
     // TODO : We may want different values depending on
     // the provider here, let it like this as all provider are set to 12
     // at the moment

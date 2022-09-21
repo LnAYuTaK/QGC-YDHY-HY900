@@ -569,9 +569,11 @@ QGCMapEngineManager::_updateDiskFreeSpace()
         quint32 total = static_cast<quint32>(info.bytesTotal() / 1024);
         quint32 free  = static_cast<quint32>(info.bytesFree()  / 1024);
         qCDebug(QGCMapEngineManagerLog) << info.rootPath() << "has" << free << "Mbytes available.";
+
         if(_freeDiskSpace != free) {
             _freeDiskSpace = free;
             _diskSpace = total;
+
             emit freeDiskSpaceChanged();
         }
     }

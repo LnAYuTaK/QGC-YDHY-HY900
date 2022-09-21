@@ -150,7 +150,7 @@ Rectangle {
            id:batteryVoltage
            width:parent.width
            parameterName:_batteryVoltage
-           value:_activeVehicle ?_activeVehicle.batteries.get(0).voltage.valueString+"V":qsTr("N/A", "No data to display")
+           value:_activeVehicle ?_activeVehicle.batteries.get(0).voltage.valueString+"V":qsTr("N/A")
            color:_LabelColorG
        }
        //海拔高度
@@ -183,7 +183,7 @@ Rectangle {
            width:parent.width
            parameterName:_flightTime
            //_activeVehicle.flightTime.value
-           value: _activeVehicle ?secondString(_activeVehicle.flightTime.rawValue.toInt()):qsTr("0min")
+           value: _activeVehicle ?secondString(_activeVehicle.flightTime.rawValue):qsTr("0min")
            color:_LabelColorG
        }
 

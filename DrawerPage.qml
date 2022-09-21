@@ -49,16 +49,20 @@ Drawer {
         height: parent.height
         clip: true
         currentIndex: bar.currentIndex
-        DrawerFlightPlan{
-            id:planView
+//        DrawerFlightPlan{
+//            id:planView
+//        }
+        Loader {
+            source :"qrc:/qml/OfflineMap.qml"
         }
-        ConnectView{
+
+        ConnectView {
             id:connectView
         }
-        ParameterEditor{
+        ParameterEditor {
             id:setUpView
         }
-        VersionView{
+        VersionView {
             id:versionView
         }
     }

@@ -132,6 +132,9 @@ QGCCachedTileSet::downloadStatus()
 void
 QGCCachedTileSet::createDownloadTask()
 {
+
+
+    qDebug()<<"DownLoadTask";
     if(!_downloading) {
         _errorCount   = 0;
         _downloading  = true;

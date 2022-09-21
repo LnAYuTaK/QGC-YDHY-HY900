@@ -620,6 +620,7 @@ QGCCacheWorker::_pruneCache(QGCMapTask* mtask)
     if(!_testTask(mtask)) {
         return;
     }
+
     QGCPruneCacheTask* task = static_cast<QGCPruneCacheTask*>(mtask);
     QSqlQuery query(*_db);
     QString s;

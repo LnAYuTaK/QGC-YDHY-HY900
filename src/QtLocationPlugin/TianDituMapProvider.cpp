@@ -31,8 +31,8 @@ QNetworkRequest TianDiTuMapProvider::getTileURL(const int x,
 QString TianDiTuSatelliteMapProvider::_getURL(const int x, const int y, const int zoom, QNetworkAccessManager* networkManager)
 {
     Q_UNUSED(networkManager)
-    //最大放大18倍
-    if(zoom>18){
+    //最大放大17倍
+    if(zoom>17){
         return "";
     }
     return QStringLiteral("http://t2.tianditu.gov.cn/img_w/wmts?SERVICE=WMTS&REQUEST"
@@ -43,8 +43,8 @@ QString TianDiTuSatelliteMapProvider::_getURL(const int x, const int y, const in
 
 QString TianDiTuTextMapProvider::_getURL(const int x, const int y, const int zoom, QNetworkAccessManager* networkManager) {
     Q_UNUSED(networkManager)
-    //最大放大18倍
-    if(zoom>18){
+    //最大放大17倍
+    if(zoom>17){
         return "";
     }
     return QStringLiteral("http://t2.tianditu.gov.cn/cia_w/wmts?SERVICE=WMTS&REQUEST"

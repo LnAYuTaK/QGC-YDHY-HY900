@@ -162,6 +162,17 @@ Item {
     FlyViewVideo {
         id: videoControl
     }
+    //隐藏视频小箭头
+//    Image{
+//        anchors.left : _pipOverlay.visable? _pipOverlay.right:
+
+
+//        MouseArea {
+//            anchors.fill:   parent
+//            onClicked:      _pipOverlay._setPipIsExpanded(true)
+//        }
+
+//    }
 
     //左下角视频
     QGCPipOverlay {

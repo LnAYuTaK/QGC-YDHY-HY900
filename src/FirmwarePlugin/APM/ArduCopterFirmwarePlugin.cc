@@ -15,7 +15,7 @@
 #include "QGCApplication.h"
 #include "MissionManager.h"
 #include "ParameterManager.h"
-//2922 9.19修改
+//2022 9.19修改
 bool ArduCopterFirmwarePlugin::_remapParamNameIntialized = false;
 FirmwarePlugin::remapParamNameMajorVersionMap_t ArduCopterFirmwarePlugin::_remapParamName;
 
@@ -23,7 +23,7 @@ APMCopterMode::APMCopterMode(uint32_t mode, bool settable) :
     APMCustomMode(mode, settable)
 {
     setEnumToStringMapping({
-        { STABILIZE,    "Stabilize"},
+        { STABILIZE,    "稳定"},
         { ACRO,         "Acro"},
       //{ ALT_HOLD,     "Altitude Hold"},
         { ALT_HOLD,     "定高"},

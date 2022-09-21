@@ -24,7 +24,7 @@
 #include "MapboxMapProvider.h"
 #include "ElevationMapProvider.h"
 #include "TianDiTuMapProvider.h"
-#define MAX_MAP_ZOOM (23.0)
+#define MAX_MAP_ZOOM (21.0)
 
 class UrlFactory : public QObject {
     Q_OBJECT
