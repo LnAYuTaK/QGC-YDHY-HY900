@@ -125,40 +125,41 @@ ApplicationWindow {
     }
 
     function viewSwitch(currentToolbar) {
-        toolDrawer.visible      = false
-        toolDrawer.toolSource   = ""
-        flightView.visible      = false
-        planView.visible        = false
-        toolbar.currentToolbar  = currentToolbar
-    }
-
+         toolDrawer.visible      = false
+         toolDrawer.toolSource   = ""
+         flightView.visible      = false
+         planView.visible        = false
+         toolbar.currentToolbar  = currentToolbar
+     }
+    //
     function showFlyView() {
         if (!flightView.visible) {
             mainWindow.showPreFlightChecklistIfNeeded()
         }
-        if(!menuToolStrip.visible)
-        {
-          menuToolStrip.visible  =true
-        }
-        viewSwitch(toolbar.flyViewToolbar)
-        flightView.visible = true
+//        viewSwitch(toolbar.flyViewToolbar)
+//        flightView.visible = true
+        viewSwitchPlanView(true)
+        planView.visible = false
     }
+    //打开计划界面的时候其他全部隐藏  视频&&参数界面&&图标
 
     function showPlanView() {
-        menuToolCard.visible = false
-        viewSwitch(toolbar.planViewToolbar)
-        planView.visible = true
-        //2022815
-        menuToolStrip.visible = false
-    }
-    function showTool(toolTitle, toolSource, toolIcon) {
-        toolDrawer.backIcon     = flightView.visible ? "/qmlimages/PaperPlane.svg" : "/qmlimages/Plan.svg"
-        toolDrawer.toolTitle    = toolTitle
-        toolDrawer.toolSource   = toolSource
-        toolDrawer.toolIcon     = toolIcon
-        toolDrawer.visible      = true
+       if(!planView.visible)  {
+          viewSwitchPlanView(false)
+          planView.visible = true
+       }
+     }
+    function viewSwitchPlanView(setable) {
+        flightView.hideItem(setable)
     }
 
+    function showTool(toolTitle, toolSource, toolIcon) {
+         toolDrawer.backIcon     = flightView.visible ? "/qmlimages/PaperPlane.svg" : "/qmlimages/Plan.svg"
+         toolDrawer.toolTitle    = toolTitle
+         toolDrawer.toolSource   = toolSource
+         toolDrawer.toolIcon     = toolIcon
+         toolDrawer.visible      = true
+     }
 
 //-----------------------------------------------------------
     //左侧的导航栏
@@ -195,6 +196,7 @@ ApplicationWindow {
     function showVersionView() {
        showCard("/qml/QGroundControl/MenuTool/VersionView.qml")
     }
+
 
     function showAnalyzeTool() {
         showTool(qsTr("Analyze Tools"), "AnalyzeView.qml", "/qmlimages/Analyze.svg")
@@ -452,18 +454,10 @@ ApplicationWindow {
     FlyView {
         id:             flightView
         anchors.fill:   parent
-        QGCToolBarButton {
-            id:                     currentButton
-            anchors.top :parent.top
-            //修改公司图标
-            icon.source:            "qrc:/qmlimages/resources/ImageRes/shenglve.svg"
-            logo:                   true
-            //2022 8.22
-            onClicked:              toolDrawerSelect.visible =true
-        }
-
-
-//    }
+    }
+    function showDrawerpage() {
+       toolDrawerSelect.visible = true
+    }
     DrawerPage{
        id: toolDrawerSelect
        visible:        false
@@ -482,7 +476,7 @@ ApplicationWindow {
         //跟顶部的距离
         anchors.topMargin:       10
         anchors.left:            parent.left
-        anchors.top :            currentButton.buttom
+        //anchors.top :            currentButton.buttom
         z:                       QGroundControl.zOrderWidgets
         maxHeight:               parent.height
         visible:                 false
@@ -499,7 +493,6 @@ ApplicationWindow {
         height:         menuToolStrip.height*1.2
         color:         "transparent"
         visible:        false
-
         property alias toolSource:  smallToolDrawerLoader.source
 
         RowLayout {
@@ -776,5 +769,5 @@ ApplicationWindow {
             indicatorPopup.currentIndicator = null
         }
     }
-  }
 }
+

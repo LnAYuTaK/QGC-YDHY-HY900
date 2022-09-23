@@ -105,12 +105,10 @@ Map {
            for (var i = 0; i < control.supportedMapTypes.length; i++) {
                if (para === control.supportedMapTypes[i].name) {
                    control.activeMapType = control.supportedMapTypes[i]
-
                    return
                }
            }
-       }
-
+    }
     on_ActiveVehicleCoordinateChanged: _possiblyCenterToVehiclePosition()
 
     onMapReadyChanged: {
@@ -132,7 +130,7 @@ Map {
         function onRawValueChanged() {
             updateActiveMapType() }
     }
-    //地图显示当前位置图标
+    //地图显示地面站位置图标
     /// Ground Station location
     MapQuickItem {
         anchorPoint.x:  sourceItem.width / 2
@@ -177,7 +175,6 @@ Map {
           z: parent.z + 1;
           Component.onCompleted: {
               updateActiveMapTypeText(this,"TianDiTu TextMap");
-
           }
      }
 

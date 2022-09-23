@@ -240,7 +240,6 @@ Rectangle {
                 visible:        !_vehicleHasHomePosition
                 checked:        false
             }
-
             Column {
                 anchors.left:   parent.left
                 anchors.right:  parent.right
@@ -262,7 +261,6 @@ Rectangle {
                         Layout.fillWidth:   true
                     }
                 }
-
                 QGCLabel {
                     width:                  parent.width
                     wrapMode:               Text.WordWrap
@@ -270,7 +268,6 @@ Rectangle {
                     text:                   qsTr("Actual position set by vehicle at flight time.")
                     horizontalAlignment:    Text.AlignHCenter
                 }
-
                 QGCButton {
                     text:                       qsTr("Set To Map Center")
                     onClicked:                  missionItem.coordinate = map.center

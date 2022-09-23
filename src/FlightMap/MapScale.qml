@@ -14,6 +14,7 @@ import QGroundControl                   1.0
 import QGroundControl.Controls          1.0
 import QGroundControl.ScreenTools       1.0
 import QGroundControl.SettingsManager   1.0
+import QGroundControl.MultiVehicleManager   1.0
 
 /// Map scale control
 Item {
@@ -21,6 +22,7 @@ Item {
     width:  buttonsOnLeft || !_zoomButtonsVisible ? rightEnd.x + rightEnd.width : zoomDownButton.x + zoomDownButton.width
     height: rightEnd.y + rightEnd.height
 
+    property var    _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
     property var    mapControl                      ///< Map control for which this scale control is being used
     property bool   terrainButtonVisible:   false
     property alias  terrainButtonChecked:   terrainButton.checked
@@ -142,6 +144,15 @@ Item {
         running:            false
         repeat:             false
         onTriggered:        calculateScale()
+    }
+    //
+    QGCMapLabel {
+        map:                mapControl
+        font.family:        ScreenTools.demiboldFontFamily
+        horizontalAlignment:Text.AlignRight
+        anchors.left:       parent.left
+        anchors.bottom :    scaleText.top
+        text:  _activeVehicle ?"lat"+_activeVehicle.latitude+"·"+"lon"+_activeVehicle.longitude:"lat·lon:N/A"
     }
 
     QGCMapLabel {

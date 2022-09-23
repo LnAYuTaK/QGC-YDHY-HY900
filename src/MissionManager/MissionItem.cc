@@ -30,6 +30,7 @@ const char*  MissionItem::_jsonParam2Key =          "param2";
 const char*  MissionItem::_jsonParam3Key =          "param3";
 const char*  MissionItem::_jsonParam4Key =          "param4";
 
+//单个任务视图
 MissionItem::MissionItem(QObject* parent)
     : QObject(parent)
     , _sequenceNumber(0)
@@ -51,10 +52,10 @@ MissionItem::MissionItem(QObject* parent)
     _frameFact.setRawValue(MAV_FRAME_GLOBAL_RELATIVE_ALT);
 
     setAutoContinue(true);
-
     connect(&_param1Fact, &Fact::rawValueChanged, this, &MissionItem::_param1Changed);
     connect(&_param2Fact, &Fact::rawValueChanged, this, &MissionItem::_param2Changed);
     connect(&_param3Fact, &Fact::rawValueChanged, this, &MissionItem::_param3Changed);
+
 }
 
 MissionItem::MissionItem(int             sequenceNumber,

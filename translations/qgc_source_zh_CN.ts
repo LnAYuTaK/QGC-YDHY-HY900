@@ -7822,7 +7822,7 @@ Click Ok to start the auto-tuning process.
     <message>
       <location filename="../src/AnalyzeView/GeoTagController.cc" line="252"/>
       <source>Geotagging failed. Requesting image #%1, but only %2 images present.</source>
-      <translation>地理标签失败。正在请求图像文件 %1，但仅有 %2 图片文件。</translation>
+      <translation>地理标签失败。正在请求图像文件 %1，但仅有 #%2 图片文件。</translation>
     </message>
     <message>
       <location filename="../src/AnalyzeView/GeoTagController.cc" line="264"/>
@@ -10170,7 +10170,7 @@ Click Ok to start the auto-tuning process.
     <message>
       <location filename="../src/PlanView/MissionItemEditor.qml" line="251"/>
       <source>Item #%1</source>
-      <translation>项目 1</translation>
+      <translation>项目 #%1</translation>
     </message>
     <message>
       <location filename="../src/PlanView/MissionItemEditor.qml" line="155"/>

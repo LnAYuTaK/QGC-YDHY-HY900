@@ -296,21 +296,30 @@ Item {
 //        property bool _virtualJoystickEnabled: QGroundControl.settingsManager.appSettings.virtualJoystick.rawValue
 //    }
 
-    FlyViewToolStrip {
-        id:                     toolStrip
-        anchors.leftMargin:     _toolsMargin + parentToolInsets.leftEdgeCenterInset
-        anchors.topMargin:      _toolsMargin + parentToolInsets.topEdgeLeftInset
-        anchors.left:           parent.left
-        anchors.top:            parent.top
-        z:                      QGroundControl.zOrderWidgets
-        maxHeight:              parent.height - y - parentToolInsets.bottomEdgeLeftInset - _toolsMargin
+    QGCToolBarButton {
+        id:                     menuButton
+        anchors.top :parent.top
+        //修改公司图标
+        icon.source:            "qrc:/qmlimages/resources/ImageRes/shenglve.svg"
+        logo:                   true
         //2022 8.22
-        visible:                false
-        onDisplayPreFlightChecklist: preFlightChecklistPopup.createObject(mainWindow).open()
-
-        property real leftInset: x + width
+        onClicked:              mainWindow.showDrawerpage()
     }
 
+    FlyViewToolStrip {
+         id:                     toolStrip
+         anchors.leftMargin:     _toolsMargin + parentToolInsets.leftEdgeCenterInset
+         anchors.topMargin:      _toolsMargin + parentToolInsets.topEdgeLeftInset
+         anchors.left:           parent.left
+         anchors.top:            currentButton.bottom
+         z:                      QGroundControl.zOrderWidgets
+         maxHeight:              parent.height - y - parentToolInsets.bottomEdgeLeftInset - _toolsMargin
+         visible:                !QGroundControl.videoManager.fullScreen
+
+         onDisplayPreFlightChecklist: mainWindow.showPopupDialogFromComponent(preFlightChecklistPopup)
+
+         property real leftInset: x + width
+     }
     FlyViewAirspaceIndicator {
         anchors.top:                parent.top
         anchors.topMargin:          ScreenTools.defaultFontPixelHeight * 0.25

@@ -18,6 +18,7 @@
 #include "SpeedSection.h"
 #include "QGroundControlQmlGlobal.h"
 
+/// 单个任务项内部包含 _missionItem   带有具体的数据
 /// A SimpleMissionItem is used to represent a single MissionItem to the ui.
 class SimpleMissionItem : public VisualMissionItem
 {

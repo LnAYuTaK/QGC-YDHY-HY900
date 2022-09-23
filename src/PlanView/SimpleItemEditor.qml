@@ -11,6 +11,7 @@ import QGroundControl.FactControls  1.0
 import QGroundControl.Palette       1.0
 
 // Editor for Simple mission items
+//右侧任务视图//会根据类型不同的方式显示
 Rectangle {
     width:  availableWidth
     height: editorColumn.height + (_margin * 2)

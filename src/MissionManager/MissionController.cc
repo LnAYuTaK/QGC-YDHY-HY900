@@ -171,6 +171,7 @@ void MissionController::_newMissionItemsAvailableFromVehicle(bool removeAllReque
 
         QmlObjectListModel* newControllerMissionItems = new QmlObjectListModel(this);
         const QList<MissionItem*>& newMissionItems = _missionManager->missionItems();
+
         qCDebug(MissionControllerLog) << "loading from vehicle: count"<< newMissionItems.count();
 
         _missionItemCount = newMissionItems.count();
@@ -313,16 +314,22 @@ int MissionController::_nextSequenceNumber(void)
 VisualMissionItem* MissionController::_insertSimpleMissionItemWorker(QGeoCoordinate coordinate, MAV_CMD command, int visualItemIndex, bool makeCurrentItem)
 {
     int sequenceNumber = _nextSequenceNumber();
+    //创建新航点//
     SimpleMissionItem * newItem = new SimpleMissionItem(_masterController, _flyView, false /* forLoad */);
+
     newItem->setSequenceNumber(sequenceNumber);
     newItem->setCoordinate(coordinate);
     newItem->setCommand(command);
     _initVisualItem(newItem);
 
+    //设置高度
     if (newItem->specifiesAltitude()) {
+        //判断是否是MAV_LAND
         if (!qgcApp()->toolbox()->missionCommandTree()->isLandCommand(command)) {
             double                              prevAltitude;
             QGroundControlQmlGlobal::AltMode    prevAltMode;
+
+            qDebug() << sequenceNumber;
 
             if (_findPreviousAltitude(visualItemIndex, &prevAltitude, &prevAltMode)) {
                 newItem->altitude()->setRawValue(prevAltitude);
@@ -351,9 +358,10 @@ VisualMissionItem* MissionController::_insertSimpleMissionItemWorker(QGeoCoordin
     return newItem;
 }
 
-
+//添加一个新的简单任务项到列表
 VisualMissionItem* MissionController::insertSimpleMissionItem(QGeoCoordinate coordinate, int visualItemIndex, bool makeCurrentItem)
 {
+    //MAV_CMD_NAV_WAYPOINT默认为航点类型
     return _insertSimpleMissionItemWorker(coordinate, MAV_CMD_NAV_WAYPOINT, visualItemIndex, makeCurrentItem);
 }
 
@@ -427,6 +435,7 @@ VisualMissionItem* MissionController::insertCancelROIMissionItem(int visualItemI
     return simpleItem;
 }
 
+//复杂任务
 VisualMissionItem* MissionController::insertComplexMissionItem(QString itemName, QGeoCoordinate mapCenterCoordinate, int visualItemIndex, bool makeCurrentItem)
 {
     ComplexMissionItem* newItem = nullptr;
@@ -2364,6 +2373,8 @@ bool MissionController::_isROICancelItem(SimpleMissionItem* simpleItem)
              static_cast<int>(simpleItem->missionItem().param1()) == MAV_ROI_NONE);
 }
 
+
+//设置当前平面视图的序号
 void MissionController::setCurrentPlanViewSeqNum(int sequenceNumber, bool force)
 {
     if (_visualItems && (force || sequenceNumber != _currentPlanViewSeqNum)) {
@@ -2386,8 +2397,11 @@ void MissionController::setCurrentPlanViewSeqNum(int sequenceNumber, bool force)
         _previousCoordinate =           QGeoCoordinate();
 
         for (int viIndex=0; viIndex<_visualItems->count(); viIndex++) {
+            //获取地图上的视图
             VisualMissionItem*  pVI =        qobject_cast<VisualMissionItem*>(_visualItems->get(viIndex));
+            //获取添加的任务
             SimpleMissionItem*  simpleItem = qobject_cast<SimpleMissionItem*>(pVI);
+            //获取任务编号
             int                 currentSeqNumber = pVI->sequenceNumber();
 
             if (sequenceNumber != 0 && currentSeqNumber <= sequenceNumber) {
@@ -2396,12 +2410,12 @@ void MissionController::setCurrentPlanViewSeqNum(int sequenceNumber, bool force)
                     _isInsertTakeoffValid = false;
                 }
             }
-
             if (qobject_cast<TakeoffMissionItem*>(pVI)) {
                 takeoffSeqNum = currentSeqNumber;
                 _isInsertTakeoffValid = false;
             }
 
+            //任务类型
             if (!foundLand) {
                 if (simpleItem) {
                     switch (simpleItem->mavCommand()) {
@@ -2462,6 +2476,7 @@ void MissionController::setCurrentPlanViewSeqNum(int sequenceNumber, bool force)
                 _currentPlanViewSeqNum = sequenceNumber;
                 _currentPlanViewVIIndex = viIndex;
 
+                //这里有bug错误//TUDO
                 if (pVI->specifiesCoordinate()) {
                     if (!pVI->isStandaloneCoordinate()) {
                         // Determine split segment used to display line split editing ui.
@@ -2516,7 +2531,6 @@ void MissionController::setCurrentPlanViewSeqNum(int sequenceNumber, bool force)
                 _flyThroughCommandsAllowed = false;
             }
         }
-
         // These are not valid when only takeoff is allowed
         _isInsertLandValid =            _isInsertLandValid && !_onlyInsertTakeoffValid;
         _flyThroughCommandsAllowed =    _flyThroughCommandsAllowed && !_onlyInsertTakeoffValid;

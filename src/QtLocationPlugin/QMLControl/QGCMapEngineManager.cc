@@ -62,7 +62,6 @@ QGCMapEngineManager::setToolbox(QGCToolbox *toolbox)
    QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
    qmlRegisterUncreatableType<QGCMapEngineManager>("QGroundControl.QGCMapEngineManager", 1, 0, "QGCMapEngineManager", "Reference only");
    connect(getQGCMapEngine(), &QGCMapEngine::updateTotals, this, &QGCMapEngineManager::_updateTotals);
-   _updateDiskFreeSpace();
 }
 
 //-----------------------------------------------------------------------------

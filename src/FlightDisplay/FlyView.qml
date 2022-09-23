@@ -61,6 +61,13 @@ Item {
     property real   _fullItemZorder:    0
     property real   _pipItemZorder:     QGroundControl.zOrderWidgets
 
+
+    //窗口是否显示
+    function hideItem(enable){
+       widgetLayer.visible = enable
+       _pipOverlay._setPipIsExpanded(enable)
+    }
+
     function _calcCenterViewPort() {
         var newToolInset = Qt.rect(0, 0, width, height)
         toolstrip.adjustToolInset(newToolInset)
@@ -158,22 +165,37 @@ Item {
         property real centerInset: visible ? parent.height - y : 0
     }
 
-
     FlyViewVideo {
         id: videoControl
     }
     //隐藏视频小箭头
-//    Image{
-//        anchors.left : _pipOverlay.visable? _pipOverlay.right:
+    Rectangle {
+        id:                     showPip
+        anchors.left :          _pipOverlay._pipOrWindowItem.visible? _pipOverlay.right:parent.left
+        anchors.top:            _pipOverlay.top
+        height:                 ScreenTools.defaultFontPixelHeight * 2
+        width:                  ScreenTools.defaultFontPixelHeight * 2
+        radius:                 ScreenTools.defaultFontPixelHeight / 3
+        visible:                true//!_isExpanded
+        color:                  Qt.rgba(0,0,0,0.75)
 
-
-//        MouseArea {
-//            anchors.fill:   parent
-//            onClicked:      _pipOverlay._setPipIsExpanded(true)
-//        }
-
-//    }
-
+        Image {
+            id :changeImg
+            width:              parent.width  * 0.75
+            height:             parent.height * 0.75
+            sourceSize.height:  height
+            source:             _pipOverlay._pipOrWindowItem.visible? "qrc:/res/buttonLeft.svg":"qrc:/res/buttonLeft.svg"
+            mipmap:             true
+            fillMode:           Image.PreserveAspectFit
+            anchors.verticalCenter:     parent.verticalCenter
+            anchors.horizontalCenter:   parent.horizontalCenter
+        }
+        MouseArea {
+            anchors.fill:   parent
+            onClicked:
+             _pipOverlay._setPipIsExpanded(!(_pipOverlay._pipOrWindowItem.visible))
+        }
+    }
     //左下角视频
     QGCPipOverlay {
         id:                     _pipOverlay

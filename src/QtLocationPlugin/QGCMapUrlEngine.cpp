@@ -188,16 +188,15 @@ int UrlFactory::getIdFromType(QString type) { return (int)(qHash(type)>>1); }
 int
 UrlFactory::long2tileX(QString mapType, double lon, int z)
 {
-    return _providersTable[mapType]->long2tileX(lon, z);
+    return _providersTable["TianDiTu SatelliteMap"]->long2tileX(lon, z);
 }
 
 //-----------------------------------------------------------------------------
 int
 UrlFactory::lat2tileY(QString mapType, double lat, int z)
 {
-    return _providersTable[mapType]->lat2tileY(lat, z);
+    return _providersTable["TianDiTu SatelliteMap"]->lat2tileY(lat, z);
 }
-
 
 //-----------------------------------------------------------------------------
 QGCTileSet

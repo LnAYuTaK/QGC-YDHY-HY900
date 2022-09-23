@@ -32,6 +32,9 @@ void MissionCommandTree::setToolbox(QGCToolbox* toolbox)
 
     _settingsManager = toolbox->settingsManager();
 
+
+
+
 #ifdef UNITTEST_BUILD
     if (_unitTest) {
         // Load unit testing tree

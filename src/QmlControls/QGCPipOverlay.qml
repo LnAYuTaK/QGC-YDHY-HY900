@@ -20,7 +20,7 @@ Item {
     width:      _pipSize
     height:     _pipSize * (12/16)
     z:          pipZOrder + 1
-    visible:    item2 && item2.pipState !== item2.pipState.window && show
+   visible:    item2 && item2.pipState !== item2.pipState.window && show
 
     property var    item1:                  null    // Required
     property var    item2:                  null    // Optional, may come and go
@@ -215,7 +215,8 @@ Item {
         fillMode:       Image.PreserveAspectFit
         anchors.left:   parent.left
         anchors.bottom: parent.bottom
-        visible:        _isExpanded && (ScreenTools.isMobile || pipMouseArea.containsMouse)
+        visible:       false
+        //visible:        _isExpanded && (ScreenTools.isMobile || pipMouseArea.containsMouse)
         height:         ScreenTools.defaultFontPixelHeight * 2.5
         width:          ScreenTools.defaultFontPixelHeight * 2.5
         sourceSize.height:  height

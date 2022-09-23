@@ -29,9 +29,6 @@ Drawer {
         width: parent.width
         currentIndex:swipeView.currentIndex
         TabButton {
-            text: qsTr("任务规划")
-        }
-        TabButton {
             text: qsTr("通信连接")
         }
         TabButton {
@@ -41,7 +38,6 @@ Drawer {
             text: qsTr("版本更新")
         }
     }
-
     SwipeView  {
         id :swipeView
         width: parent.width
@@ -49,13 +45,6 @@ Drawer {
         height: parent.height
         clip: true
         currentIndex: bar.currentIndex
-//        DrawerFlightPlan{
-//            id:planView
-//        }
-        Loader {
-            source :"qrc:/qml/OfflineMap.qml"
-        }
-
         ConnectView {
             id:connectView
         }

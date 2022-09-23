@@ -54,6 +54,7 @@ getQGCMapEngine()
 {
     if(!kMapEngine)
         kMapEngine = new QGCMapEngine();
+
     return kMapEngine;
 }
 
@@ -97,6 +98,7 @@ QGCMapEngine::QGCMapEngine()
     qRegisterMetaType<QList<QGCTile*>>();
     connect(&_worker, &QGCCacheWorker::updateTotals,   this, &QGCMapEngine::_updateTotals);
     connect(&_worker, &QGCCacheWorker::internetStatus, this, &QGCMapEngine::_internetStatus);
+
 }
 
 //-----------------------------------------------------------------------------
@@ -168,6 +170,13 @@ QGCMapEngine::init()
     }
     QGCMapTask* task = new QGCMapTask(QGCMapTask::taskInit);
     _worker.enqueueTask(task);
+    //2022 9.22 修改默认DiskCache大小
+    QString path = getQGCMapEngine()->getCachePath();
+    QStorageInfo info(path);
+    quint32 total = static_cast<quint32>(info.bytesTotal() / (1024L*1024L)); // M
+    //quint64 maxSize = static_cast<quint64>(getMaxDiskCache()) * 1024L * 1024L;
+    this->setMaxDiskCache(total*0.3);
+
 }
 
 //-----------------------------------------------------------------------------

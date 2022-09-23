@@ -180,6 +180,8 @@ Item {
         }
     }
 
+
+    //
     PlanMasterController {
         id:         planMasterController
         flyView:    false
@@ -286,12 +288,15 @@ Item {
             _missionController.setCurrentPlanViewSeqNum(0, true)
         }
     }
-
+    //添加航点
     function insertSimpleItemAfterCurrent(coordinate) {
         var nextIndex = _missionController.currentPlanViewVIIndex + 1
-        _missionController.insertSimpleMissionItem(coordinate, nextIndex, true /* makeCurrentItem */)
-    }
 
+        console.log(nextIndex)
+        _missionController.insertSimpleMissionItem(coordinate, nextIndex, true /* makeCurrentItem */)
+
+    }
+    //添加兴趣点
     function insertROIAfterCurrent(coordinate) {
         var nextIndex = _missionController.currentPlanViewVIIndex + 1
         _missionController.insertROIMissionItem(coordinate, nextIndex, true /* makeCurrentItem */)
@@ -388,12 +393,14 @@ Item {
                 updateAirspace(false)
             }
 
+            //这里创建航点入口
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
                     // Take focus to close any previous editing
                     editorMap.focus = true
                     var coordinate = editorMap.toCoordinate(Qt.point(mouse.x, mouse.y), false /* clipToViewPort */)
+
                     coordinate.latitude = coordinate.latitude.toFixed(_decimalPlaces)
                     coordinate.longitude = coordinate.longitude.toFixed(_decimalPlaces)
                     coordinate.altitude = coordinate.altitude.toFixed(_decimalPlaces)
@@ -401,6 +408,7 @@ Item {
                     switch (_editingLayer) {
                     case _layerMission:
                         if (addWaypointRallyPointAction.checked) {
+                            //航点入口
                             insertSimpleItemAfterCurrent(coordinate)
                         } else if (_addROIOnClick) {
                             insertROIAfterCurrent(coordinate)
@@ -412,6 +420,7 @@ Item {
                         if (_rallyPointController.supported && addWaypointRallyPointAction.checked) {
                             _rallyPointController.addPoint(coordinate)
                         }
+
                         break
                     }
                 }
@@ -572,9 +581,11 @@ Item {
             property bool _isRallyLayer:    _editingLayer == _layerRallyPoints
             property bool _isMissionLayer:  _editingLayer == _layerMission
 
+
             ToolStripActionList {
                 id: toolStripActionList
                 model: [
+                    //回到飞行界面//
                     ToolStripAction {
                         text:           qsTr("Fly")
                         iconSource:     "/qmlimages/PaperPlane.svg"
@@ -595,7 +606,9 @@ Item {
                         enabled:    _missionController.isInsertTakeoffValid
                         visible:    toolStrip._isMissionLayer && !_planMasterController.controllerVehicle.rover
                         onTriggered: {
+                            //使能可以添加后续航点
                             toolStrip.allAddClickBoolsOff()
+                            //添加起飞点
                             insertTakeItemAfterCurrent()
                         }
                     },

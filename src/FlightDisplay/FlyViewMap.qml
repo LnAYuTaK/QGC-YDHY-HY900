@@ -216,7 +216,6 @@ FlightMap {
             }
         }
     }
-
     MapFitFunctions {
         id:                         mapFitFunctions // The name for this id cannot be changed without breaking references outside of this code. Beware!
         map:                        _root
@@ -511,7 +510,6 @@ FlightMap {
             label:      qsTr("Orbit", "Orbit waypoint")
         }
     }
-
 
     // Handle guided mode clicks
     MouseArea {
