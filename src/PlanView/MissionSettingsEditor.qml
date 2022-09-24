@@ -39,6 +39,10 @@ Rectangle {
     property bool   _showFlightSpeed:               !_controllerVehicle.vtol && !_simpleMissionStart && !_controllerVehicle.apmFirmware
     property bool   _allowFWVehicleTypeSelection:   _noMissionItemsAdded && !globals.activeVehicle
 
+    property var    _planmaster   :                 mainWindow.planView._planMasterController
+
+
+
     readonly property string _firmwareLabel:    qsTr("Firmware")
     readonly property string _vehicleLabel:     qsTr("Vehicle")
     readonly property real  _margin:            ScreenTools.defaultFontPixelWidth / 2
@@ -65,10 +69,12 @@ Rectangle {
         spacing:            _margin
 
         QGCLabel {
+            visible:false
             text:           qsTr("All Altitudes")
             font.pointSize: ScreenTools.smallFontPointSize
         }
         MouseArea {
+            visible: false
             Layout.preferredWidth:  childrenRect.width
             Layout.preferredHeight: childrenRect.height
             enabled:                _noMissionItemsAdded
@@ -99,8 +105,68 @@ Rectangle {
             }
         }
 
+       GridLayout{
+            Layout.preferredWidth:  childrenRect.width
+            columnSpacing:      ScreenTools.defaultFontPixelWidth
+            rowSpacing:         columnSpacing
+            columns : 2
+
+            QGCButton {
+                text:           qsTr("加载航点文件")
+                Layout.fillWidth: true
+                backRadius:     4
+                heightFactor:   0.3333
+                showBorder:     true
+                onClicked: {
+                    mainWindow._planView._planMasterController.loadFromSelectedFile()
+                }
+            }
+            QGCButton {
+                text:           qsTr("保存航点文件")
+                backRadius:     4
+                Layout.fillWidth: true
+                heightFactor:   0.3333
+                showBorder:     true
+                onClicked: {
+                    mainWindow._planView._planMasterController.saveToSelectedFile()
+                }
+
+            }
+            QGCButton {
+                text:           qsTr("清空航点")
+                Layout.fillWidth: true
+                backRadius:     4
+                heightFactor:   0.3333
+                showBorder:     true
+                onClicked: {
+
+                }
+            }
+            QGCButton {
+                text:           qsTr("读取航点")
+                Layout.fillWidth: true
+                backRadius:     4
+                heightFactor:   0.3333
+                showBorder:     true
+                onClicked: {
+                      mainWindow._planView.downloadClicked("读取航点")
+                }
+            }
+            QGCButton {
+                text:           qsTr("刷新航点")
+                Layout.fillWidth: true
+                backRadius:     4
+
+                heightFactor:   0.3333
+                showBorder:     true
+                onClicked: {
+
+                }
+            }
+        }
+
         QGCLabel {
-            text:           qsTr("Initial Waypoint Alt")
+            text:           qsTr("默认高度")
             font.pointSize: ScreenTools.smallFontPointSize
         }
         FactTextField {
@@ -113,6 +179,7 @@ Rectangle {
             columnSpacing:      ScreenTools.defaultFontPixelWidth
             rowSpacing:         columnSpacing
             columns:            2
+            visible:            false
 
             QGCCheckBox {
                 id:         flightSpeedCheckBox
@@ -128,8 +195,23 @@ Rectangle {
                 enabled:            flightSpeedCheckBox.checked
             }
         }
-
-        Column {
+        GridLayout{
+            Layout.fillWidth:   true
+            columnSpacing:      ScreenTools.defaultFontPixelWidth
+            rowSpacing:         columnSpacing
+            columns:            2
+            QGCLabel {
+                text:           qsTr("航程")
+                font.pointSize: ScreenTools.defaultFontPointSize
+            }
+            QGCTextField {
+                Layout.fillWidth:   true
+                text:"Text"
+                visible:            _showFlightSpeed
+                enabled:            false
+            }
+        }
+    Column {
             Layout.fillWidth:   true
             spacing:            _margin
             visible:            !_simpleMissionStart
@@ -137,7 +219,7 @@ Rectangle {
             CameraSection {
                 id:         cameraSection
                 checked:    !_waypointsOnlyMode && missionItem.cameraSection.settingsSpecified
-                visible:    _showCameraSection
+                visible:    false//_showCameraSection
             }
 
             QGCLabel {
@@ -147,7 +229,7 @@ Rectangle {
                 wrapMode:               Text.WordWrap
                 horizontalAlignment:    Text.AlignHCenter
                 font.pointSize:         ScreenTools.smallFontPointSize
-                visible:                _showCameraSection && cameraSection.checked
+                visible:                false//_showCameraSection && cameraSection.checked
             }
 
             SectionHeader {
@@ -155,7 +237,7 @@ Rectangle {
                 anchors.left:   parent.left
                 anchors.right:  parent.right
                 text:           qsTr("Vehicle Info")
-                visible:        !_waypointsOnlyMode
+                visible:        false//!_waypointsOnlyMode
                 checked:        false
             }
 
@@ -165,7 +247,7 @@ Rectangle {
                 columnSpacing:  ScreenTools.defaultFontPixelWidth
                 rowSpacing:     columnSpacing
                 columns:        2
-                visible:        vehicleInfoSectionHeader.visible && vehicleInfoSectionHeader.checked
+                visible:        false//vehicleInfoSectionHeader.visible && vehicleInfoSectionHeader.checked
 
                 QGCLabel {
                     text:               _firmwareLabel
@@ -237,22 +319,21 @@ Rectangle {
                 anchors.left:   parent.left
                 anchors.right:  parent.right
                 text:           qsTr("Launch Position")
-                visible:        !_vehicleHasHomePosition
+                visible:        false// !_vehicleHasHomePosition
                 checked:        false
             }
             Column {
                 anchors.left:   parent.left
                 anchors.right:  parent.right
                 spacing:        _margin
-                visible:        plannedHomePositionSection.checked && !_vehicleHasHomePosition
+                visible:        false// plannedHomePositionSection.checked && !_vehicleHasHomePosition
 
                 GridLayout {
                     anchors.left:   parent.left
                     anchors.right:  parent.right
                     columnSpacing:  ScreenTools.defaultFontPixelWidth
                     rowSpacing:     columnSpacing
-                    columns:        2
-
+                    columns:        2 
                     QGCLabel {
                         text: qsTr("Altitude")
                     }

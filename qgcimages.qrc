@@ -240,5 +240,10 @@
         <file>resources/ImageRes/zuojiantou.svg</file>
         <file>src/FlightMap/Images/attitudePointer.png</file>
         <file>src/FlightMap/Images/attitudeDial.png</file>
+        <file>resources/ImageRes/shangjiantou.svg</file>
+        <file>resources/ImageRes/shang-jiantou.svg</file>
+        <file>resources/ImageRes/xiangshang.svg</file>
+        <file>resources/ImageRes/renwu_1.svg</file>
+        <file>resources/ImageRes/renwuchaxun.svg</file>
     </qresource>
 </RCC>

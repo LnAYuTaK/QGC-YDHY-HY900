@@ -168,40 +168,42 @@ Item {
     FlyViewVideo {
         id: videoControl
     }
-    //隐藏视频小箭头
-    Rectangle {
-        id:                     showPip
-        anchors.left :          _pipOverlay._pipOrWindowItem.visible? _pipOverlay.right:parent.left
-        anchors.top:            _pipOverlay.top
-        height:                 ScreenTools.defaultFontPixelHeight * 2
-        width:                  ScreenTools.defaultFontPixelHeight * 2
-        radius:                 ScreenTools.defaultFontPixelHeight / 3
-        visible:                true//!_isExpanded
-        color:                  Qt.rgba(0,0,0,0.75)
 
-        Image {
-            id :changeImg
-            width:              parent.width  * 0.75
-            height:             parent.height * 0.75
-            sourceSize.height:  height
-            source:             _pipOverlay._pipOrWindowItem.visible? "qrc:/res/buttonLeft.svg":"qrc:/res/buttonLeft.svg"
-            mipmap:             true
-            fillMode:           Image.PreserveAspectFit
-            anchors.verticalCenter:     parent.verticalCenter
-            anchors.horizontalCenter:   parent.horizontalCenter
-        }
-        MouseArea {
-            anchors.fill:   parent
-            onClicked:
-             _pipOverlay._setPipIsExpanded(!(_pipOverlay._pipOrWindowItem.visible))
-        }
-    }
+////隐藏视频小箭头  2022 9.24弃用
+//    Rectangle {
+//        id:                     showPip
+//        anchors.left :          _pipOverlay._pipOrWindowItem.visible? _pipOverlay.right:parent.left
+//        anchors.top:            _pipOverlay.top
+//        height:                 ScreenTools.defaultFontPixelHeight * 2
+//        width:                  ScreenTools.defaultFontPixelHeight * 2
+//        radius:                 ScreenTools.defaultFontPixelHeight / 3
+//        visible:                true//!_isExpanded
+//        color:                  Qt.rgba(0,0,0,0.75)
+//        visible: false
+//        Image {
+//            id :changeImg
+//            width:              parent.width  * 0.75
+//            height:             parent.height * 0.75
+//            sourceSize.height:  height
+//            source:             _pipOverlay._pipOrWindowItem.visible? "qrc:/res/buttonLeft.svg":"qrc:/res/buttonLeft.svg"
+//            mipmap:             true
+//            fillMode:           Image.PreserveAspectFit
+//            anchors.verticalCenter:     parent.verticalCenter
+//            anchors.horizontalCenter:   parent.horizontalCenter
+//        }
+//        MouseArea {
+//            anchors.fill:   parent
+//            onClicked:
+//             _pipOverlay._setPipIsExpanded(!(_pipOverlay._pipOrWindowItem.visible))
+//        }
+//    }
+
     //左下角视频
     QGCPipOverlay {
         id:                     _pipOverlay
         anchors.left:           parent.left
         anchors.bottom:         parent.bottom
-//        anchors.margins:        _toolsMargin
+//      anchors.margins:        _toolsMargin
         item1IsFullSettingsKey: "MainFlyWindowIsMap"
         item1:                  mapControl
         item2:                  QGroundControl.videoManager.hasVideo ? videoControl : null

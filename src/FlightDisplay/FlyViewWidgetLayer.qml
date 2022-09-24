@@ -29,7 +29,6 @@ import QGroundControl.FlightMap     1.0
 import QGroundControl.Palette       1.0
 import QGroundControl.ScreenTools   1.0
 import QGroundControl.Vehicle       1.0
-//2022 822
 import QGroundControl.MenuTool      1.0
 
 import QtQuick.Controls.Styles  1.4
@@ -37,8 +36,6 @@ import QtQuick.Dialogs          1.2
 import QtLocation               5.3
 import QtPositioning            5.3
 import QtQuick.Layouts          1.2
-
-
 
 // This is the ui overlay layer for the widgets/tools for Fly View
 Item {
@@ -118,18 +115,6 @@ Item {
         visible:            !multiVehiclePanelSelector.showSingleVehiclePanel
     }
 
-//2022 9.9右侧隐藏左右箭头16X16
-    Image {
-        id:            currentButton
-        anchors.right :  instrumentPanel.visible== true?instrumentPanel.left:parent.right
-        source:     instrumentPanel.visible== true? "qrc:/qmlimages/resources/ImageRes/youjiantou.svg":"qrc:/qmlimages/resources/ImageRes/zuojiantou.svg"
-       // logo:            true
-        //onClicked:  parameterVisable()
-        MouseArea{
-            anchors.fill :parent
-            onClicked: parameterVisable()
-        }
-    }
     function parameterVisable(){
         if(parameterView.visible) {
             parameterView.visible = false
@@ -141,7 +126,6 @@ Item {
         }
     }
 
-
     //罗盘
     FlyViewInstrumentPanel {
         id:                         instrumentPanel
@@ -152,10 +136,19 @@ Item {
         visible:                    true
         anchors.horizontalCenter:   parameterView.horizontalCenter
         //availableHeight:            parent.height - y - _toolsMargin
-
        // property real rightInset: visible ? parent.width - x : 0
     }
-
+    //右侧隐藏参数箭头
+    Image {
+        id:            currentButton
+        anchors.right :  instrumentPanel.visible== true?instrumentPanel.left:parent.right
+        source:     instrumentPanel.visible== true? "qrc:/qmlimages/resources/ImageRes/youjiantou.svg":"qrc:/qmlimages/resources/ImageRes/zuojiantou.svg"
+        MouseArea{
+            anchors.fill :parent
+            onClicked: parameterVisable()
+        }
+    }
+    //右侧参数界面
     ParameterView{
              id : parameterView
              anchors.top:          instrumentPanel.bottom
@@ -165,8 +158,6 @@ Item {
              color:                "black"
              visible:  true
      }
-
-
 //    QGCPipOverlay {
 //        id:                     _pipOverlay
 //        anchors.left:           parent.left
@@ -278,7 +269,8 @@ Item {
         }
     }
 
-    //-- Virtual Joystick
+//虚拟摇杆屏蔽
+//-- Virtual Joystick
 //    Loader {
 //        id:                         virtualJoystickMultiTouch
 //        z:                          QGroundControl.zOrderTopMost + 1
@@ -296,6 +288,7 @@ Item {
 //        property bool _virtualJoystickEnabled: QGroundControl.settingsManager.appSettings.virtualJoystick.rawValue
 //    }
 
+    //左上角省略三点// 打开设置界面
     QGCToolBarButton {
         id:                     menuButton
         anchors.top :parent.top
@@ -305,7 +298,25 @@ Item {
         //2022 8.22
         onClicked:              mainWindow.showDrawerpage()
     }
+    //左侧任务计划图标
+    Image {
+        id :planViewDisplay
+        anchors.left:parent.left
+        anchors.leftMargin:_margins
+        anchors.topMargin: _margins
+        anchors.top :menuButton.bottom
+        width:ScreenTools.defaultFontPixelWidth*5
+        height:ScreenTools.defaultFontPixelWidth*5
+        sourceSize.height:  height
+        source:             "qrc:/qmlimages/resources/ImageRes/renwu.svg"
+        fillMode:           Image.PreserveAspectFit
+        MouseArea {
+            anchors.fill:   parent
+            onClicked:mainWindow.showPlanView()
+        }
+    }
 
+    //2022 9.24屏蔽原版QGC任务规划ToolStrip
     FlyViewToolStrip {
          id:                     toolStrip
          anchors.leftMargin:     _toolsMargin + parentToolInsets.leftEdgeCenterInset
@@ -314,12 +325,12 @@ Item {
          anchors.top:            currentButton.bottom
          z:                      QGroundControl.zOrderWidgets
          maxHeight:              parent.height - y - parentToolInsets.bottomEdgeLeftInset - _toolsMargin
-         visible:                !QGroundControl.videoManager.fullScreen
-
+          visible:false
+         // visible:                !QGroundControl.videoManager.fullScreen
          onDisplayPreFlightChecklist: mainWindow.showPopupDialogFromComponent(preFlightChecklistPopup)
-
          property real leftInset: x + width
-     }
+    }
+
     FlyViewAirspaceIndicator {
         anchors.top:                parent.top
         anchors.topMargin:          ScreenTools.defaultFontPixelHeight * 0.25
@@ -327,12 +338,11 @@ Item {
         z:                          QGroundControl.zOrderWidgets
         show:                       mapControl.pipState.state !== mapControl.pipState.pipState
     }
-//    警告
+//   提示警告
 //    VehicleWarnings {
 //        anchors.centerIn:   parent
 //        z:                  QGroundControl.zOrderTopMost
 //    }
-     //比例尺
 
     Component {
         id: preFlightChecklistPopup

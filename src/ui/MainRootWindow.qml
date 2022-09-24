@@ -28,6 +28,8 @@ ApplicationWindow {
     minimumWidth:   ScreenTools.isMobile ? Screen.width  : Math.min(ScreenTools.defaultFontPixelWidth * 100, Screen.width)
     minimumHeight:  ScreenTools.isMobile ? Screen.height : Math.min(ScreenTools.defaultFontPixelWidth * 50, Screen.height)
     visible:        true
+    property var _planView :planView
+
 
     Component.onCompleted: {
         //-- Full screen on mobile or tiny screens
@@ -105,10 +107,17 @@ ApplicationWindow {
     //-------------------------------------------------------------------------
     //-- Global Scope Functions
 
+
+
+    function func(){
+       planView._planMasterController.saveToSelectedFile()
+    }
+
     /// Prevent view switching
     function pushPreventViewSwitch() {
         _rgPreventViewSwitch.push(true)
     }
+
 
     /// Allow view switching
     function popPreventViewSwitch() {
@@ -455,6 +464,8 @@ ApplicationWindow {
         id:             flightView
         anchors.fill:   parent
     }
+
+
     function showDrawerpage() {
        toolDrawerSelect.visible = true
     }
@@ -463,11 +474,15 @@ ApplicationWindow {
        visible:        false
     }
 
+
+
     PlanView {
         id:             planView
         anchors.fill:   parent
         visible:        false
     }
+
+
 
     //导航栏
     MenuToolStrip {
@@ -722,7 +737,6 @@ ApplicationWindow {
             }
         }
     }
-
     //-------------------------------------------------------------------------
     //-- Indicator Popups
 

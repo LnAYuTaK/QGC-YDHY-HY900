@@ -116,7 +116,6 @@ Rectangle {
             color:                  qgcPal.text
             visible:                _currentItem && missionItem.sequenceNumber !== 0
             source:                 "/res/TrashDelete.svg"
-
             QGCMouseArea {
                 fillItem:   parent
                 onClicked:  remove()

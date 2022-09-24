@@ -10,6 +10,7 @@
 import QtQuick          2.3
 import QtQuick.Controls 1.2
 import QtQuick.Dialogs  1.2
+import QtQuick.Controls.Styles  1.4
 import QtLocation       5.3
 import QtPositioning    5.3
 import QtQuick.Layouts  1.2
@@ -40,6 +41,7 @@ Item {
     readonly property var   _defaultVehicleCoordinate:  QtPositioning.coordinate(37.803784, -122.462276)
     readonly property bool  _waypointsOnlyMode:         QGroundControl.corePlugin.options.missionWaypointsOnly
 
+    property real   _margins:                           ScreenTools.defaultFontPixelWidth / 2
     property bool   _airspaceEnabled:                   QGroundControl.airmapSupported ? (QGroundControl.settingsManager.airMapSettings.enableAirMap.rawValue && QGroundControl.airspaceManager.connected): false
     property var    _planMasterController:              planMasterController
     property var    _missionController:                 _planMasterController.missionController
@@ -62,8 +64,10 @@ Item {
     readonly property int       _layerRallyPoints:          3
     readonly property string    _armedVehicleUploadPrompt:  qsTr("Vehicle is currently armed. Do you want to upload the mission to the vehicle?")
 
+
     function mapCenter() {
         var coordinate = editorMap.center
+       console.log("123")
         coordinate.latitude  = coordinate.latitude.toFixed(_decimalPlaces)
         coordinate.longitude = coordinate.longitude.toFixed(_decimalPlaces)
         coordinate.altitude  = coordinate.altitude.toFixed(_decimalPlaces)
@@ -322,7 +326,6 @@ Item {
         _missionController.insertLandItem(mapCenter(), nextIndex, true /* makeCurrentItem */)
     }
 
-
     function selectNextNotReady() {
         var foundCurrent = false
         for (var i=0; i<_missionController.visualItems.count; i++) {
@@ -361,6 +364,8 @@ Item {
         id:             panel
         anchors.fill:   parent
 
+
+        //飞行地图
         FlightMap {
             id:                         editorMap
             anchors.fill:               parent
@@ -400,29 +405,29 @@ Item {
                     // Take focus to close any previous editing
                     editorMap.focus = true
                     var coordinate = editorMap.toCoordinate(Qt.point(mouse.x, mouse.y), false /* clipToViewPort */)
-
                     coordinate.latitude = coordinate.latitude.toFixed(_decimalPlaces)
                     coordinate.longitude = coordinate.longitude.toFixed(_decimalPlaces)
                     coordinate.altitude = coordinate.altitude.toFixed(_decimalPlaces)
+//2022 9.24修改不需要选取航点就可以创建//但是默认选取为航点
+                    insertSimpleItemAfterCurrent(coordinate)
+//                    switch (_editingLayer) {
+//                    case _layerMission:
+//                        if (addWaypointRallyPointAction.checked) {
+//                            //航点入口
+//                            insertSimpleItemAfterCurrent(coordinate)
+//                        } else if (_addROIOnClick) {
+//                            insertROIAfterCurrent(coordinate)
+//                            _addROIOnClick = false
+//                        }
 
-                    switch (_editingLayer) {
-                    case _layerMission:
-                        if (addWaypointRallyPointAction.checked) {
-                            //航点入口
-                            insertSimpleItemAfterCurrent(coordinate)
-                        } else if (_addROIOnClick) {
-                            insertROIAfterCurrent(coordinate)
-                            _addROIOnClick = false
-                        }
+//                        break
+//                    case _layerRallyPoints:
+//                        if (_rallyPointController.supported && addWaypointRallyPointAction.checked) {
+//                            _rallyPointController.addPoint(coordinate)
+//                        }
 
-                        break
-                    case _layerRallyPoints:
-                        if (_rallyPointController.supported && addWaypointRallyPointAction.checked) {
-                            _rallyPointController.addPoint(coordinate)
-                        }
-
-                        break
-                    }
+//                        break
+//                    }
                 }
             }
 
@@ -559,7 +564,24 @@ Item {
         }
 
         //-----------------------------------------------------------
-        // Left tool strip
+        //同FlyViewWidgetLayer里边的左侧任务计划图标
+        Image {
+            id :planViewDisplay
+            anchors.left:parent.left
+            anchors.top:        parent.top
+            width:ScreenTools.defaultFontPixelWidth*5
+            height:ScreenTools.defaultFontPixelWidth*5
+            sourceSize.height:  height
+            source:             "qrc:/qmlimages/resources/ImageRes/renwu.svg"
+            fillMode:           Image.PreserveAspectFit
+            MouseArea {
+                anchors.fill:   parent
+                onClicked:mainWindow.showFlyView()
+            }
+        }
+
+        //-----------------------------------------------------------
+         // Left tool strip
         ToolStrip {
             id:                 toolStrip
             anchors.margins:    _toolsMargin
@@ -568,6 +590,7 @@ Item {
             z:                  QGroundControl.zOrderWidgets
             maxHeight:          parent.height - toolStrip.y
             title:              qsTr("Plan")
+            visible:false
 
             readonly property int flyButtonIndex:       0
             readonly property int fileButtonIndex:      1
@@ -584,6 +607,7 @@ Item {
 
             ToolStripActionList {
                 id: toolStripActionList
+
                 model: [
                     //回到飞行界面//
                     ToolStripAction {
@@ -681,21 +705,25 @@ Item {
 
         //-----------------------------------------------------------
         // Right pane for mission editing controls
+        //2022 9.23
         Rectangle {
-            id:                 rightPanel
-            height:             parent.height
-            width:              _rightPanelWidth
-            color:              qgcPal.window
-            opacity:            layerTabBar.visible ? 0.2 : 0
-            anchors.bottom:     parent.bottom
-            anchors.right:      parent.right
-            anchors.rightMargin: _toolsMargin
+                 id:                 rightPanel
+                 height:             parent.height
+                 width:              _rightPanelWidth*1.5
+                 color:              qgcPal.window
+                 opacity:            layerTabBar.visible ? 0.2 : 0
+                 anchors.bottom:     parent.bottom
+                 anchors.right:      parent.right
+                 anchors.top:        parent.top
+
+                 //anchors.rightMargin: _toolsMargin
         }
         //-------------------------------------------------------
+        //右侧的面板控件修改//
         // Right Panel Controls
         Item {
             anchors.fill:           rightPanel
-            anchors.topMargin:      _toolsMargin
+           // anchors.topMargin:      _toolsMargin
             DeadMouseArea {
                 anchors.fill:   parent
             }
@@ -722,6 +750,7 @@ Item {
                     color:      qgcPal.missionItemEditor
                     radius:     _radius
                     visible:    planControlColapsed && _airspaceEnabled
+
                     Row {
                         id:                     colapsedRow
                         spacing:                ScreenTools.defaultFontPixelWidth
@@ -762,17 +791,20 @@ Item {
                     }
                 }
                 //-------------------------------------------------------
+                //2022 9.23
                 // Mission Controls (Expanded)
                 QGCTabBar {
                     id:         layerTabBar
                     width:      parent.width
-                    visible:    (!planControlColapsed || !_airspaceEnabled) && QGroundControl.corePlugin.options.enablePlanViewSelector
+                    visible:false
+                   // visible:    (!planControlColapsed || !_airspaceEnabled) && QGroundControl.corePlugin.options.enablePlanViewSelector
                     Component.onCompleted: currentIndex = 0
                     QGCTabButton {
                         text:       qsTr("Mission")
                     }
                     QGCTabButton {
                         text:       qsTr("Fence")
+
                         enabled:    _geoFenceController.supported
                     }
                     QGCTabButton {
@@ -781,6 +813,7 @@ Item {
                     }
                 }
             }
+
             //-------------------------------------------------------
             // Mission Item Editor
             Item {
@@ -788,7 +821,7 @@ Item {
                 anchors.left:           parent.left
                 anchors.right:          parent.right
                 anchors.top:            rightControls.bottom
-                anchors.topMargin:      ScreenTools.defaultFontPixelHeight * 0.25
+                //anchors.topMargin:      ScreenTools.defaultFontPixelHeight * 0.25
                 anchors.bottom:         parent.bottom
                 anchors.bottomMargin:   ScreenTools.defaultFontPixelHeight * 0.25
                 visible:                _editingLayer == _layerMission && !planControlColapsed
@@ -803,6 +836,7 @@ Item {
                     currentIndex:       _missionController.currentPlanViewSeqNum
                     highlightMoveDuration: 250
                     visible:            _editingLayer == _layerMission && !planControlColapsed
+                    //每一个代表每个航点
                     //-- List Elements
                     delegate: MissionItemEditor {
                         map:            editorMap
@@ -855,7 +889,7 @@ Item {
                 controller:             _rallyPointController
             }
         }
-
+     //AMSL高度显示  //2022 9.4屏蔽
         TerrainStatus {
             id:                 terrainStatus
             anchors.margins:    _toolsMargin
@@ -865,8 +899,8 @@ Item {
             anchors.bottom:     parent.bottom
             height:             ScreenTools.defaultFontPixelHeight * 7
             missionController:  _missionController
-            visible:            _internalVisible && _editingLayer === _layerMission && QGroundControl.corePlugin.options.showMissionStatus
-
+            //visible:            _internalVisible && _editingLayer === _layerMission && QGroundControl.corePlugin.options.showMissionStatus
+            visible:false
             onSetCurrentSeqNum: _missionController.setCurrentPlanViewSeqNum(seqNum, true)
 
             property bool _internalVisible: _planViewSettings.showMissionItemStatus.rawValue
@@ -918,9 +952,7 @@ Item {
                                      StandardButton.Yes | StandardButton.Cancel,
                                      function() { _planMasterController.removeAllFromVehicle(); _missionController.setCurrentPlanViewSeqNum(0, true) })
     }
-
     //- ToolStrip DropPanel Components
-
     Component {
         id: centerMapDropPanel
 
@@ -955,11 +987,12 @@ Item {
     }
 
     function downloadClicked(title) {
-        if (_planMasterController.dirty) {
+        if (_planMasterController.dirty)
+        {
             mainWindow.showMessageDialog(title,
                                          qsTr("You have unsaved/unsent changes. Loading from the Vehicle will lose these changes. Are you sure you want to load from the Vehicle?"),
                                          StandardButton.Yes | StandardButton.Cancel,
-                                         function() { _planMasterController.loadFromVehicle() })
+                                         function() { _planMasterController.loadFromVehicle()})
         } else {
             _planMasterController.loadFromVehicle()
         }
@@ -1124,12 +1157,13 @@ Item {
                 id:                 vehicleSection
                 Layout.fillWidth:   true
                 text:               qsTr("Vehicle")
+                visible:            false
             }
 
             RowLayout {
                 Layout.fillWidth:   true
                 spacing:            _margin
-                visible:            vehicleSection.visible
+                visible:            false/*vehicleSection.visible*/
 
                 QGCButton {
                     text:               qsTr("Upload")
