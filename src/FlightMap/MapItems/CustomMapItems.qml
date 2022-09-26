@@ -15,7 +15,7 @@ import QGroundControl           1.0
 import QGroundControl.Controls  1.0
 import QGroundControl.FlightMap 1.0
 import QGroundControl.Vehicle   1.0
-
+//允许自定义构建将与飞行计划关联的可视化项目添加到地图
 // Allow custom builds to add visual items associated with the Flight Plan to the map
 Item {
     property var    map             ///< Map control to show items on

@@ -183,8 +183,6 @@ Item {
             planControlColapsed = QGroundControl.airspaceManager.airspaceVisible
         }
     }
-
-
     //
     PlanMasterController {
         id:         planMasterController
@@ -248,7 +246,7 @@ Item {
         }
 
         function loadFromSelectedFile() {
-            fileDialog.title =          qsTr("Select Plan File")
+            fileDialog.title =          qsTr("加载航点文件")
             fileDialog.planFiles =      true
             fileDialog.selectExisting = true
             fileDialog.nameFilters =    _planMasterController.loadNameFilters
@@ -256,10 +254,11 @@ Item {
         }
 
         function saveToSelectedFile() {
+
             if (!checkReadyForSaveUpload(true /* save */)) {
                 return
             }
-            fileDialog.title =          qsTr("Save Plan")
+            fileDialog.title =          qsTr("保存航点文件")
             fileDialog.planFiles =      true
             fileDialog.selectExisting = false
             fileDialog.nameFilters =    _planMasterController.saveNameFilters
@@ -278,6 +277,7 @@ Item {
             fileDialog.planFiles =      false
             fileDialog.selectExisting = false
             fileDialog.nameFilters =    ShapeFileHelper.fileDialogKMLFilters
+
             fileDialog.openForSave()
         }
     }
@@ -343,15 +343,18 @@ Item {
 
         property bool planFiles: true    ///< true: working with plan files, false: working with kml file
 
+
+        //保存
         onAcceptedForSave: {
             if (planFiles) {
+
                 _planMasterController.saveToFile(file)
             } else {
                 _planMasterController.saveToKml(file)
             }
             close()
         }
-
+       //加载
         onAcceptedForLoad: {
             _planMasterController.loadFromFile(file)
             _planMasterController.fitViewportToItems()
@@ -816,6 +819,8 @@ Item {
 
             //-------------------------------------------------------
             // Mission Item Editor
+
+            //任务视图编辑//最顶层
             Item {
                 id:                     missionItemEditor
                 anchors.left:           parent.left
@@ -828,7 +833,8 @@ Item {
                 QGCListView {
                     id:                 missionItemEditorListView
                     anchors.fill:       parent
-                    spacing:            ScreenTools.defaultFontPixelHeight / 4
+                    //spacing:            ScreenTools.defaultFontPixelHeight / 4
+                    spacing:0
                     orientation:        ListView.Vertical
                     model:              _missionController.visualItems
                     cacheBuffer:        Math.max(height * 2, 0)
@@ -836,8 +842,7 @@ Item {
                     currentIndex:       _missionController.currentPlanViewSeqNum
                     highlightMoveDuration: 250
                     visible:            _editingLayer == _layerMission && !planControlColapsed
-                    //每一个代表每个航点
-                    //-- List Elements
+                    //航点列表
                     delegate: MissionItemEditor {
                         map:            editorMap
                         masterController:  _planMasterController
@@ -847,6 +852,7 @@ Item {
                         onClicked:      _missionController.setCurrentPlanViewSeqNum(object.sequenceNumber, false)
                         onRemove: {
                             var removeVIIndex = index
+                            console.log(removeVIIndex)
                             _missionController.removeVisualItem(removeVIIndex)
                             if (removeVIIndex >= _missionController.visualItems.count) {
                                 removeVIIndex--

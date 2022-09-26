@@ -145,6 +145,7 @@ void MissionController::_init(void)
     _initAllVisualItems();
 }
 
+//当新任务项目完成从车辆下载时调用
 // Called when new mission items have completed downloading from Vehicle
 void MissionController::_newMissionItemsAvailableFromVehicle(bool removeAllRequested)
 {

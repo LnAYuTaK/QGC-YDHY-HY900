@@ -17,9 +17,8 @@ Rectangle {
     width:              availableWidth
     height:             valuesColumn.height + (_margin * 2)
     color:              qgcPal.windowShadeDark
-    visible:            missionItem.isCurrentItem
+    visible:true//visible:            missionItem.isCurrentItem
     radius:             _radius
-
     property var    _masterControler:               masterController
     property var    _missionController:             _masterControler.missionController
     property var    _controllerVehicle:             _masterControler.controllerVehicle
@@ -39,17 +38,15 @@ Rectangle {
     property bool   _showFlightSpeed:               !_controllerVehicle.vtol && !_simpleMissionStart && !_controllerVehicle.apmFirmware
     property bool   _allowFWVehicleTypeSelection:   _noMissionItemsAdded && !globals.activeVehicle
 
-    property var    _planmaster   :                 mainWindow.planView._planMasterController
-
-
 
     readonly property string _firmwareLabel:    qsTr("Firmware")
     readonly property string _vehicleLabel:     qsTr("Vehicle")
-    readonly property real  _margin:            ScreenTools.defaultFontPixelWidth / 2
+    readonly property real   _margin:            ScreenTools.defaultFontPixelWidth / 2
 
     QGCPalette { id: qgcPal }
     QGCFileDialogController { id: fileController }
     Component { id: altModeDialogComponent; AltModeDialog { } }
+
 
     Connections {
         target: _controllerVehicle
@@ -59,7 +56,6 @@ Rectangle {
             }
         }
     }
-
     ColumnLayout {
         id:                 valuesColumn
         anchors.margins:    _margin
@@ -96,11 +92,13 @@ Rectangle {
                     id:     altModeLabel
                     text:   QGroundControl.altitudeModeShortDescription(_missionController.globalAltitudeMode)
                 }
+                //不显示
                 QGCColoredImage {
                     height:     ScreenTools.defaultFontPixelHeight / 2
                     width:      height
                     source:     "/res/DropArrow.svg"
                     color:      altModeLabel.color
+                    visible:    false
                 }
             }
         }
@@ -110,7 +108,6 @@ Rectangle {
             columnSpacing:      ScreenTools.defaultFontPixelWidth
             rowSpacing:         columnSpacing
             columns : 2
-
             QGCButton {
                 text:           qsTr("加载航点文件")
                 Layout.fillWidth: true
@@ -120,7 +117,7 @@ Rectangle {
                 onClicked: {
                     mainWindow._planView._planMasterController.loadFromSelectedFile()
                 }
-            }
+           }
             QGCButton {
                 text:           qsTr("保存航点文件")
                 backRadius:     4
@@ -130,7 +127,6 @@ Rectangle {
                 onClicked: {
                     mainWindow._planView._planMasterController.saveToSelectedFile()
                 }
-
             }
             QGCButton {
                 text:           qsTr("清空航点")
@@ -139,7 +135,14 @@ Rectangle {
                 heightFactor:   0.3333
                 showBorder:     true
                 onClicked: {
-
+                        //清空航点除了一号航点
+                    var allVisualItemCount = _missionController.visualItems.count
+                    console.log(allVisualItemCount)
+                    var indexIedor = 0
+                    while(indexIedor!==allVisualItemCount) {
+                        _missionController.removeVisualItem(allVisualItemCount)
+                        allVisualItemCount--;
+                    }
                 }
             }
             QGCButton {
@@ -152,6 +155,7 @@ Rectangle {
                       mainWindow._planView.downloadClicked("读取航点")
                 }
             }
+            //暂未实现
             QGCButton {
                 text:           qsTr("刷新航点")
                 Layout.fillWidth: true
@@ -201,17 +205,17 @@ Rectangle {
             rowSpacing:         columnSpacing
             columns:            2
             QGCLabel {
-                text:           qsTr("航程")
+                text:     qsTr("航程")
                 font.pointSize: ScreenTools.defaultFontPointSize
             }
             QGCTextField {
                 Layout.fillWidth:   true
-                text:"Text"
+                text:String(_missionController.missionDistance)
                 visible:            _showFlightSpeed
                 enabled:            false
             }
-        }
-    Column {
+          }
+      Column {
             Layout.fillWidth:   true
             spacing:            _margin
             visible:            !_simpleMissionStart
@@ -221,7 +225,6 @@ Rectangle {
                 checked:    !_waypointsOnlyMode && missionItem.cameraSection.settingsSpecified
                 visible:    false//_showCameraSection
             }
-
             QGCLabel {
                 anchors.left:           parent.left
                 anchors.right:          parent.right

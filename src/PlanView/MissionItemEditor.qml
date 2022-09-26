@@ -19,7 +19,7 @@ Rectangle {
     height:         editorLoader.visible ? (editorLoader.y + editorLoader.height + _innerMargin) : (topRowLayout.y + topRowLayout.height + _margin)
     color:          _currentItem ? qgcPal.missionItemEditor : qgcPal.windowShade
     radius:         _radius
-    opacity:        _currentItem ? 1.0 : 0.7
+    opacity:        _currentItem ? 1.0 : 0.8
     border.width:   _readyForSave ? 0 : 2
     border.color:   qgcPal.warningText
 
@@ -57,7 +57,6 @@ Rectangle {
     FocusScope {
         id:             currentItemScope
         anchors.fill:   parent
-
         MouseArea {
             anchors.fill:   parent
             onClicked: {
@@ -151,12 +150,13 @@ Rectangle {
 
             QGCMouseArea {
                 fillItem:   parent
-                onClicked:  commandDialog.createObject(mainWindow).open()
+                //航点信息窗口
+                onClicked: commandDialog.createObject(mainWindow).open()
             }
 
             Component {
                 id: commandDialog
-
+                //旁边的
                 MissionCommandDialog {
                     vehicle:                    masterController.controllerVehicle
                     missionItem:                _root.missionItem
@@ -167,16 +167,61 @@ Rectangle {
             }
         }
 
-        QGCLabel {
-            id:                     commandLabel
-            anchors.verticalCenter: parent.verticalCenter
+//        QGCLabel {
+//            id:                     commandLabel
+//            anchors.verticalCenter: parent.verticalCenter
+//            width:                  commandPicker.width
+//            height:                 commandPicker.height
+//            visible:                !missionItem.isCurrentItem || !missionItem.isSimpleItem || _waypointsOnlyMode || missionItem.isTakeoffItem
+//            verticalAlignment:      Text.AlignVCenter
+//            text:                   missionItem.commandName
+//            color:                  _outerTextColor
+//        }
+
+     // 2022 9.26修改增加显示经纬度高度编号等航点信息
+        Rectangle{
+            id :commandLabel
             width:                  commandPicker.width
             height:                 commandPicker.height
-            visible:                !missionItem.isCurrentItem || !missionItem.isSimpleItem || _waypointsOnlyMode || missionItem.isTakeoffItem
-            verticalAlignment:      Text.AlignVCenter
-            text:                   missionItem.commandName
-            color:                  _outerTextColor
-        }
+            anchors.verticalCenter: parent.verticalCenter
+            color:                  "transparent"
+            visible:               (missionItem.sequenceNumber!==0)&&(!missionItem.isCurrentItem || !missionItem.isSimpleItem || _waypointsOnlyMode || missionItem.isTakeoffItem)
+            RowLayout{
+                spacing :10
+                anchors.fill:parent
+                //航点类型
+                QGCLabel {
+                    Layout.fillHeight: true
+                    Layout.alignment : Qt.AlignVCenter
+                    text:              missionItem.commandName
+                }
+                //航点标号
+                QGCLabel {
+                    Layout.fillHeight: true
+                    Layout.alignment : Qt.AlignVCenter
+                    text:            String(missionItem.sequenceNumber)
+
+                }
+                //航点纬度
+                QGCLabel {
+                    Layout.fillHeight: true
+                    Layout.alignment : Qt.AlignVCenter
+                    text:              "纬度:"+missionItem.coordinate.latitude
+                }
+                //航点经度
+                QGCLabel {
+                    Layout.fillHeight: true
+                    Layout.alignment : Qt.AlignVCenter
+                    text:              "经度:"+missionItem.coordinate.longitude
+                }
+                //航点高度
+                QGCLabel {
+                    Layout.fillHeight: true
+                    Layout.alignment : Qt.AlignVCenter
+                    text:              "高度:"+missionItem.altitude.rawValue+"m"
+                }
+            }
+        }//Rectangle CommandLabel
     }
 
    QGCColoredImage {
@@ -187,7 +232,7 @@ Rectangle {
         width:                  _hamburgerSize
         height:                 _hamburgerSize
         sourceSize.height:      _hamburgerSize
-        source:                 "qrc:/qmlimages/Hamburger.svg"
+        source:                 "qrc:/qmlimages/Hamburger.svg"//汉堡包??
         visible:                missionItem.isCurrentItem && missionItem.sequenceNumber !== 0
         color:                  qgcPal.text
 
@@ -207,7 +252,7 @@ Rectangle {
                     enabled:        _activeVehicle
                     onTriggered:    missionItem.coordinate = _activeVehicle.coordinate
 
-                    property var    _activeVehicle:             QGroundControl.multiVehicleManager.activeVehicle
+                    property var    _activeVehicle:      QGroundControl.multiVehicleManager.activeVehicle
                 }
 
                 QGCMenuItem {
@@ -226,11 +271,12 @@ Rectangle {
                     visible: missionItem.isSimpleItem && !_waypointsOnlyMode
                 }
 
+                //显示所有值
                 QGCMenuItem {
                     text:       qsTr("Show all values")
                     checkable:  true
                     checked:    missionItem.isSimpleItem ? missionItem.rawEdit : false
-                    visible:    missionItem.isSimpleItem && !_waypointsOnlyMode
+                    visible:    true//missionItem.isSimpleItem && !_waypointsOnlyMode
 
                     onTriggered:    {
                         if (missionItem.rawEdit) {
@@ -269,17 +315,15 @@ Rectangle {
         horizontalAlignment:    Text.AlignHCenter
         color:                  qgcPal.warningText
     }
-
 */
-
+//这里加载MissionSettingsEditor.qml
     Loader {
         id:                 editorLoader
         anchors.margins:    _innerMargin
         anchors.left:       parent.left
         anchors.top:        topRowLayout.bottom
-        source:             missionItem.editorQml
+        source:             missionItem.editorQml//"qrc:/qml/MissionSettingsEditor.qml";
         visible:            _currentItem
-
         property var    masterController:   _masterController
         property real   availableWidth:     _root.width - (anchors.margins * 2) ///< How wide the editor should be
         property var    editorRoot:         _root

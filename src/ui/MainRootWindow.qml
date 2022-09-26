@@ -475,14 +475,11 @@ ApplicationWindow {
     }
 
 
-
     PlanView {
         id:             planView
         anchors.fill:   parent
         visible:        false
     }
-
-
 
     //导航栏
     MenuToolStrip {

@@ -35,6 +35,8 @@ Item {
 
     property string fmode: vehicle.flightMode
 
+
+    //航点信息显示到地图
     // Add the mission item visuals to the map
     Repeater {
         model: largeMapView ? _missionController.visualItems : 0
