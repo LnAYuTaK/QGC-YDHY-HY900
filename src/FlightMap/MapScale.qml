@@ -152,7 +152,7 @@ Item {
         horizontalAlignment:Text.AlignRight
         anchors.left:       parent.left
         anchors.bottom :    scaleText.top
-        text:  _activeVehicle ?"lat"+_activeVehicle.latitude+"·"+"lon"+_activeVehicle.longitude:"lat·lon:N/A"
+        text:  _activeVehicle ?"纬度"+_activeVehicle.latitude+"·"+"经度"+_activeVehicle.longitude:"纬度·经度:N/A"
     }
 
     QGCMapLabel {

@@ -44,9 +44,23 @@ QGCPopupDialog {
                 function categorySelected(category) {
                     commandList.model = QGroundControl.missionCommandTree.getCommandsForCategory(vehicle, category, flyThroughCommandsAllowed)
                 }
+                function showMoreWayPointMsg()
+                {
+                    if (missionItem.rawEdit) {
+                        if (missionItem.friendlyEditAllowed) {
+                            missionItem.rawEdit = false
+                        } else {
+                            mainWindow.showMessageDialog(qsTr("Mission Edit"), qsTr("You have made changes to the mission item which cannot be shown in Simple Mode"))
+                        }
+                    } else {
+                        missionItem.rawEdit = true
+                    }
+                }
 
                 Component.onCompleted: {
                     var category  = missionItem.category
+                    showMoreWayPointMsg()
+
                     currentIndex = find(category)
                     categorySelected(category)
                 }

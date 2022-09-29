@@ -112,3 +112,4 @@ ToolStripHoverButton                    1.0 ToolStripHoverButton.qml
 VehicleRotationCal                      1.0 VehicleRotationCal.qml
 VehicleSummaryRow                       1.0 VehicleSummaryRow.qml
 MAVLinkChart                            1.0 MAVLinkChart.qml
+SwitchButton                            1.0 SwitchButton.qml

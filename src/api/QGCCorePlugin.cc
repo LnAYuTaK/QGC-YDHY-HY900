@@ -143,7 +143,7 @@ QVariantList &QGCCorePlugin::settingsPages()
                                             QUrl::fromUserInput("qrc:/res/gear-white.svg"));
         _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pGeneral)));
         _p->pCommLinks = new QmlComponentInfo(tr("通讯连接"),
-                                              QUrl::fromUserInput("qrc:/qml/LinkSettings.qml"),
+                                              QUrl::fromUserInput("qrc:/qml/LinkSettingsPage.qml"),
                                               QUrl::fromUserInput("qrc:/res/waves.svg"));
         _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pCommLinks)));
 #if defined (HY_900)
@@ -407,7 +407,6 @@ bool QGCCorePlugin::mavlinkMessage(Vehicle* vehicle, LinkInterface* link, mavlin
     Q_UNUSED(vehicle);
     Q_UNUSED(link);
     Q_UNUSED(message);
-
     return true;
 }
 

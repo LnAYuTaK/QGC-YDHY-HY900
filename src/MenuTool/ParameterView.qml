@@ -21,7 +21,8 @@ import QGroundControl.Palette       1.0
 import QGroundControl.FlightMap     1.0
 //右侧参数界面
 Rectangle {
-  color:"black"
+  color:"#1b2538"
+  opacity:  0.7
   //当前活跃无人机
   property var    _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
   //链路信号

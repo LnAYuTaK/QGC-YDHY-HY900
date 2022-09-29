@@ -297,6 +297,8 @@
         <file alias="QGroundControl/MenuTool/DrawerFlightPlan.qml">src/MenuTool/DrawerFlightPlan.qml</file>
         <file alias="QGroundControl/FlightDisplay/CustomDial.qml">src/FlightDisplay/CustomDial.qml</file>
         <file alias="QGroundControl/MenuTool/ParameterLabel.qml">src/MenuTool/ParameterLabel.qml</file>
+        <file alias="LinkSettingsPage.qml">src/ui/preferences/LinkSettingsPage.qml</file>
+        <file alias="QGroundControl/Controls/SwitchButton.qml">src/QmlControls/SwitchButton.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="UnitsFirstRunPrompt.qml">src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml</file>

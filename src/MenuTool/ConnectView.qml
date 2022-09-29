@@ -8,7 +8,7 @@ import QGroundControl.Controls      1.0
 import QGroundControl.ScreenTools   1.0
 
 
-//连接设置代码  LinkSettings.qml
+//连接界面-> LinkSettings.qml
 Rectangle {
     id:     connectView
     color:  qgcPal.window
@@ -18,6 +18,7 @@ Rectangle {
     readonly property real _defaultTextWidth:   ScreenTools.defaultFontPixelWidth
     readonly property real _horizontalMargin:   _defaultTextWidth / 2
     readonly property real _verticalMargin:     _defaultTextHeight / 2
+
     readonly property real _buttonHeight:       ScreenTools.isTinyScreen ? ScreenTools.defaultFontPixelHeight * 3 : ScreenTools.defaultFontPixelHeight * 2
 
     property bool _first: true
@@ -29,50 +30,99 @@ Rectangle {
         __rightPanel.source = QGroundControl.corePlugin.settingsPages[QGroundControl.corePlugin.defaultSettings].url
     }
 
-   QGCFlickable {
+    //Header
+
+    ListView{
         id:                 buttonList
-        width:              buttonColumn.width
+        width:          _defaultTextWidth*20
         anchors.topMargin:  _verticalMargin
         anchors.top:        parent.top
         anchors.bottom:     parent.bottom
         anchors.leftMargin: _horizontalMargin
         anchors.left:       parent.left
-        contentHeight:      buttonColumn.height + _verticalMargin
-        flickableDirection: Flickable.VerticalFlick
         clip:               true
+        focus: true
 
-        ColumnLayout {
-            id:         buttonColumn
-            spacing:    _verticalMargin
-
-            property real _maxButtonWidth: 0
-
-            Repeater {
-                model:  QGroundControl.corePlugin.settingsPages
-                QGCButton {
-                    height:             _buttonHeight
-                    text:               modelData.title
-                    autoExclusive:      true
-                    Layout.fillWidth:   true
-                    onClicked: {
-                        if (mainWindow.preventViewSwitch()) {
-                            return
-                        }
-                        if (__rightPanel.source !== modelData.url) {
-                            __rightPanel.source = modelData.url
-                        }
-                        checked = true
+    ColumnLayout {
+        id:         buttonColumn
+        spacing:    5
+        width : parent.width
+        property real _maxButtonWidth: 0
+        Repeater {
+            model:  QGroundControl.corePlugin.settingsPages
+            QGCButton {
+                height:             _buttonHeight
+                text:               modelData.title
+                autoExclusive:      true
+                Layout.fillWidth:   true
+                showBorder :true
+                onClicked: {
+                    if (mainWindow.preventViewSwitch()) {
+                        return
                     }
-                    Component.onCompleted: {
-                        if(_first) {
-                            _first = false
-                            checked = true
-                        }
+                    if (__rightPanel.source !== modelData.url) {
+                        __rightPanel.source = modelData.url
                     }
+                    checked = true
                 }
-            }
-        }
-    }
+//                Component.onCompleted: {
+//                    if(_first) {
+//                        _first = false
+//                        checked = true
+//                    }
+//                }
+             }
+          }
+      }
+   }
+
+
+
+
+//   QGCFlickable {
+//        id:                 buttonList
+//        width:              buttonColumn.width
+//        anchors.topMargin:  _verticalMargin
+//        anchors.top:        parent.top
+//        anchors.bottom:     parent.bottom
+//        anchors.leftMargin: _horizontalMargin
+//        anchors.left:       parent.left
+//        contentHeight:      buttonColumn.height + _verticalMargin
+//        flickableDirection: Flickable.VerticalFlick
+//        clip:               true
+
+//        ColumnLayout {
+//            id:         buttonColumn
+//            spacing:    _verticalMargin
+
+//            property real _maxButtonWidth: 0
+
+//            Repeater {
+//                model:  QGroundControl.corePlugin.settingsPages
+//                QGCButton {
+//                    height:             _buttonHeight
+//                    text:               modelData.title
+//                    autoExclusive:      true
+//                    Layout.fillWidth:   true
+//                    onClicked: {
+//                        if (mainWindow.preventViewSwitch()) {
+//                            return
+//                        }
+//                        if (__rightPanel.source !== modelData.url) {
+//                            __rightPanel.source = modelData.url
+//                        }
+//                        checked = true
+//                    }
+//                    Component.onCompleted: {
+//                        if(_first) {
+//                            _first = false
+//                            checked = true
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     Rectangle {
         id:                     divider
@@ -82,7 +132,7 @@ Rectangle {
         anchors.left:           buttonList.right
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
-        width:                  1
+        width:                  2
         color:                  qgcPal.windowShade
     }
     //-- Panel Contents

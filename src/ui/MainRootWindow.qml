@@ -78,6 +78,7 @@ ApplicationWindow {
     //-------------------------------------------------------------------------
     //-- Global Scope Variables
 
+    //全局单例
     QtObject {
         id: globals
 
@@ -319,6 +320,7 @@ ApplicationWindow {
     }
 
     //-------------------------------------------------------------------------
+    //2022 9.28屏蔽进度条，Header等
     // Toolbar
     header: MainToolBar {
         id:         toolbar
@@ -532,6 +534,7 @@ ApplicationWindow {
         closePolicy:    Drawer.NoAutoClose
         interactive:    false
         visible:        false
+
 
         property alias backIcon:    backIcon.source
         property alias toolTitle:   toolbarDrawerText.text

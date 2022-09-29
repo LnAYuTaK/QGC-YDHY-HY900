@@ -18,9 +18,11 @@ Drawer {
     width:          mainWindow.width*0.8
     height:         mainWindow.height
     edge:           Qt.LeftEdge
+
+    opacity:  0.99
     dragMargin:     -10
     modal: true
-    opacity : 0.99
+
     interactive : true
     closePolicy:  Popup.CloseOnEscape | Popup.CloseOnPressOutside
 

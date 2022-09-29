@@ -100,10 +100,15 @@ void LinkManager::setToolbox(QGCToolbox *toolbox)
 // This should only be used by Qml code
 void LinkManager::createConnectedLink(LinkConfiguration* config)
 {
+    qDebug()<< "LinkConfig";
     for(int i = 0; i < _rgLinkConfigs.count(); i++) {
         SharedLinkConfigurationPtr& sharedConfig = _rgLinkConfigs[i];
-        if (sharedConfig.get() == config)
-            createConnectedLink(sharedConfig);
+        if (sharedConfig.get() == config){
+            bool result =createConnectedLink(sharedConfig);
+
+            qDebug() << result;
+        }
+
     }
 }
 

@@ -245,5 +245,10 @@
         <file>resources/ImageRes/xiangshang.svg</file>
         <file>resources/ImageRes/renwu_1.svg</file>
         <file>resources/ImageRes/renwuchaxun.svg</file>
+        <file>resources/ImageRes/chuankou.svg</file>
+        <file>resources/ImageRes/com001.svg</file>
+        <file>resources/ImageRes/com002.svg</file>
+        <file>resources/ImageRes/com003.svg</file>
+        <file>resources/ImageRes/lanya.svg</file>
     </qresource>
 </RCC>

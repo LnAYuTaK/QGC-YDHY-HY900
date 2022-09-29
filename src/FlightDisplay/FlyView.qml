@@ -152,7 +152,7 @@ Item {
         toolInsets:             customOverlay.totalToolInsets
         mapName:                "FlightDisplayView"
     }
-
+    
     //比例尺
     MapScale {
         id:                 mapScale

@@ -435,15 +435,16 @@ void SimpleMissionItem::_rebuildTextFieldFacts(void)
         _missionItem._param1Fact._setName("Param1");
         _missionItem._param1Fact.setMetaData(_defaultParamMetaData);
         _textFieldFacts.append(&_missionItem._param1Fact);
-        _missionItem._param2Fact._setName("Param2");
-        _missionItem._param2Fact.setMetaData(_defaultParamMetaData);
-        _textFieldFacts.append(&_missionItem._param2Fact);
-        _missionItem._param3Fact._setName("Param3");
-        _missionItem._param3Fact.setMetaData(_defaultParamMetaData);
-        _textFieldFacts.append(&_missionItem._param3Fact);
-        _missionItem._param4Fact._setName("Param4");
-        _missionItem._param4Fact.setMetaData(_defaultParamMetaData);
-        _textFieldFacts.append(&_missionItem._param4Fact);
+/// 2022 9.27屏蔽
+//        _missionItem._param2Fact._setName("Param2");
+//        _missionItem._param2Fact.setMetaData(_defaultParamMetaData);
+//        _textFieldFacts.append(&_missionItem._param2Fact);
+//        _missionItem._param3Fact._setName("Param3");
+//        _missionItem._param3Fact.setMetaData(_defaultParamMetaData);
+//        _textFieldFacts.append(&_missionItem._param3Fact);
+//        _missionItem._param4Fact._setName("Param4");
+//        _missionItem._param4Fact.setMetaData(_defaultParamMetaData);
+//        _textFieldFacts.append(&_missionItem._param4Fact);
         _missionItem._param5Fact._setName("Lat/X");
         _missionItem._param5Fact.setMetaData(_defaultParamMetaData);
         _textFieldFacts.append(&_missionItem._param5Fact);
@@ -572,8 +573,10 @@ void SimpleMissionItem::_rebuildComboBoxFacts(void)
     _comboboxFacts.clear();
 
     if (rawEdit()) {
-        _comboboxFacts.append(&_missionItem._commandFact);
-        _comboboxFacts.append(&_missionItem._frameFact);
+
+        //_comboboxFacts.append(&_missionItem._commandFact);
+        //2022 9.27消除
+//      _comboboxFacts.append(&_missionItem._frameFact);
     } else {
         Fact*           rgParamFacts[7] =       { &_missionItem._param1Fact, &_missionItem._param2Fact, &_missionItem._param3Fact, &_missionItem._param4Fact, &_missionItem._param5Fact, &_missionItem._param6Fact, &_missionItem._param7Fact };
         FactMetaData*   rgParamMetaData[7] =    { &_param1MetaData, &_param2MetaData, &_param3MetaData, &_param4MetaData, &_param5MetaData, &_param6MetaData, &_param7MetaData };

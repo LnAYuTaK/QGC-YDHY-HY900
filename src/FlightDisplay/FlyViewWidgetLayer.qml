@@ -288,34 +288,61 @@ Item {
 //        property bool _virtualJoystickEnabled: QGroundControl.settingsManager.appSettings.virtualJoystick.rawValue
 //    }
 
-    //左上角省略三点// 打开设置界面
-    QGCToolBarButton {
-        id:                     menuButton
-        anchors.top :parent.top
-        //修改公司图标
-        icon.source:            "qrc:/qmlimages/resources/ImageRes/shenglve.svg"
-        logo:                   true
-        //2022 8.22
-        onClicked:              mainWindow.showDrawerpage()
-    }
-    //左侧任务计划图标
-    Image {
-        id :planViewDisplay
-        anchors.left:parent.left
-        anchors.leftMargin:_margins
+    //设置悬浮控制栏//包括打开飞行规划模式和总体控件
+    Rectangle
+    {
+        color:"#1b2538"
+        opacity:  0.7
+        radius:     5
+        border.width:   /*_readyForSave ? 0 : */1
+        border.color:   "black"
+        width:ScreenTools.defaultFontPixelWidth*8
+        height:ScreenTools.defaultFontPixelWidth*20
         anchors.topMargin: _margins
-        anchors.top :menuButton.bottom
-        width:ScreenTools.defaultFontPixelWidth*5
-        height:ScreenTools.defaultFontPixelWidth*5
-        sourceSize.height:  height
-        source:             "qrc:/qmlimages/resources/ImageRes/renwu.svg"
-        fillMode:           Image.PreserveAspectFit
-        MouseArea {
-            anchors.fill:   parent
-            onClicked:mainWindow.showPlanView()
+        anchors.leftMargin: _margins
+        anchors.top:parent.top
+        anchors.left:parent.left
+
+        ColumnLayout{
+            spacing:5
+            anchors.fill:parent
+//            QGCToolBarButton {
+//                id:                     menuButton
+//                Layout.alignment:       Qt.AlignVCenter
+//                //修改公司图标
+//                icon.source:            "qrc:/qmlimages/resources/ImageRes/shenglve.svg"
+//                logo:                   true
+//                //2022 8.22
+//                onClicked:              mainWindow.showDrawerpage()
+//            }
+            Image {
+                id :menuButton
+                Layout.alignment: Qt.AlignHCenter
+                width:parent.width*0.7
+                height:menuButton.width
+                sourceSize.height:  height
+                source:             "qrc:/qmlimages/resources/ImageRes/shenglve.svg"
+                fillMode:           Image.PreserveAspectFit
+                MouseArea {
+                    anchors.fill:   parent
+                    onClicked:mainWindow.showDrawerpage()
+                }
+            }
+            Image {
+                id :planViewDisplay
+                Layout.alignment: Qt.AlignHCenter
+                width:parent.width*0.7
+                height:planViewDisplay.width
+                sourceSize.height:  height
+                source:             "qrc:/qmlimages/resources/ImageRes/renwu.svg"
+                fillMode:           Image.PreserveAspectFit
+                MouseArea {
+                    anchors.fill:   parent
+                    onClicked:mainWindow.showPlanView()
+                }
+            }
         }
     }
-
     //2022 9.24屏蔽原版QGC任务规划ToolStrip
     FlyViewToolStrip {
          id:                     toolStrip

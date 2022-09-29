@@ -38,6 +38,8 @@ Rectangle {
         } else {
             altModeLabel.text = qsTr("Internal Error")
         }
+        //2022 9.27设置RawEdit模式 显示所有值
+        missionItem.rawEdit = true
     }
 
     Component.onCompleted: updateAltitudeModeText()
@@ -61,6 +63,7 @@ Rectangle {
         QGCLabel {
             width:          parent.width
             wrapMode:       Text.WordWrap
+            visible :       false
             font.pointSize: ScreenTools.smallFontPointSize
             text:           missionItem.rawEdit ?
                                 qsTr("Provides advanced access to all commands/parameters. Be very careful!") :
@@ -277,10 +280,11 @@ Rectangle {
                     visible:            missionItem.speedSection.available
                 }
             }
-
+            //相机不显示
             CameraSection {
                 checked:    missionItem.cameraSection.settingsSpecified
-                visible:    missionItem.cameraSection.available
+                //visible:    missionItem.cameraSection.available
+                visible:false
             }
         }
     }

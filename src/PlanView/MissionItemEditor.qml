@@ -17,11 +17,12 @@ import QGroundControl.Palette       1.0
 Rectangle {
     id:             _root
     height:         editorLoader.visible ? (editorLoader.y + editorLoader.height + _innerMargin) : (topRowLayout.y + topRowLayout.height + _margin)
-    color:          _currentItem ? qgcPal.missionItemEditor : qgcPal.windowShade
+    //color:          _currentItem ? qgcPal.missionItemEditor : qgcPal.windowShade
+    color:"#000000"
     radius:         _radius
-    opacity:        _currentItem ? 1.0 : 0.8
-    border.width:   _readyForSave ? 0 : 2
-    border.color:   qgcPal.warningText
+    opacity:         0.80
+    border.width:   /*_readyForSave ? 0 : */1
+    border.color:   "white"
 
     property var    map                 ///< Map control
     property var    masterController
@@ -59,13 +60,13 @@ Rectangle {
         anchors.fill:   parent
         MouseArea {
             anchors.fill:   parent
-            onClicked: {
+            onClicked: { 
                 currentItemScope.focus = true
                 _root.clicked()
             }
         }
     }
-
+    //
     Component {
         id: editPositionDialog
 
@@ -112,7 +113,7 @@ Rectangle {
             fillMode:               Image.PreserveAspectFit
             mipmap:                 true
             smooth:                 true
-            color:                  qgcPal.text
+            color:                  "white"
             visible:                _currentItem && missionItem.sequenceNumber !== 0
             source:                 "/res/TrashDelete.svg"
             QGCMouseArea {
@@ -135,7 +136,24 @@ Rectangle {
 
                 property real _padding: ScreenTools.comboBoxPadding
 
-                QGCLabel { text: missionItem.commandName }
+                QGCLabel {
+
+                    text: missionItem.commandName
+                    color:"white"
+
+                }
+                Rectangle{
+                    width:1
+                    Layout.fillHeight: true
+                    color:"white"
+                    visible:missionItem.sequenceNumber!==0
+                }
+
+                QGCLabel{
+                   text: String(missionItem.sequenceNumber)
+                   color:"white"
+                   visible: missionItem.sequenceNumber!==0
+                }
 
                 QGCColoredImage {
                     height:             ScreenTools.defaultFontPixelWidth
@@ -147,11 +165,11 @@ Rectangle {
                     source:             "/qmlimages/arrow-down.png"
                 }
             }
-
             QGCMouseArea {
                 fillItem:   parent
-                //航点信息窗口
-                onClicked: commandDialog.createObject(mainWindow).open()
+                onClicked: {
+                    commandDialog.createObject(mainWindow).open()
+                }
             }
 
             Component {
@@ -179,6 +197,7 @@ Rectangle {
 //        }
 
      // 2022 9.26修改增加显示经纬度高度编号等航点信息
+        //缩略的航点信息
         Rectangle{
             id :commandLabel
             width:                  commandPicker.width
@@ -194,12 +213,14 @@ Rectangle {
                     Layout.fillHeight: true
                     Layout.alignment : Qt.AlignVCenter
                     text:              missionItem.commandName
+                    color:"white"
                 }
                 //航点标号
                 QGCLabel {
                     Layout.fillHeight: true
                     Layout.alignment : Qt.AlignVCenter
                     text:            String(missionItem.sequenceNumber)
+                    color:"white"
 
                 }
                 //航点纬度
@@ -207,23 +228,27 @@ Rectangle {
                     Layout.fillHeight: true
                     Layout.alignment : Qt.AlignVCenter
                     text:              "纬度:"+missionItem.coordinate.latitude
+                    color:"white"
                 }
                 //航点经度
                 QGCLabel {
                     Layout.fillHeight: true
                     Layout.alignment : Qt.AlignVCenter
                     text:              "经度:"+missionItem.coordinate.longitude
+                    color:"white"
                 }
                 //航点高度
                 QGCLabel {
                     Layout.fillHeight: true
                     Layout.alignment : Qt.AlignVCenter
                     text:              "高度:"+missionItem.altitude.rawValue+"m"
+                    color:"white"
                 }
             }
         }//Rectangle CommandLabel
     }
 
+    //更多选项
    QGCColoredImage {
         id:                     hamburger
         anchors.margins:        _margin
@@ -232,7 +257,7 @@ Rectangle {
         width:                  _hamburgerSize
         height:                 _hamburgerSize
         sourceSize.height:      _hamburgerSize
-        source:                 "qrc:/qmlimages/Hamburger.svg"//汉堡包??
+        source:                 "qrc:/qmlimages/Hamburger.svg"
         visible:                missionItem.isCurrentItem && missionItem.sequenceNumber !== 0
         color:                  qgcPal.text
 
@@ -251,7 +276,6 @@ Rectangle {
                     visible:        missionItem.specifiesCoordinate
                     enabled:        _activeVehicle
                     onTriggered:    missionItem.coordinate = _activeVehicle.coordinate
-
                     property var    _activeVehicle:      QGroundControl.multiVehicleManager.activeVehicle
                 }
 
@@ -316,13 +340,14 @@ Rectangle {
         color:                  qgcPal.warningText
     }
 */
-//这里加载MissionSettingsEditor.qml
+
+//"qrc:/qml/MissionSettingsEditor.qml";
     Loader {
         id:                 editorLoader
         anchors.margins:    _innerMargin
         anchors.left:       parent.left
         anchors.top:        topRowLayout.bottom
-        source:             missionItem.editorQml//"qrc:/qml/MissionSettingsEditor.qml";
+        source:             missionItem.editorQml
         visible:            _currentItem
         property var    masterController:   _masterController
         property real   availableWidth:     _root.width - (anchors.margins * 2) ///< How wide the editor should be

@@ -32,7 +32,6 @@ Item {
         id:                 qgcPal
     }
 
-
     property bool   _isactvehicle:QGroundControl.multiVehicleManager.activeVehicle? true:false
     property Fact   _editorDialogFact: Fact { }
     property int    _rowHeight:         ScreenTools.defaultFontPixelHeight * 2

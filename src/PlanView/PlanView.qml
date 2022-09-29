@@ -433,7 +433,6 @@ Item {
 //                    }
                 }
             }
-
             // Add the mission item visuals to the map
             Repeater {
                 model: _missionController.visualItems
@@ -445,14 +444,12 @@ Item {
                     vehicle:     _planMasterController.controllerVehicle
                 }
             }
-
             // Add lines between waypoints
             MissionLineView {
                 showSpecialVisual:  _missionController.isROIBeginCurrentItem
                 model:              _missionController.simpleFlightPathSegments
                 opacity:            _editingLayer == _layerMission ? 1 : editorMap._nonInteractiveOpacity
             }
-
             // Direction arrows in waypoint lines
             MapItemView {
                 model: _editingLayer == _layerMission ? _missionController.directionArrows : undefined
@@ -464,7 +461,6 @@ Item {
                     z:              QGroundControl.zOrderWaypointLines + 1
                 }
             }
-
             // Incomplete segment lines
             MapItemView {
                 model: _missionController.incompleteComplexItemLines
@@ -477,7 +473,6 @@ Item {
                     opacity:    _editingLayer == _layerMission ? 1 : editorMap._nonInteractiveOpacity
                 }
             }
-
             // UI for splitting the current segment
             MapQuickItem {
                 id:             splitSegmentItem
@@ -568,6 +563,7 @@ Item {
 
         //-----------------------------------------------------------
         //同FlyViewWidgetLayer里边的左侧任务计划图标
+
         Image {
             id :planViewDisplay
             anchors.left:parent.left
@@ -575,7 +571,7 @@ Item {
             width:ScreenTools.defaultFontPixelWidth*5
             height:ScreenTools.defaultFontPixelWidth*5
             sourceSize.height:  height
-            source:             "qrc:/qmlimages/resources/ImageRes/renwu.svg"
+            source:             "qrc:/InstrumentValueIcons/backspace.svg"
             fillMode:           Image.PreserveAspectFit
             MouseArea {
                 anchors.fill:   parent
@@ -708,13 +704,14 @@ Item {
 
         //-----------------------------------------------------------
         // Right pane for mission editing controls
-        //2022 9.23
+        //2022 9.23  右上控件
         Rectangle {
                  id:                 rightPanel
                  height:             parent.height
                  width:              _rightPanelWidth*1.5
-                 color:              qgcPal.window
-                 opacity:            layerTabBar.visible ? 0.2 : 0
+                 //color:              qgcPal.window
+                 color :"transparent"
+
                  anchors.bottom:     parent.bottom
                  anchors.right:      parent.right
                  anchors.top:        parent.top
@@ -833,8 +830,7 @@ Item {
                 QGCListView {
                     id:                 missionItemEditorListView
                     anchors.fill:       parent
-                    //spacing:            ScreenTools.defaultFontPixelHeight / 4
-                    spacing:0
+                    spacing:            ScreenTools.defaultFontPixelHeight / 4
                     orientation:        ListView.Vertical
                     model:              _missionController.visualItems
                     cacheBuffer:        Math.max(height * 2, 0)
@@ -843,13 +839,17 @@ Item {
                     highlightMoveDuration: 250
                     visible:            _editingLayer == _layerMission && !planControlColapsed
                     //航点列表
+                    //
                     delegate: MissionItemEditor {
                         map:            editorMap
                         masterController:  _planMasterController
                         missionItem:    object
                         width:          missionItemEditorListView.width
                         readOnly:       false
-                        onClicked:      _missionController.setCurrentPlanViewSeqNum(object.sequenceNumber, false)
+                        //被点击设置焦点
+                        onClicked:      {
+                            _missionController.setCurrentPlanViewSeqNum(object.sequenceNumber, false)
+                        }
                         onRemove: {
                             var removeVIIndex = index
                             console.log(removeVIIndex)
