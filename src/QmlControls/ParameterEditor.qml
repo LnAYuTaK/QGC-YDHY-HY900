@@ -35,7 +35,7 @@ Item {
     property bool   _isactvehicle:QGroundControl.multiVehicleManager.activeVehicle? true:false
     property Fact   _editorDialogFact: Fact { }
     property int    _rowHeight:         ScreenTools.defaultFontPixelHeight * 2
-    property int    _rowWidth:          10 // Dynamic adjusted at runtime
+    property int    _rowWidth:          7 // Dynamic adjusted at runtime
     property bool   _searchFilter:      searchText.text.trim() != "" || controller.showModifiedOnly  ///< true: showing results of search
     property var    _searchResults      ///< List of parameter names from search results
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
@@ -43,6 +43,16 @@ Item {
     property var    _appSettings:       QGroundControl.settingsManager.appSettings
     property var    _controller:        controller
 
+    //2022 10.6
+    readonly property real _defaultTextHeight:  ScreenTools.defaultFontPixelHeight
+    readonly property real _defaultTextWidth:   ScreenTools.defaultFontPixelWidth
+    readonly property real _horizontalMargin:   _defaultTextWidth / 2
+    readonly property real _verticalMargin:     _defaultTextHeight / 2
+    readonly property real _buttonHeight:  ScreenTools.defaultFontPixelHeight * 2
+
+
+    //ParameterEditorController.cc
+    //参数编辑器实例化 // 只在这里实例化
     ParameterEditorController {
         id: controller
     }
@@ -53,7 +63,8 @@ Item {
     //-- Header
     Row {
         id:             header
-        anchors.left:   parent.left
+        anchors.left:   groupScroll.right
+        anchors.leftMargin: _defaultTextHeight
         anchors.right:  parent.right
         spacing:        ScreenTools.defaultFontPixelWidth
 
@@ -166,8 +177,8 @@ Item {
     /// Group buttons
     QGCFlickable {
         id :                groupScroll
-        width:              ScreenTools.defaultFontPixelWidth * 25
-        anchors.top:        header.bottom
+        width:              ScreenTools.defaultFontPixelWidth * 20
+        anchors.top:        parent.top
         anchors.bottom:     parent.bottom
         clip:               true
         pixelAligned:       true
@@ -183,18 +194,18 @@ Item {
 
             Repeater {
                 model: controller.categories
-
                 Column {
                     Layout.fillWidth:   true
                     spacing:            Math.ceil(ScreenTools.defaultFontPixelHeight * 0.25)
+                    //
                     SectionHeader {
                         id:             categoryHeader
                         anchors.left:   parent.left
                         anchors.right:  parent.right
+                        anchors.rightMargin: 10
                         text:           object.name
                         checked:        object == controller.currentCategory
                         exclusiveGroup: sectionGroup
-
                         onCheckedChanged: {
                             if (checked) {
                                 controller.currentCategory  = object
@@ -206,7 +217,7 @@ Item {
                         model: categoryHeader.checked ? object.groups : 0
 
                         QGCButton {
-                            width:          ScreenTools.defaultFontPixelWidth * 25
+                            width:          ScreenTools.defaultFontPixelWidth * 20
                             text:           object.name
                             height:         _rowHeight
                             checked:        object == controller.currentGroup
@@ -223,11 +234,22 @@ Item {
             }
         }
     }
+    Rectangle {
+        id:                     divider
+        anchors.topMargin:      _verticalMargin
+        anchors.bottomMargin:   _verticalMargin
+        anchors.leftMargin:     _horizontalMargin/2
+        anchors.left:           groupScroll.right
+        anchors.top:            parent.top
+        anchors.bottom:         parent.bottom
+        width:                  2
+        color:                  qgcPal.windowShade
+    }
     /// Parameter list
     QGCListView {
         id:                 editorListView
         anchors.leftMargin: ScreenTools.defaultFontPixelWidth
-        anchors.left:       _searchFilter ? parent.left : groupScroll.right
+        anchors.left:       divider.right
         anchors.right:      parent.right
         anchors.top:        header.bottom
         anchors.bottom:     parent.bottom
@@ -250,14 +272,14 @@ Item {
 
                 QGCLabel {
                     id:     nameLabel
-                    width:  ScreenTools.defaultFontPixelWidth  * 20
+                    width:  ScreenTools.defaultFontPixelWidth  * 15
                     text:   factRow.modelFact.name
                     clip:   true
                 }
 
                 QGCLabel {
                     id:     valueLabel
-                    width:  ScreenTools.defaultFontPixelWidth  * 20
+                    width:  ScreenTools.defaultFontPixelWidth  * 15
                     color:  factRow.modelFact.defaultValueAvailable ? (factRow.modelFact.valueEqualsDefault ? qgcPal.text : qgcPal.warningText) : qgcPal.text
                     text:   {
                         if(factRow.modelFact.enumStrings.length === 0) {
@@ -272,6 +294,8 @@ Item {
                     }
                     clip:   true
                 }
+
+
 
                 QGCLabel {
                     text:   factRow.modelFact.shortDescription

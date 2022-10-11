@@ -210,22 +210,24 @@ void ParameterManager::mavlinkMessageReceived(mavlink_message_t message)
             break;
         }
 
+
         _handleParamValue(message.compid, parameterName, param_value.param_count, param_value.param_index, static_cast<MAV_PARAM_TYPE>(param_value.param_type), parameterValue);
     }
 }
 
+//处理参数值
 /// Called whenever a parameter is updated or first seen.
 void ParameterManager::_handleParamValue(int componentId, QString parameterName, int parameterCount, int parameterIndex, MAV_PARAM_TYPE mavParamType, QVariant parameterValue)
 {
 
-    qCDebug(ParameterManagerVerbose1Log) << _logVehiclePrefix(componentId) <<
-                                            "_parameterUpdate" <<
-                                            "name:" << parameterName <<
-                                            "count:" << parameterCount <<
-                                            "index:" << parameterIndex <<
-                                            "mavType:" << mavParamType <<
-                                            "value:" << parameterValue <<
-                                            ")";
+//    qDebug(ParameterManagerVerbose1Log) << _logVehiclePrefix(componentId) <<
+//                                            "_parameterUpdate" <<
+//                                            "name:" << parameterName <<
+//                                            "count:" << parameterCount <<
+//                                            "index:" << parameterIndex <<
+//                                            "mavType:" << mavParamType <<
+//                                            "value:" << parameterValue <<
+//                                            ")";
 
     // ArduPilot has this strange behavior of streaming parameters that we didn't ask for. This even happens before it responds to the
     // PARAM_REQUEST_LIST. We disregard any of this until the initial request is responded to.
@@ -387,6 +389,8 @@ void ParameterManager::_handleParamValue(int componentId, QString parameterName,
         // We need to know when the fact value changes so we can update the vehicle
         connect(fact, &Fact::_containerRawValueChanged, this, &ParameterManager::_factRawValueUpdated);
 
+        //这里将参数发送到 参数管理器统一管理
+        //参数管理器在qml内部实例化并显示
         emit factAdded(componentId, fact);
     }
 
@@ -411,6 +415,8 @@ void ParameterManager::_handleParamValue(int componentId, QString parameterName,
     qCDebug(ParameterManagerVerbose1Log) << _logVehiclePrefix(componentId) << "_parameterUpdate complete";
 }
 
+
+//更新参数数值
 /// Writes the parameter update to mavlink, sets up for write wait
 void ParameterManager::_factRawValueUpdateWorker(int componentId, const QString& name, FactMetaData::ValueType_t valueType, const QVariant& rawValue)
 {
@@ -428,6 +434,9 @@ void ParameterManager::_factRawValueUpdateWorker(int componentId, const QString&
         qWarning() << "Internal error ParameterManager::_factValueUpdateWorker: component id not found" << componentId;
     }
 
+    //qDebug()<<componentId<< name<<  valueType<<  rawValue;
+
+
     _sendParamSetToVehicle(componentId, name, valueType, rawValue);
     qCDebug(ParameterManagerLog) << _logVehiclePrefix(componentId) << "Update parameter (_waitingParamTimeoutTimer started) - compId:name:rawValue" << componentId << name << rawValue;
 }
@@ -441,6 +450,7 @@ void ParameterManager::_factRawValueUpdated(const QVariant& rawValue)
     }
 
     _factRawValueUpdateWorker(fact->componentId(), fact->name(), fact->type(), rawValue);
+
 }
 
 void ParameterManager::refreshAllParameters(uint8_t componentId)
@@ -573,7 +583,6 @@ QStringList ParameterManager::parameterNames(int componentId)
     for(const QString &paramName: _mapCompId2FactMap[_actualComponentId(componentId)].keys()) {
         names << paramName;
     }
-
     return names;
 }
 

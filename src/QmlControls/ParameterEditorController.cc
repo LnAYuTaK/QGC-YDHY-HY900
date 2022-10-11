@@ -18,6 +18,7 @@
 ParameterEditorController::ParameterEditorController(void)
     : _parameterMgr(_vehicle->parameterManager())
 {
+    //先创建ModelList表
     _buildLists();
 
     connect(this, &ParameterEditorController::currentCategoryChanged,   this, &ParameterEditorController::_currentCategoryChanged);
@@ -41,6 +42,8 @@ void ParameterEditorController::_buildListsForComponent(int compId)
     for (const QString& factName: _parameterMgr->parameterNames(compId)) {
         Fact* fact = _parameterMgr->getParameter(compId, factName);
 
+
+        //类别
         ParameterEditorCategory* category = nullptr;
         if (_mapCategoryName2Category.contains(fact->category())) {
             category = _mapCategoryName2Category[fact->category()];
@@ -50,7 +53,7 @@ void ParameterEditorController::_buildListsForComponent(int compId)
             _mapCategoryName2Category[fact->category()] = category;
             _categories.append(category);
         }
-
+        //参数组
         ParameterEditorGroup* group = nullptr;
         if (category->mapGroupName2Group.contains(fact->group())) {
             group = category->mapGroupName2Group[fact->group()];
@@ -70,6 +73,7 @@ void ParameterEditorController::_buildLists(void)
 {
     // Autopilot component should always be first list
     _buildListsForComponent(MAV_COMP_ID_AUTOPILOT1);
+
 
     // "Standard" category should always be first
     for (int i=0; i<_categories.count(); i++) {
@@ -420,6 +424,7 @@ void ParameterEditorController::_currentCategoryChanged(void)
     }
     setCurrentGroup(group);
 }
+
 
 void ParameterEditorController::_currentGroupChanged(void)
 {

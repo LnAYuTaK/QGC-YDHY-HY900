@@ -41,10 +41,11 @@ Rectangle {
             // Editing existing link config
             settingsLoader.editingConfig = QGroundControl.linkManager.startConfigurationEditing(originalLinkConfig)
         } else {
-
             // Create new link configuration
             //
-            settingsLoader.editingConfig = QGroundControl.linkManager.createConfiguration(ScreenTools.isSerialAvailable ? LinkConfiguration.TypeSerial : LinkConfiguration.TypeUdp, "")
+            settingsLoader.editingConfig = QGroundControl.linkManager.createConfiguration(Linktype,"")
+
+            //settingsLoader.editingConfig = QGroundControl.linkManager.createConfiguration(ScreenTools.isSerialAvailable ? LinkConfiguration.TypeSerial : LinkConfiguration.TypeUdp, "")
         }
         settingsLoader.sourceComponent = commSettings
     }
@@ -71,23 +72,23 @@ Rectangle {
         }
     }
     //左侧显示连接类型
-    GridLayout {
-       id :selectLinkType
-       //四种连接方式 蓝牙  串口  TCP
-       anchors.top :parent.top
-       anchors.bottom:buttonRow.top
-       anchors.bottomMargin: _margin
-       anchors.left:parent.left
-       width:parent.width/2
-       columns : 2
-       rowSpacing : 5
-       columnSpacing : 5
+   GridLayout {
+      id :selectLinkType
+      //四种连接方式 蓝牙  串口  TCP
+      anchors.top :parent.top
+      height:parent.height*0.9
+      anchors.left:parent.left
+      width:parent.width/2
+      columns : 2
+      rowSpacing : 5
+      columnSpacing : 5
       QGCButton {
            id : serialLinkIcon
            text:"串口连接"
            Layout.fillHeight: true
            Layout.fillWidth: true
            //iconSource:"qrc:/qmlimages/resources/ImageRes/chuankou.svg"
+           onClicked:  _linkRoot.openCommSettings(null,LinkConfiguration.TypeSerial)
        }
        QGCButton {
            id : tcpLinkIcon
@@ -95,6 +96,7 @@ Rectangle {
            Layout.fillHeight: true
            Layout.fillWidth: true
            //iconSource:"qrc:/qmlimages/resources/ImageRes/com002.svg"
+           onClicked:  _linkRoot.openCommSettings(null,LinkConfiguration.TypeTcp)
        }
        QGCButton {
            id : udpLinkIcon
@@ -102,123 +104,139 @@ Rectangle {
            Layout.fillHeight: true
            Layout.fillWidth: true
            //iconSource:"qrc:/qmlimages/resources/ImageRes/com002.svg"
+           onClicked:  _linkRoot.openCommSettings(null,LinkConfiguration.TypeUdp)
        }
       QGCButton {
            id : bluetoothLinkIcon
            text:"蓝牙连接"
            Layout.fillHeight: true
            Layout.fillWidth: true
-           onClicked:  _linkRoot.openCommSettings(_currentSelection)
-           //iconSource:"qrc:/qmlimages/resources/ImageRes/lanya.svg"
+
+           onClicked:  _linkRoot.openCommSettings(null,LinkConfiguration.TypeBluetooth)
        }
     }
-     //复选table 显示每一个连接
-    QGCFlickable {
-        clip:               true
-        id :                serialLinkFlick
-        anchors.top:        parent.top
-        anchors.margins: 5
-        anchors.left: selectLinkType.right
-        anchors.right:parent.right
-        height:             (parent.height - buttonRow.height)/2
-        contentHeight:      settingsColumn.height
-        contentWidth:       parent.width*0.5
-        anchors.verticalCenter: parent.verticalCenter
-        flickableDirection: Flickable.VerticalFlick
-        //显示连接
-        Column {
-            id:        settingsColumn
-            anchors.left:parent.left
-            anchors.right:parent.right
-            anchors.margins:    ScreenTools.defaultFontPixelWidth
+
+    Rectangle{
+        anchors.top:    selectLinkType.top
+        anchors.bottom: selectLinkType.bottom
+        anchors.right:  parent.right
+        anchors.left:   selectLinkType.right
+        width :parent.width*0.5
+        border.color:qgcPal.windowShade
+        border.width:2
+        QGCFlickable {
+            clip:               true
+            id :                serialLinkFlick
+            anchors.fill:parent
+            contentHeight:      settingsColumn.height
+            contentWidth:       parent.width
+            anchors.topMargin: 10
+            anchors.leftMargin: 5
+            anchors.rightMargin: 5
             anchors.verticalCenter: parent.verticalCenter
-            spacing:            ScreenTools.defaultFontPixelHeight/2
-            property string linktypeString:  "其他"
-            Repeater {
-                model: QGroundControl.linkManager.linkConfigurations
-                delegate:
-                    Rectangle {
-                        width:                      parent.width
-                        height  :25
-                        visible:                    !object.dynamic
-                        color:"gray"
-                        radius:         3
-                         border.width: 1
-                         border.color: "white"
-                         anchors.horizontalCenter:   parent.horizontalCenter
-                         RowLayout {
-                             spacing:0
-                            //LinkName
-                            anchors.fill: parent
-                            QGCLabel{
-                                text:showLinkType(object.linkType)
-                                color:"white"
-                            }
-                            //切换是否自动连接
-                            SwitchButton{
-                                id:isAutoConnect
-                                text: qsTr("自动")
-                                checkedColor: "#003221"
-                                checked: object.autoConnect
-                                onCheckedChanged:  object.autoConnect = checked
-                            }
-                            //连接
-                            SwitchButton{
-                                id:isConnect
-                                text: qsTr("连接")
-                                checkedColor: "#003221"
-                                checked:false
-                                onClicked: {
-                                    if(checked){
-                                        QGroundControl.linkManager.createConnectedLink(object)
+            flickableDirection: Flickable.VerticalFlick
+            //显示连接
+            Column {
+                id:        settingsColumn
+                anchors.left:parent.left
+                anchors.right:parent.right
+                anchors.margins:    ScreenTools.defaultFontPixelWidth
+                anchors.verticalCenter: parent.verticalCenter
+                spacing:            ScreenTools.defaultFontPixelHeight/2
+                property string linktypeString:  "其他"
+                Repeater {
+                    model: QGroundControl.linkManager.linkConfigurations
+                    delegate:
+                        Rectangle {
+                            width:                      parent.width
+                            height  :25
+                            visible:                    !object.dynamic
+                            color:"#3a4055"
+                            radius:         3
+                             border.width: 1
+                             border.color: "white"
+                             anchors.horizontalCenter:   parent.horizontalCenter
+                             RowLayout {
+                                 spacing:0
+                                //LinkName
+                                anchors.fill: parent
+                                QGCLabel{
+                                    text:showLinkType(object.linkType)
+                                    color:"white"
+                                }
+                                //切换是否自动连接
+                                SwitchButton{
+                                    id:isAutoConnect
+                                    checkedColor: "white"
+                                    checked: object.autoConnect
+                                    onCheckedChanged:  object.autoConnect = checked
+                                }
+
+                                QGCLabel{
+                                     text: qsTr("自动")
+                                     color:"white"
+                                }
+                                SwitchButton{
+                                    id:isConnect
+                                    checkedColor: "white"
+                                    checked:false
+                                    onClicked: {
+                                        if(checked){
+                                            QGroundControl.linkManager.createConnectedLink(object)
+                                        }
+                                        else {
+                                            object.link.disconnect()
+                                        }
                                     }
-                                    else {
-                                        object.link.disconnect()
+                                }
+                                QGCLabel{
+                                     text: qsTr("删除")
+                                      color:"white"
+                                }
+                                QGCColoredImage {
+                                    id:                     deleteButton
+                                    height:                 20
+                                    width:                  height
+                                    sourceSize.height:      height
+                                    fillMode:               Image.PreserveAspectFit
+                                    mipmap:                 true
+                                    smooth:                 true
+                                    color:                  "white"
+                                    visible:                visible
+                                    source:                 "/res/TrashDelete.svg"
+                                    QGCMouseArea {
+                                        fillItem:   parent
+                                        onClicked:  deleteDialogs.visible = true
+                                    }
+                                    MessageDialog {
+                                        id:         deleteDialogs
+                                        visible:    false
+                                        icon:       StandardIcon.Warning
+                                        standardButtons: StandardButton.Yes | StandardButton.No
+                                        title:      qsTr("Remove Link Configuration")
+                                        text:       object ? qsTr("Remove %1. Is this really what you want?").arg(object.name) : ""
+                                        onYes: {
+                                            QGroundControl.linkManager.removeConfiguration(object)
+                                            object = null
+                                            deleteDialogs.visible = false
+                                        }
+                                        onNo: deleteDialogs.visible = false
                                     }
                                 }
                             }
-                            QGCColoredImage {
-                                id:                     deleteButton
-                                height:                 20
-                                width:                  height
-                                sourceSize.height:      height
-                                fillMode:               Image.PreserveAspectFit
-                                mipmap:                 true
-                                smooth:                 true
-                                color:                  "white"
-                                visible:                visible
-                                source:                 "/res/TrashDelete.svg"
-                                QGCMouseArea {
-                                    fillItem:   parent
-                                    onClicked:  deleteDialogs.visible = true
-                                }
-                                MessageDialog {
-                                    id:         deleteDialogs
-                                    visible:    false
-                                    icon:       StandardIcon.Warning
-                                    standardButtons: StandardButton.Yes | StandardButton.No
-                                    title:      qsTr("Remove Link Configuration")
-                                    text:       object ? qsTr("Remove %1. Is this really what you want?").arg(object.name) : ""
-                                    onYes: {
-                                        QGroundControl.linkManager.removeConfiguration(object)
-                                        object = null
-                                        deleteDialogs.visible = false
-                                    }
-                                    onNo: deleteDialogs.visible = false
-                                }
-                            }
-                        }
-                  }
-             }
+                      }
+                 }
+            }
         }
-    }
-    //底部的新建//删除//断开
+   }
+    //底部的新建//删除//断开 (弃用)
     Row {
         id:                 buttonRow
         spacing:            ScreenTools.defaultFontPixelWidth
         anchors.bottom:     parent.bottom
         anchors.margins:    ScreenTools.defaultFontPixelWidth
         anchors.horizontalCenter: parent.horizontalCenter
+        visible:false
         QGCButton {
             width:      ScreenTools.defaultFontPixelWidth * 10
             text:       qsTr("Delete")
@@ -232,7 +250,6 @@ Rectangle {
                 standardButtons: StandardButton.Yes | StandardButton.No
                 title:      qsTr("Remove Link Configuration")
                 text:       _currentSelection ? qsTr("Remove %1. Is this really what you want?").arg(_currentSelection.name) : ""
-
                 onYes: {
                     QGroundControl.linkManager.removeConfiguration(_currentSelection)
                     _currentSelection = null
@@ -252,21 +269,11 @@ Rectangle {
             text:       qsTr("新建连接")
             onClicked:  _linkRoot.openCommSettings(null)
         }
-//       QGCButton {
-//          text:       qsTr("Connect")
-//          enabled:    _currentSelection && !_currentSelection.link
-//          onClicked:  QGroundControl.linkManager.createConnectedLink(_currentSelection)
-//        }
         QGCButton {
             text:       qsTr("Disconnect")
             enabled:    _currentSelection && _currentSelection.link
             onClicked:  _currentSelection.link.disconnect()
         }
-//        QGCButton {
-//            text:       qsTr("MockLink Options")
-//            visible:    _currentSelection && _currentSelection.link && _currentSelection.link.isMockLink
-//            onClicked:  mainWindow.showPopupDialogFromSource("qrc:/unittest/MockLinkOptionsDlg.qml", { link: _currentSelection.link })
-//        }
     }
     Loader {
         id:             settingsLoader

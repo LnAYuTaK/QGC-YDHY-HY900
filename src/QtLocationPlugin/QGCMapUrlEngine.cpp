@@ -44,9 +44,9 @@ UrlFactory::UrlFactory() : _timeout(5 * 1000) {
 //    _providersTable["Google Labels"]     = new GoogleTerrainMapProvider(this);
 //#endif
 
-    _providersTable["Bing Road"]      = new BingRoadMapProvider(this);
-    _providersTable["Bing Satellite"] = new BingSatelliteMapProvider(this);
-    _providersTable["Bing Hybrid"]    = new BingHybridMapProvider(this);
+//    _providersTable["Bing Road"]      = new BingRoadMapProvider(this);
+//    _providersTable["Bing Satellite"] = new BingSatelliteMapProvider(this);
+//    _providersTable["Bing Hybrid"]    = new BingHybridMapProvider(this);
 
 //    _providersTable["Statkart Topo"] = new StatkartMapProvider(this);
 

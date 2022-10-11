@@ -15,6 +15,7 @@ import QtLocation       5.3
 import QtPositioning    5.3
 import QtQuick.Layouts  1.2
 import QtQuick.Window   2.2
+import QtGraphicalEffects 1.12
 
 import QGroundControl                   1.0
 import QGroundControl.FlightMap         1.0
@@ -67,7 +68,6 @@ Item {
 
     function mapCenter() {
         var coordinate = editorMap.center
-       console.log("123")
         coordinate.latitude  = coordinate.latitude.toFixed(_decimalPlaces)
         coordinate.longitude = coordinate.longitude.toFixed(_decimalPlaces)
         coordinate.altitude  = coordinate.altitude.toFixed(_decimalPlaces)
@@ -562,10 +562,9 @@ Item {
         }
 
         //-----------------------------------------------------------
-        //同FlyViewWidgetLayer里边的左侧任务计划图标
-
+       //回到FlyView主界面的图标
         Image {
-            id :planViewDisplay
+            id :back
             anchors.left:parent.left
             anchors.top:        parent.top
             width:ScreenTools.defaultFontPixelWidth*5
@@ -573,6 +572,11 @@ Item {
             sourceSize.height:  height
             source:             "qrc:/InstrumentValueIcons/backspace.svg"
             fillMode:           Image.PreserveAspectFit
+            ColorOverlay{
+                anchors.fill:back
+                source: back
+                color: "#3a4055"
+            }
             MouseArea {
                 anchors.fill:   parent
                 onClicked:mainWindow.showFlyView()
@@ -711,11 +715,9 @@ Item {
                  width:              _rightPanelWidth*1.5
                  //color:              qgcPal.window
                  color :"transparent"
-
                  anchors.bottom:     parent.bottom
                  anchors.right:      parent.right
                  anchors.top:        parent.top
-
                  //anchors.rightMargin: _toolsMargin
         }
         //-------------------------------------------------------
@@ -816,14 +818,12 @@ Item {
 
             //-------------------------------------------------------
             // Mission Item Editor
-
             //任务视图编辑//最顶层
             Item {
                 id:                     missionItemEditor
                 anchors.left:           parent.left
                 anchors.right:          parent.right
                 anchors.top:            rightControls.bottom
-                //anchors.topMargin:      ScreenTools.defaultFontPixelHeight * 0.25
                 anchors.bottom:         parent.bottom
                 anchors.bottomMargin:   ScreenTools.defaultFontPixelHeight * 0.25
                 visible:                _editingLayer == _layerMission && !planControlColapsed

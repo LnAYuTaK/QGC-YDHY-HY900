@@ -3759,8 +3759,7 @@ QString Vehicle::hobbsMeter()
     return _firmwarePlugin->getHobbsMeter(this);
 }
 
-
-//2022 9.26参数加载增加延时  等到
+//2022 9.26参数加载
 void Vehicle::_vehicleParamLoaded(bool ready)
 {
     //-- TODO: This seems silly but can you think of a better

@@ -8,7 +8,7 @@ import QGroundControl.Controls      1.0
 import QGroundControl.ScreenTools   1.0
 
 
-//连接界面-> LinkSettings.qml
+//连接界面->   LinkSettingsPage.qml
 Rectangle {
     id:     connectView
     color:  qgcPal.window
@@ -19,7 +19,7 @@ Rectangle {
     readonly property real _horizontalMargin:   _defaultTextWidth / 2
     readonly property real _verticalMargin:     _defaultTextHeight / 2
 
-    readonly property real _buttonHeight:       ScreenTools.isTinyScreen ? ScreenTools.defaultFontPixelHeight * 3 : ScreenTools.defaultFontPixelHeight * 2
+    property int  _buttonHeight:  ScreenTools.defaultFontPixelHeight * 2
 
     property bool _first: true
 
@@ -34,7 +34,7 @@ Rectangle {
 
     ListView{
         id:                 buttonList
-        width:          _defaultTextWidth*20
+        width:              _defaultTextWidth*20
         anchors.topMargin:  _verticalMargin
         anchors.top:        parent.top
         anchors.bottom:     parent.bottom
@@ -45,7 +45,7 @@ Rectangle {
 
     ColumnLayout {
         id:         buttonColumn
-        spacing:    5
+        spacing:    Math.ceil(ScreenTools.defaultFontPixelHeight * 0.25)
         width : parent.width
         property real _maxButtonWidth: 0
         Repeater {
@@ -75,9 +75,6 @@ Rectangle {
           }
       }
    }
-
-
-
 
 //   QGCFlickable {
 //        id:                 buttonList

@@ -45,7 +45,6 @@ Rectangle {
         visible:        qgcPal.globalTheme === QGCPalette.Light
     }
 
-
     Rectangle {
         anchors.fill:   viewButtonRow
         visible:        currentToolbar === flyViewToolbar

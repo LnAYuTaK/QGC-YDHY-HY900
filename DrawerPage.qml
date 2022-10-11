@@ -18,6 +18,7 @@ Drawer {
     width:          mainWindow.width*0.8
     height:         mainWindow.height
     edge:           Qt.LeftEdge
+    property var    _corePlugin:                    QGroundControl.corePlugin
 
     opacity:  0.99
     dragMargin:     -10
@@ -25,21 +26,30 @@ Drawer {
 
     interactive : true
     closePolicy:  Popup.CloseOnEscape | Popup.CloseOnPressOutside
-
     TabBar {
         id: bar
         width: parent.width
         currentIndex:swipeView.currentIndex
         TabButton {
+            background: Rectangle{
+                color:"#3a4055"
+            }
             text: qsTr("通信连接")
         }
         TabButton {
             text: qsTr("飞控参数")
+            background: Rectangle{
+                color:"#3a4055"
+            }
         }
         TabButton {
             text: qsTr("版本更新")
+            background: Rectangle{
+                color:"#3a4055"
+            }
         }
     }
+
     SwipeView  {
         id :swipeView
         width: parent.width
@@ -50,13 +60,14 @@ Drawer {
         ConnectView {
             id:connectView
         }
-        ParameterEditor {
+        Loader{
             id:setUpView
+            source:"qrc:/qml/SetupView.qml"
         }
         VersionView {
             id:versionView
         }
-    }
+  }
 }
 
    // Component.onCompleted: toolDrawerSelectLoader.sourceComponent

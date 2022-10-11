@@ -23,7 +23,6 @@
 
 #define LINK_SETTING_ROOT "LinkConfigurations"
 
-
 LinkConfiguration::LinkConfiguration(const QString& name)
     : _name         (name)
     , _dynamic      (false)

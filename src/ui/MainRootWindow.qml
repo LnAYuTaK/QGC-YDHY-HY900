@@ -87,7 +87,6 @@ ApplicationWindow {
         readonly property real      defaultTextWidth:               ScreenTools.defaultFontPixelWidth
         readonly property var       planMasterControllerFlyView:    flightView.planController
         readonly property var       guidedControllerFlyView:        flightView.guidedController
-
         property var                planMasterControllerPlanView:   null
         property var                currentPlanMissionItem:         planMasterControllerPlanView ? planMasterControllerPlanView.missionController.currentPlanViewItem : null
     }
@@ -107,8 +106,6 @@ ApplicationWindow {
 
     //-------------------------------------------------------------------------
     //-- Global Scope Functions
-
-
 
     function func(){
        planView._planMasterController.saveToSelectedFile()
@@ -141,28 +138,11 @@ ApplicationWindow {
          planView.visible        = false
          toolbar.currentToolbar  = currentToolbar
      }
-    //
-    function showFlyView() {
-        if (!flightView.visible) {
-            mainWindow.showPreFlightChecklistIfNeeded()
-        }
-//        viewSwitch(toolbar.flyViewToolbar)
-//        flightView.visible = true
-        viewSwitchPlanView(true)
-        planView.visible = false
-    }
-    //打开计划界面的时候其他全部隐藏  视频&&参数界面&&图标
 
-    function showPlanView() {
-       if(!planView.visible)  {
-          viewSwitchPlanView(false)
-          planView.visible = true
-       }
-     }
+
     function viewSwitchPlanView(setable) {
         flightView.hideItem(setable)
     }
-
     function showTool(toolTitle, toolSource, toolIcon) {
          toolDrawer.backIcon     = flightView.visible ? "/qmlimages/PaperPlane.svg" : "/qmlimages/Plan.svg"
          toolDrawer.toolTitle    = toolTitle
@@ -171,57 +151,46 @@ ApplicationWindow {
          toolDrawer.visible      = true
      }
 
-//-----------------------------------------------------------
-    //左侧的导航栏
-    function showMenuToolStrip(){
-        viewSwitch(toolbar.flyViewToolbar)
-        flightView.visible = true
-       if(!menuToolStrip.visible){
-          menuToolStrip.visible = true
-       }
-       else{
-         menuToolStrip.visible = false
-         menuToolCard.visible = false
-       }
-    }
-    //显示导航栏内容
-    function showCard(toolSource) {
-        if(!menuToolCard.visible){
-         menuToolCard.toolSource   = toolSource
-         menuToolCard.visible  = true
+// QGC
+//    function showAnalyzeTool() {
+//        showTool(qsTr("Analyze Tools"), "AnalyzeView.qml", "/qmlimages/Analyze.svg")
+//    }
+//    function showSetupTool() {
+//        showTool(qsTr("Vehicle Setup"), "SetupView.qml", "/qmlimages/Gears.svg")
+//    }
+//    function showSettingsTool() {
+//        showTool(qsTr("Application Settings"), "AppSettings.qml", "/res/QGCLogoWhite")
+//    }
+//-------------------------------------------------------------------
+//YDHY 2022 10.11
+
+    //从飞行规划界面切换主界面
+    function showFlyView() {
+        if (!flightView.visible) {
+            mainWindow.showPreFlightChecklistIfNeeded()
         }
-        else{
-           menuToolCard.visible  = false
-        }
+        viewSwitchPlanView(true)
+        planView.visible = false
     }
-    //通讯界面
-    function showConnectTool() {
-       showCard("/qml/QGroundControl/MenuTool/ConnectView.qml")
+    //飞行规划
+    function showPlanView() {
+       if(!planView.visible)  {
+          viewSwitchPlanView(false)
+          planView.visible = true
+       }
     }
-    //飞控参数界面
-    function showParameterTool() {
-       showCard("SetupView.qml")
+    //通讯连接
+    function showConnectView() {
+        showTool(qsTr("通讯连接"), "qrc:/qml/QGroundControl/MenuTool/ConnectView.qml", "/qmlimages/Gears.svg")
     }
-    //版本说明界面
-    function showVersionView() {
-       showCard("/qml/QGroundControl/MenuTool/VersionView.qml")
+    //飞控参数
+    function showParameterView() {
+        showTool(qsTr("飞控参数"), "SetupView.qml", "/qmlimages/Gears.svg")
     }
-
-
-    function showAnalyzeTool() {
-        showTool(qsTr("Analyze Tools"), "AnalyzeView.qml", "/qmlimages/Analyze.svg")
+    //版本更新
+    function showVersionInfoView(){
+        showTool(qsTr("版本说明"), "qrc:/qml/QGroundControl/MenuTool/VersionView.qml", "/res/QGCLogoWhite")
     }
-
-    function showSetupTool() {
-        showTool(qsTr("Vehicle Setup"), "SetupView.qml", "/qmlimages/Gears.svg")
-    }
-
-    function showSettingsTool() {
-        showTool(qsTr("Application Settings"), "AppSettings.qml", "/res/QGCLogoWhite")
-    }
- //-------------------------------------------------------------------
-
-
 
   //-------------------------------------------------------------------------
     //-- Global simple message dialog
@@ -340,7 +309,7 @@ ApplicationWindow {
 
     Component {
         id: toolSelectDialogComponent
-
+        //弃用
         QGCPopupDialog {
             id:         toolSelectDialog
             title:      qsTr("Select Tool")
@@ -467,15 +436,17 @@ ApplicationWindow {
         anchors.fill:   parent
     }
 
+//    function showDrawerpage() {
+//     toolDrawerSelect.visible = true
+//        //showToolSelectDialog()
+//    }
 
-    function showDrawerpage() {
-       toolDrawerSelect.visible = true
-    }
-    DrawerPage{
-       id: toolDrawerSelect
-       visible:        false
-    }
-
+//    //移动抽屉  //包括界面->   连接 | 参数 | 版本说明
+//    // LinkSettingsPage.qml | ParameterEditor.qml | VertsionView.qml
+//    DrawerPage{
+//       id: toolDrawerSelect
+//       visible:  false
+//    }
 
     PlanView {
         id:             planView
@@ -483,59 +454,16 @@ ApplicationWindow {
         visible:        false
     }
 
-    //导航栏
-    MenuToolStrip {
-        id:                      menuToolStrip
-        anchors.leftMargin:      ScreenTools.defaultFontPixelWidth * 0.75
-        //跟顶部的距离
-        anchors.topMargin:       10
-        anchors.left:            parent.left
-        //anchors.top :            currentButton.buttom
-        z:                       QGroundControl.zOrderWidgets
-        maxHeight:               parent.height
-        visible:                 false
-        property real leftInset: x + width
-    }
-    //导航内卡片
-    Rectangle {
-        id:             menuToolCard
-        anchors.left:   menuToolStrip.right
-        anchors.leftMargin:   ScreenTools.defaultFontPixelWidth * 0.75
-        anchors.top:    menuToolStrip.top
-        anchors.bottom: menuToolStrip.buttom
-        width:          mainWindow.width*0.8
-        height:         menuToolStrip.height*1.2
-        color:         "transparent"
-        visible:        false
-        property alias toolSource:  smallToolDrawerLoader.source
-
-        RowLayout {
-            anchors.leftMargin: ScreenTools.defaultFontPixelWidth
-            anchors.left:       parent.left
-            anchors.top:        parent.top
-            anchors.bottom:     parent.bottom
-            spacing:            ScreenTools.defaultFontPixelWidth
-        }
-        Loader {
-            id:             smallToolDrawerLoader
-            anchors.fill    :menuToolCard
-            Connections {
-                target:                 smallToolDrawerLoader.item
-                ignoreUnknownSignals:   true
-            }
-        }
-    }
     Drawer {
         id:             toolDrawer
-        width:          mainWindow.width
+        width:          mainWindow.width*0.75
         height:         mainWindow.height
         edge:           Qt.LeftEdge
         dragMargin:     0
         closePolicy:    Drawer.NoAutoClose
         interactive:    false
         visible:        false
-
-
+        opacity:  0.99
         property alias backIcon:    backIcon.source
         property alias toolTitle:   toolbarDrawerText.text
         property alias toolSource:  toolDrawerLoader.source
@@ -615,7 +543,6 @@ ApplicationWindow {
                 onPopout:               toolDrawer.visible = false
             }
         }
-
     }
 
     //-------------------------------------------------------------------------

@@ -17,4 +17,7 @@ import QGroundControl.Palette 1.0
 
 ParameterEditor {
 
+
+
+
 }

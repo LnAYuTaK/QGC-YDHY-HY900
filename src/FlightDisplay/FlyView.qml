@@ -88,7 +88,6 @@ Item {
         anchors.bottom:         parent.bottom
         anchors.left:           parent.left
         anchors.right:          guidedValueSlider.visible ? guidedValueSlider.left : parent.right
-        //anchors.margins:        _toolsMargin
         z:                      _fullItemZorder + 1
         parentToolInsets:       _toolInsets
         mapControl:             _mapControl

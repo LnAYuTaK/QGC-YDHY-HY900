@@ -9,7 +9,7 @@ import QtQuick.Window   2.2
 import QGroundControl           1.0
 import QGroundControl.Controls  1.0
 import QGroundControl.Palette   1.0
-import QGroundControl.ScreenTools       1.0
+import QGroundControl.ScreenTools  1.0
 //导航栏内部List
 ToolStripActionList {
     id: _root
@@ -17,24 +17,24 @@ ToolStripActionList {
 
     model: [
         ToolStripAction {
-            text:           qsTr("任务规划")
-          iconSource:     "/qmlimages/Plan.svg"
+            text:           qsTr("航线规划")
+            iconSource:     "/qmlimages/Plan.svg"
             onTriggered:    mainWindow.showPlanView()
         },
         ToolStripAction {
             text:           qsTr("通信连接")
-           iconSource:     "/qmlimages/resources/ImageRes/lianjie.svg"
-            onTriggered:    mainWindow.showConnectTool()
+            iconSource:     "/qmlimages/resources/ImageRes/lianjie.svg"
+            //onTriggered:    mainWindow.showConnectTool()
         },
         ToolStripAction {
             text:           qsTr("飞控参数")
-           iconSource:     "/qmlimages/resources/ImageRes/canshushezhi.svg"
-            onTriggered:    mainWindow.showParameterTool()
+            iconSource:     "/qmlimages/resources/ImageRes/canshushezhi.svg"
+            //onTriggered:    mainWindow.showParameterTool()
         },
         ToolStripAction {
-            text:           qsTr("版本说明")
+            text:           qsTr("版本更新")
             iconSource:     "/qmlimages/resources/ImageRes/banbenxinxi.svg"
-            onTriggered:    mainWindow.showVersionView()
+            //onTriggered:    mainWindow.showVersionView()
         }
     ]
     //版本描述组件

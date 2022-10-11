@@ -75,7 +75,7 @@ Rectangle {
                 return  "其他"
         }
     }
-     //复选table 显示每一个连接
+     //显示每一个连接
     QGCFlickable {
         clip:               true
         id :                serialLinkFlick

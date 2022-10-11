@@ -16,6 +16,7 @@ import QtLocation               5.3
 import QtPositioning            5.3
 import QtQuick.Window           2.2
 import QtQml.Models             2.1
+import QtGraphicalEffects      1.15
 
 import QGroundControl               1.0
 import QGroundControl.Controls      1.0
@@ -289,71 +290,170 @@ Item {
 //    }
 
     //设置悬浮控制栏//包括打开飞行规划模式和总体控件
-    Rectangle
-    {
-        color:"#1b2538"
-        opacity:  0.7
-        radius:     5
-        border.width:   /*_readyForSave ? 0 : */1
-        border.color:   "black"
-        width:ScreenTools.defaultFontPixelWidth*8
-        height:ScreenTools.defaultFontPixelWidth*20
-        anchors.topMargin: _margins
-        anchors.leftMargin: _margins
-        anchors.top:parent.top
-        anchors.left:parent.left
-
-        ColumnLayout{
-            spacing:5
-            anchors.fill:parent
-//            QGCToolBarButton {
-//                id:                     menuButton
-//                Layout.alignment:       Qt.AlignVCenter
-//                //修改公司图标
-//                icon.source:            "qrc:/qmlimages/resources/ImageRes/shenglve.svg"
-//                logo:                   true
-//                //2022 8.22
-//                onClicked:              mainWindow.showDrawerpage()
+//    Rectangle
+//    {
+//        color:"#1b2538"
+//        opacity:  0.7
+//        radius:     5
+//        border.width:   /*_readyForSave ? 0 : */1
+//        border.color:   "black"
+//        width:ScreenTools.defaultFontPixelWidth*8
+//        height:ScreenTools.defaultFontPixelWidth*20
+//        anchors.topMargin: _margins
+//        anchors.leftMargin: _margins
+//        anchors.top:parent.top
+//        anchors.left:parent.left
+//        Image {
+//                id :menuButton
+//                Layout.alignment: Qt.AlignHCenter
+//                width:parent.width*0.7
+//                height:menuButton.width
+//                sourceSize.height:  height
+//                source:             "qrc:/qmlimages/resources/ImageRes/shenglve.svg"
+//                fillMode:           Image.PreserveAspectFit
+//                MouseArea {
+//                    anchors.fill:   parent
+//                    onClicked:mainWindow.showSetupTool()
+//                }
 //            }
-            Image {
-                id :menuButton
-                Layout.alignment: Qt.AlignHCenter
-                width:parent.width*0.7
-                height:menuButton.width
-                sourceSize.height:  height
-                source:             "qrc:/qmlimages/resources/ImageRes/shenglve.svg"
-                fillMode:           Image.PreserveAspectFit
-                MouseArea {
-                    anchors.fill:   parent
-                    onClicked:mainWindow.showDrawerpage()
-                }
-            }
-            Image {
-                id :planViewDisplay
-                Layout.alignment: Qt.AlignHCenter
-                width:parent.width*0.7
-                height:planViewDisplay.width
-                sourceSize.height:  height
-                source:             "qrc:/qmlimages/resources/ImageRes/renwu.svg"
-                fillMode:           Image.PreserveAspectFit
-                MouseArea {
-                    anchors.fill:   parent
-                    onClicked:mainWindow.showPlanView()
-                }
-            }
+
+        QGCToolBarButton {
+            id:                     menuToolBarButton
+            width:ScreenTools.defaultFontPixelWidth*4
+            height:ScreenTools.defaultFontPixelWidth*4
+            anchors.leftMargin: _margins
+            anchors.top:parent.top
+            anchors.left:parent.left
+            //修改公司图标
+            icon.source:            "qrc:/qmlimages/resources/ImageRes/shenglve.svg"
+            logo:                   true
+            //2022 8.22
+            onClicked:  menuToolStrip.visible ==true ?(menuToolStrip.visible=false): (menuToolStrip.visible=true)
+                /*mainWindow.showMenuToolStrip()*/
         }
-    }
+
+//        MenuToolStrip{
+//            id:menuToolStrip
+//            anchors.left:       parent.left
+//            anchors.top:menuToolBarButton.bottom
+//            anchors.leftMargin: _margins
+//            z:                      QGroundControl.zOrderWidgets
+//            maxHeight: ScreenTools.defaultFontPixelWidth*30
+//            width:ScreenTools.defaultFontPixelWidth*6
+//            visible:false
+//        }
+        Rectangle{
+                id:menuToolStrip
+                anchors.left:       parent.left
+                anchors.top:menuToolBarButton.bottom
+                anchors.leftMargin: _margins
+                width:ScreenTools.defaultFontPixelWidth*20
+                height:ScreenTools.defaultFontPixelWidth*15
+                z:   QGroundControl.zOrderWidgets
+                color:"#3a4055"
+                ColumnLayout{
+                    anchors.fill: parent
+                    Layout.margins: _margins
+                    spacing:        ScreenTools.defaultFontPixelWidth
+                    Button {
+                        id:                 planViewButton
+                        Layout.fillWidth:   true
+                        text:               qsTr("航线规划")
+                        visible:            QGroundControl.corePlugin.showAdvancedUI
+                        onClicked: {
+                            if (!mainWindow.preventViewSwitch()) {
+                                mainWindow.showPlanView()
+                            }
+                        }
+                        background: Rectangle {
+                            layer.effect: DropShadow {
+                                verticalOffset: 1
+                                color: control.visualFocus ? "#330066ff" : "#aaaaaa"
+                                spread: 0.5
+                            }
+                        }
+                    }
+                    Button {
+                        id:                 commButton
+                        Layout.fillWidth:   true
+                        text:               qsTr("通讯连接")
+                        visible:            QGroundControl.corePlugin.showAdvancedUI
+                        onClicked: {
+                            if (!mainWindow.preventViewSwitch()) {
+                                mainWindow.showConnectView()
+                            }
+                        }
+                        background: Rectangle {
+                            layer.effect: DropShadow {
+                                verticalOffset: 1
+                                color: control.visualFocus ? "#330066ff" : "#aaaaaa"
+                                spread: 0.5
+                            }
+                        }
+                    }
+                    Button {
+                        id:                 settingsButton
+                        Layout.fillWidth:   true
+                        text:               qsTr("飞控参数")
+                        visible:            !QGroundControl.corePlugin.options.combineSettingsAndSetup
+                        onClicked: {
+                            if (!mainWindow.preventViewSwitch()) {
+                                mainWindow.showParameterView()
+                            }
+                        }
+                        background: Rectangle {
+                            layer.effect: DropShadow {
+                                verticalOffset: 1
+                                color: control.visualFocus ? "#330066ff" : "#aaaaaa"
+                                spread: 0.5
+                            }
+                        }
+                    }
+                    Button {
+                        id:                 infoButton
+                        Layout.fillWidth:   true
+                        text:               qsTr("版本更新")
+                        visible:            !QGroundControl.corePlugin.options.combineSettingsAndSetup
+                        onClicked: {
+                            if (!mainWindow.preventViewSwitch()) {
+                                mainWindow.showVersionInfoView()
+                            }
+                        }
+                        background: Rectangle {
+                            layer.effect: DropShadow {
+                                verticalOffset: 1
+                                color: control.visualFocus ? "#330066ff" : "#aaaaaa"
+                                spread: 0.5
+                            }
+                        }
+                    }
+             }
+        }
+//           Image {
+//                id :planViewDisplay
+//                Layout.alignment: Qt.AlignHCenter
+//                width:parent.width*0.7
+//                height:planViewDisplay.width
+//                sourceSize.height:  height
+//                source:             "qrc:/qmlimages/resources/ImageRes/renwu.svg"
+//                fillMode:           Image.PreserveAspectFit
+//                MouseArea {
+//                    anchors.fill:   parent
+//                    onClicked:mainWindow.showPlanView()
+//                }
+//            }
+//}
+
     //2022 9.24屏蔽原版QGC任务规划ToolStrip
     FlyViewToolStrip {
          id:                     toolStrip
-         anchors.leftMargin:     _toolsMargin + parentToolInsets.leftEdgeCenterInset
-         anchors.topMargin:      _toolsMargin + parentToolInsets.topEdgeLeftInset
-         anchors.left:           parent.left
-         anchors.top:            currentButton.bottom
+//         anchors.leftMargin:     _toolsMargin + parentToolInsets.leftEdgeCenterInset
+//         anchors.topMargin:      _toolsMargin + parentToolInsets.topEdgeLeftInset
+//         anchors.left:           parent.left
+//         anchors.top:            currentButton.bottom
          z:                      QGroundControl.zOrderWidgets
          maxHeight:              parent.height - y - parentToolInsets.bottomEdgeLeftInset - _toolsMargin
-          visible:false
-         // visible:                !QGroundControl.videoManager.fullScreen
+         visible:                false/*!QGroundControl.videoManager.fullScreen*/
          onDisplayPreFlightChecklist: mainWindow.showPopupDialogFromComponent(preFlightChecklistPopup)
          property real leftInset: x + width
     }

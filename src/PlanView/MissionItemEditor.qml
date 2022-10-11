@@ -18,7 +18,7 @@ Rectangle {
     id:             _root
     height:         editorLoader.visible ? (editorLoader.y + editorLoader.height + _innerMargin) : (topRowLayout.y + topRowLayout.height + _margin)
     //color:          _currentItem ? qgcPal.missionItemEditor : qgcPal.windowShade
-    color:"#000000"
+    color:"#3a4055"
     radius:         _radius
     opacity:         0.80
     border.width:   /*_readyForSave ? 0 : */1
@@ -137,10 +137,8 @@ Rectangle {
                 property real _padding: ScreenTools.comboBoxPadding
 
                 QGCLabel {
-
                     text: missionItem.commandName
                     color:"white"
-
                 }
                 Rectangle{
                     width:1
@@ -184,7 +182,6 @@ Rectangle {
                 }
             }
         }
-
 //        QGCLabel {
 //            id:                     commandLabel
 //            anchors.verticalCenter: parent.verticalCenter
@@ -195,7 +192,6 @@ Rectangle {
 //            text:                   missionItem.commandName
 //            color:                  _outerTextColor
 //        }
-
      // 2022 9.26修改增加显示经纬度高度编号等航点信息
         //缩略的航点信息
         Rectangle{

@@ -234,6 +234,7 @@ void MultiVehicleManager::_deleteVehiclePhase1(Vehicle* vehicle)
     QTimer::singleShot(20, this, &MultiVehicleManager::_deleteVehiclePhase2);
 }
 
+//清除其他的的配置
 void MultiVehicleManager::_deleteVehiclePhase2(void)
 {
     qCDebug(MultiVehicleManagerLog) << "_deleteVehiclePhase2" << _vehiclesBeingDeleted[0];

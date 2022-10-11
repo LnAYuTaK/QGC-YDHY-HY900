@@ -48,16 +48,16 @@ FocusScope {
                 id:                 label
                 Layout.fillWidth:   true
 
-                QGCColoredImage {
-                    id:                     image
-                    anchors.right:          parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    width:                  label.height / 2
-                    height:                 width
-                    source:                 "/qmlimages/arrow-down.png"
-                    color:                  qgcPal.text
-                    visible:                !_root.checked
-                }
+//                QGCColoredImage {
+//                    id:                     image
+//                    anchors.right:          parent.right
+//                    anchors.verticalCenter: parent.verticalCenter
+//                    width:                  label.height / 2
+//                    height:                 width
+//                    source:                 "/qmlimages/arrow-down.png"
+//                    color:                  qgcPal.text
+//                    visible:                !_root.checked
+//                }
             }
 
             Rectangle {

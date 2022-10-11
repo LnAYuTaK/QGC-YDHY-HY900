@@ -105,6 +105,9 @@ Rectangle {
     Connections {
         target: QGroundControl.multiVehicleManager
         onParameterReadyVehicleAvailableChanged: {
+            //2022 /10.6
+            //这里修改直接显示去掉左边的边框
+             panelLoader.setSource("SetupParameterEditor.qml")
             if(!QGroundControl.skipSetupPage) {
                 if (QGroundControl.multiVehicleManager.parameterReadyVehicleAvailable || summaryButton.checked || setupButtonGroup.current != firmwareButton) {
                     // Show/Reload the Summary panel when:
@@ -117,6 +120,8 @@ Rectangle {
             }
         }
     }
+
+
 
     Component {
         id: noComponentsVehicleSummaryComponent
@@ -203,14 +208,15 @@ Rectangle {
         contentHeight:      buttonColumn.height
         flickableDirection: Flickable.VerticalFlick
         clip:               true
-
+        visible:false
         ColumnLayout {
             id:         buttonColumn
             spacing:    _defaultTextHeight / 2
 
             Repeater {
                 model:                  _corePlugin ? _corePlugin.settingsPages : []
-                visible:                _corePlugin && _corePlugin.options.combineSettingsAndSetup
+                //visible:                _corePlugin && _corePlugin.options.combineSettingsAndSetup
+                visible:false
                 SubMenuButton {
                     imageResource:      modelData.icon
                     setupIndicator:     false
@@ -284,16 +290,16 @@ Rectangle {
 //                }
 //            }
 
-//            SubMenuButton {
-//                setupIndicator:     false
-//                exclusiveGroup:     setupButtonGroup
-//                visible:            QGroundControl.multiVehicleManager.parameterReadyVehicleAvailable &&
-//                                    !QGroundControl.multiVehicleManager.activeVehicle.usingHighLatencyLink &&
-//                                    _corePlugin.showAdvancedUI
-//                text:               qsTr("Parameters")
-//                Layout.fillWidth:   true
-//                onClicked:          showPanel(this, "SetupParameterEditor.qml")
-//            }
+            SubMenuButton {
+                setupIndicator:     false
+                exclusiveGroup:     setupButtonGroup
+                visible:            QGroundControl.multiVehicleManager.parameterReadyVehicleAvailable &&
+                                    !QGroundControl.multiVehicleManager.activeVehicle.usingHighLatencyLink &&
+                                    _corePlugin.showAdvancedUI
+                text:               qsTr("Parameters")
+                Layout.fillWidth:   true
+                onClicked:          showPanel(this, "SetupParameterEditor.qml")
+            }
 
         }
     }
