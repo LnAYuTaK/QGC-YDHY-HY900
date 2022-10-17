@@ -432,10 +432,10 @@ void SimpleMissionItem::_rebuildTextFieldFacts(void)
     _textFieldFacts.clear();
     
     if (rawEdit()) {
-        _missionItem._param1Fact._setName("Param1");
-        _missionItem._param1Fact.setMetaData(_defaultParamMetaData);
-        _textFieldFacts.append(&_missionItem._param1Fact);
-/// 2022 9.27屏蔽
+//2022 10.17屏蔽更多参数
+//        _missionItem._param1Fact._setName("Param1");
+//        _missionItem._param1Fact.setMetaData(_defaultParamMetaData);
+//        _textFieldFacts.append(&_missionItem._param1Fact);
 //        _missionItem._param2Fact._setName("Param2");
 //        _missionItem._param2Fact.setMetaData(_defaultParamMetaData);
 //        _textFieldFacts.append(&_missionItem._param2Fact);
@@ -445,15 +445,15 @@ void SimpleMissionItem::_rebuildTextFieldFacts(void)
 //        _missionItem._param4Fact._setName("Param4");
 //        _missionItem._param4Fact.setMetaData(_defaultParamMetaData);
 //        _textFieldFacts.append(&_missionItem._param4Fact);
-        _missionItem._param5Fact._setName("Lat/X");
-        _missionItem._param5Fact.setMetaData(_defaultParamMetaData);
-        _textFieldFacts.append(&_missionItem._param5Fact);
-        _missionItem._param6Fact._setName("Lon/Y");
-        _missionItem._param6Fact.setMetaData(_defaultParamMetaData);
-        _textFieldFacts.append(&_missionItem._param6Fact);
-        _missionItem._param7Fact._setName("Alt/Z");
-        _missionItem._param7Fact.setMetaData(_defaultParamMetaData);
-        _textFieldFacts.append(&_missionItem._param7Fact);
+//        _missionItem._param5Fact._setName("Lat/X");
+//        _missionItem._param5Fact.setMetaData(_defaultParamMetaData);
+//        _textFieldFacts.append(&_missionItem._param5Fact);
+//        _missionItem._param6Fact._setName("Lon/Y");
+//        _missionItem._param6Fact.setMetaData(_defaultParamMetaData);
+//        _textFieldFacts.append(&_missionItem._param6Fact);
+//        _missionItem._param7Fact._setName("Alt/Z");
+//        _missionItem._param7Fact.setMetaData(_defaultParamMetaData);
+//        _textFieldFacts.append(&_missionItem._param7Fact);
     } else {
         _ignoreDirtyChangeSignals = true;
 
@@ -477,7 +477,6 @@ void SimpleMissionItem::_rebuildTextFieldFacts(void)
                 if (showUI && paramInfo && paramInfo->enumStrings().count() == 0 && !paramInfo->nanUnchanged()) {
                     Fact*               paramFact =     rgParamFacts[i-1];
                     FactMetaData*       paramMetaData = rgParamMetaData[i-1];
-
                     paramFact->_setName(paramInfo->label());
                     paramMetaData->setDecimalPlaces(paramInfo->decimalPlaces());
                     paramMetaData->setRawUnits(paramInfo->units());

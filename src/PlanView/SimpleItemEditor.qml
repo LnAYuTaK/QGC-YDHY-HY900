@@ -155,7 +155,6 @@ Rectangle {
 
                     RowLayout {
                         spacing: _altRectMargin
-
                         QGCLabel {
                             Layout.alignment:   Qt.AlignBaseline
                             text:               qsTr("Altitude")
@@ -225,7 +224,6 @@ Rectangle {
                                 missionItem.nanFacts.count +
                                 (missionItem.speedSection.available ? 1 : 0)
                 columns:        2
-
                 Repeater {
                     model: missionItem.textFieldFacts
 
@@ -234,22 +232,20 @@ Rectangle {
 
                 Repeater {
                     model: missionItem.nanFacts
-
                     QGCCheckBox {
                         text:           object.name
                         checked:        !isNaN(object.rawValue)
                         onClicked:      object.rawValue = checked ? 0 : NaN
                     }
                 }
-
-                QGCCheckBox {
-                    id:         flightSpeedCheckbox
-                    text:       qsTr("Flight Speed")
-                    checked:    missionItem.speedSection.specifyFlightSpeed
-                    onClicked:  missionItem.speedSection.specifyFlightSpeed = checked
-                    visible:    missionItem.speedSection.available
-                }
-
+//2022 10.17  任务规划item的速度显示
+//                QGCCheckBox {
+//                    id:         flightSpeedCheckbox
+//                    text:       qsTr("Flight Speed")
+//                    checked:    missionItem.speedSection.specifyFlightSpeed
+//                    onClicked:  missionItem.speedSection.specifyFlightSpeed = checked
+//                    visible:    missionItem.speedSection.available
+//                }
 
                 Repeater {
                     model: missionItem.textFieldFacts
@@ -273,12 +269,12 @@ Rectangle {
                     }
                 }
 
-                FactTextField {
-                    fact:               missionItem.speedSection.flightSpeed
-                    Layout.fillWidth:   true
-                    enabled:            flightSpeedCheckbox.checked
-                    visible:            missionItem.speedSection.available
-                }
+//                FactTextField {
+//                    fact:               missionItem.speedSection.flightSpeed
+//                    Layout.fillWidth:   true
+//                    enabled:            flightSpeedCheckbox.checked
+//                    visible:            missionItem.speedSection.available
+//                }
             }
             //相机不显示
             CameraSection {

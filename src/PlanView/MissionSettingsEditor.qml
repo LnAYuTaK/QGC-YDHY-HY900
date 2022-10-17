@@ -63,50 +63,44 @@ Rectangle {
         anchors.right:      parent.right
         anchors.top:        parent.top
         spacing:            _margin
+//      MouseArea {
+//            visible: false
+//            Layout.preferredWidth:  childrenRect.width
+//            Layout.preferredHeight: childrenRect.height
+//            enabled:                _noMissionItemsAdded
 
-        QGCLabel {
-            visible:false
-            text:           qsTr("All Altitudes")
-            font.pointSize: ScreenTools.smallFontPointSize
-        }
-        MouseArea {
-            visible: false
-            Layout.preferredWidth:  childrenRect.width
-            Layout.preferredHeight: childrenRect.height
-            enabled:                _noMissionItemsAdded
-
-            onClicked: {
-                var removeModes = []
-                var updateFunction = function(altMode){ _missionController.globalAltitudeMode = altMode }
-                if (!_controllerVehicle.supportsTerrainFrame) {
-                    removeModes.push(QGroundControl.AltitudeModeTerrainFrame)
-                }
-                altModeDialogComponent.createObject(mainWindow, { rgRemoveModes: removeModes, updateAltModeFn: updateFunction }).open()
-            }
-
-            RowLayout {
-                spacing: ScreenTools.defaultFontPixelWidth
-                enabled: _noMissionItemsAdded
-                QGCLabel {
-                    id:     altModeLabel
-                    text:   QGroundControl.altitudeModeShortDescription(_missionController.globalAltitudeMode)
-                }
-                //不显示
-                QGCColoredImage {
-                    height:     ScreenTools.defaultFontPixelHeight / 2
-                    width:      height
-                    source:     "/res/DropArrow.svg"
-                    color:      altModeLabel.color
-                    visible:    false
-                }
-            }
-        }
-       GridLayout{
+//            onClicked: {
+//                var removeModes = []
+//                var updateFunction = function(altMode){ _missionController.globalAltitudeMode = altMode }
+//                if (!_controllerVehicle.supportsTerrainFrame) {
+//                    removeModes.push(QGroundControl.AltitudeModeTerrainFrame)
+//                }
+//                altModeDialogComponent.createObject(mainWindow, { rgRemoveModes: removeModes, updateAltModeFn: updateFunction }).open()
+//            }
+//            RowLayout {
+//                spacing: ScreenTools.defaultFontPixelWidth
+//                enabled: _noMissionItemsAdded
+//                QGCLabel {
+//                    id:     altModeLabel
+//                    text:   QGroundControl.altitudeModeShortDescription(_missionController.globalAltitudeMode)
+//                }
+//                //不显示
+//                QGCColoredImage {
+//                    height:     ScreenTools.defaultFontPixelHeight / 2
+//                    width:      height
+//                    source:     "/res/DropArrow.svg"
+//                    color:      altModeLabel.color
+//                    visible:    false
+//                }
+//            }
+//        }
+       // 加载航点文件 保存航点文件
+       RowLayout{
             id :missionLayerBtnGrounp
             Layout.preferredWidth:  childrenRect.width
-            columnSpacing:      ScreenTools.defaultFontPixelWidth
-            rowSpacing:         columnSpacing
-            columns : 2
+            //columnSpacing:      ScreenTools.defaultFontPixelWidth
+            //rowSpacing:         columnSpacing
+            //columns : 2
             QGCButton {
                 text:           qsTr("加载航点文件")
                 Layout.fillWidth: true
@@ -127,6 +121,10 @@ Rectangle {
                     mainWindow._planView._planMasterController.saveToSelectedFile()
                 }
             }
+          }
+        //清空航点------读取航点------写入航点
+        RowLayout{
+            Layout.preferredWidth:  childrenRect.width
             QGCButton {
                 text:           qsTr("清空航点")
                 Layout.fillWidth: true
@@ -136,14 +134,14 @@ Rectangle {
                 onClicked: {
                 //清空航点除了一号航点
                 var allVisualItemCount = _missionController.visualItems.count
-                if(allVisualItemCount>0){
+                if(allVisualItemCount>0) {
                     var indexIedor = 0
                     while(indexIedor!==allVisualItemCount) {
                         _missionController.removeVisualItem(allVisualItemCount)
                         allVisualItemCount--;
                     }
                 }
-                else{
+                else {
                     return
                 }
               }
@@ -155,28 +153,26 @@ Rectangle {
                 heightFactor:   0.3333
                 showBorder:     true
                 onClicked: {
-                      mainWindow._planView.downloadClicked("读取航点")
+                    mainWindow._planView.downloadClicked("读取航点")
                 }
                 highlighted : true
             }
-
             QGCButton {
-                text:           qsTr("刷新航点")
+                text:           qsTr("写入航线")
                 Layout.fillWidth: true
                 backRadius:     4
                 heightFactor:   0.3333
                 showBorder:     true
                 onClicked: {
-                         return
+                    return
                 }
             }
         }
-
-        GridLayout{
-                Layout.fillWidth:   true
-                columnSpacing:      ScreenTools.defaultFontPixelWidth
-                rowSpacing:         columnSpacing
-                columns:            2
+        //默认高度  ---   航程
+        RowLayout{
+            //Layout.fillWidth:   true
+            Layout.preferredWidth:  childrenRect.width
+            RowLayout {
                 QGCLabel {
                     text:           qsTr("默认高度")
                     font.pointSize: ScreenTools.defaultFontPointSize*1.5
@@ -186,49 +182,64 @@ Rectangle {
                 FactTextField {
                     Layout.fillWidth:   true
                     visible:            true
-                    fact:             QGroundControl.settingsManager.appSettings.defaultMissionItemAltitude
+                    fact:   QGroundControl.settingsManager.appSettings.defaultMissionItemAltitude
                 }
-         }
-
-        GridLayout {
-            Layout.fillWidth:   true
-            columnSpacing:      ScreenTools.defaultFontPixelWidth
-            rowSpacing:         columnSpacing
-            columns:            2
-            visible:            false
-            QGCCheckBox {
-                id:         flightSpeedCheckBox
-                text:       qsTr("Flight speed")
-                visible:    _showFlightSpeed
-                checked:    missionItem.speedSection.specifyFlightSpeed
-                onClicked:   missionItem.speedSection.specifyFlightSpeed = checked
-            }
-            FactTextField {
+             }
+             RowLayout{
                 Layout.fillWidth:   true
-                fact:               missionItem.speedSection.flightSpeed
-                visible:            _showFlightSpeed
-                enabled:            flightSpeedCheckBox.checked
-            }
-        }
-        GridLayout{
-            Layout.fillWidth:   true
-            columnSpacing:      ScreenTools.defaultFontPixelWidth
-            rowSpacing:         columnSpacing
-            columns:            2
-            QGCLabel {
-                text:           qsTr("航程")
-                font.pointSize: ScreenTools.defaultFontPointSize*1.5
-                color:"white"
-                font.weight:Font.DemiBold
+        //            columnSpacing:      ScreenTools.defaultFontPixelWidth
+        //            rowSpacing:         columnSpacing
+        //            columns:            2
+                QGCLabel {
+                    text:           qsTr("航程")
+                    font.pointSize: ScreenTools.defaultFontPointSize*1.5
+                    color:"white"
+                    font.weight:Font.DemiBold
 
+                }
+                QGCTextField {
+                    Layout.fillWidth:   true
+                    text:String(_missionController.missionDistance)
+                    visible:            true
+                    enabled:            false
+                }
+              }
             }
-            QGCTextField {
-                Layout.fillWidth:   true
-                text:String(_missionController.missionDistance)
-                visible:            true
-                enabled:            false
-            }
-          }
+//                QGCCheckBox {
+//                    id:         flightSpeedCheckBox
+//                    text:       qsTr("Flight speed")
+//                    visible:    _showFlightSpeed
+//                    checked:    missionItem.speedSection.specifyFlightSpeed
+//                    onClicked:   missionItem.speedSection.specifyFlightSpeed = checked
+//                }
+//                FactTextField {
+//                    Layout.fillWidth:   true
+//                    fact:               missionItem.speedSection.flightSpeed
+//                    visible:            _showFlightSpeed
+//                    enabled:            flightSpeedCheckBox.checked
+//                }
+
+//        GridLayout {
+//            Layout.fillWidth:   true
+//            columnSpacing:      ScreenTools.defaultFontPixelWidth
+//            rowSpacing:         columnSpacing
+//            columns:            2
+//            visible:            false
+//            QGCCheckBox {
+//                id:         flightSpeedCheckBox
+//                text:       qsTr("Flight speed")
+//                visible:    _showFlightSpeed
+//                checked:    missionItem.speedSection.specifyFlightSpeed
+//                onClicked:   missionItem.speedSection.specifyFlightSpeed = checked
+//            }
+//            FactTextField {
+//                Layout.fillWidth:   true
+//                fact:               missionItem.speedSection.flightSpeed
+//                visible:            _showFlightSpeed
+//                enabled:            flightSpeedCheckBox.checked
+//            }
+//        }
+
       Column {
             Layout.fillWidth:   true
             spacing:            _margin
@@ -256,7 +267,6 @@ Rectangle {
                 visible:        false//!_waypointsOnlyMode
                 checked:        false
             }
-
             GridLayout {
                 anchors.left:   parent.left
                 anchors.right:  parent.right
@@ -264,7 +274,6 @@ Rectangle {
                 rowSpacing:     columnSpacing
                 columns:        2
                 visible:        false//vehicleInfoSectionHeader.visible && vehicleInfoSectionHeader.checked
-
                 QGCLabel {
                     text:               _firmwareLabel
                     Layout.fillWidth:   true
@@ -306,7 +315,6 @@ Rectangle {
                     text:                   qsTr("The following speed values are used to calculate total mission time. They do not affect the flight speed for the mission.")
                     visible:                _showCruiseSpeed || _showHoverSpeed
                 }
-
                 QGCLabel {
                     text:               qsTr("Cruise speed")
                     visible:            _showCruiseSpeed
@@ -317,7 +325,6 @@ Rectangle {
                     visible:                _showCruiseSpeed
                     Layout.preferredWidth:  _fieldWidth
                 }
-
                 QGCLabel {
                     text:               qsTr("Hover speed")
                     visible:            _showHoverSpeed
@@ -328,8 +335,7 @@ Rectangle {
                     visible:                _showHoverSpeed
                     Layout.preferredWidth:  _fieldWidth
                 }
-            } // GridLayout
-
+            }
             SectionHeader {
                 id:             plannedHomePositionSection
                 anchors.left:   parent.left

@@ -82,6 +82,8 @@ public:
     QmlComponentInfo* pGeneral                  = nullptr;
     QmlComponentInfo* pCommLinks                = nullptr;
 
+
+    //2022 10.15 add
     QmlComponentInfo* pImgTranMis               = nullptr ;
 
     QmlComponentInfo* pOfflineMaps              = nullptr;

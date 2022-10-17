@@ -54,22 +54,20 @@ Rectangle {
         id: qgcPal
         colorGroupEnabled: enabled
     }
-
     FocusScope {
         id:             currentItemScope
         anchors.fill:   parent
         MouseArea {
             anchors.fill:   parent
-            onClicked: { 
+            onClicked: {
                 currentItemScope.focus = true
                 _root.clicked()
             }
         }
     }
-    //
+
     Component {
         id: editPositionDialog
-
         EditPositionDialog {
             coordinate:             missionItem.isSurveyItem ?  missionItem.centerCoordinate : missionItem.coordinate
             onCoordinateChanged:    missionItem.isSurveyItem ?  missionItem.centerCoordinate = coordinate : missionItem.coordinate = coordinate
@@ -82,7 +80,6 @@ Rectangle {
         anchors.left:       parent.left
         anchors.top:        parent.top
         spacing:            _margin
-
         Rectangle {
             id:                     notReadyForSaveIndicator
             anchors.verticalCenter: parent.verticalCenter
@@ -93,7 +90,6 @@ Rectangle {
             color:                  "white"
             radius:                 width / 2
             visible:                !_readyForSave
-
             QGCLabel {
                 id:                 readyForSaveLabel
                 anchors.centerIn:   parent
@@ -103,7 +99,7 @@ Rectangle {
                 font.pointSize:     ScreenTools.smallFontPointSize
             }
         }
-
+        //删除按钮
         QGCColoredImage {
             id:                     deleteButton
             anchors.verticalCenter: parent.verticalCenter
@@ -114,55 +110,62 @@ Rectangle {
             mipmap:                 true
             smooth:                 true
             color:                  "white"
-            visible:                _currentItem && missionItem.sequenceNumber !== 0
+            visible:                missionItem.sequenceNumber !== 0
             source:                 "/res/TrashDelete.svg"
             QGCMouseArea {
                 fillItem:   parent
                 onClicked:  remove()
             }
         }
-
         Item {
             id:                     commandPicker
             anchors.verticalCenter: parent.verticalCenter
             height:                 ScreenTools.implicitComboBoxHeight
             width:                  innerLayout.width
-            visible:                !commandLabel.visible
-
+            visible:                missionItem.sequenceNumber!==0// !commandLabel.visible
             RowLayout {
-                id:                     innerLayout
+                id: innerLayout
                 anchors.verticalCenter: parent.verticalCenter
                 spacing:                _padding
-
                 property real _padding: ScreenTools.comboBoxPadding
-
                 QGCLabel {
-                    text: missionItem.commandName
+                    text: missionItem.commandName+String(missionItem.sequenceNumber)
                     color:"white"
                 }
-                Rectangle{
-                    width:1
+                //航点纬度
+                QGCLabel {
+                    Layout.preferredWidth:ScreenTools.defaultFontPixelWidth * 12
                     Layout.fillHeight: true
+                    Layout.alignment : Qt.AlignVCenter
+                    text:              "纬度:"+missionItem.coordinate.latitude
                     color:"white"
-                    visible:missionItem.sequenceNumber!==0
                 }
-
-                QGCLabel{
-                   text: String(missionItem.sequenceNumber)
-                   color:"white"
-                   visible: missionItem.sequenceNumber!==0
+                //航点纬度
+                QGCLabel {
+                    Layout.fillHeight: true
+                    Layout.preferredWidth:ScreenTools.defaultFontPixelWidth * 12
+                    Layout.alignment : Qt.AlignVCenter
+                    text:              "纬度:"+missionItem.coordinate.latitude
+                    color:"white"
                 }
-
-                QGCColoredImage {
-                    height:             ScreenTools.defaultFontPixelWidth
-                    width:              height
-                    fillMode:           Image.PreserveAspectFit
-                    smooth:             true
-                    antialiasing:       true
-                    color:              qgcPal.text
-                    source:             "/qmlimages/arrow-down.png"
+                QGCLabel {
+                    Layout.fillHeight: true
+                    Layout.preferredWidth:ScreenTools.defaultFontPixelWidth *12
+                    Layout.alignment : Qt.AlignVCenter
+                    text:              "高度:"+missionItem.altitude.rawValue+"m"
+                    color:"white"
                 }
+//                QGCColoredImage {
+//                    height:             ScreenTools.defaultFontPixelWidth
+//                    width:              height
+//                    fillMode:           Image.PreserveAspectFit
+//                    smooth:             true
+//                    antialiasing:       true
+//                    color:              qgcPal.text
+//                    source:             "/qmlimages/arrow-down.png"
+//                }
             }
+
             QGCMouseArea {
                 fillItem:   parent
                 onClicked: {
@@ -172,7 +175,7 @@ Rectangle {
 
             Component {
                 id: commandDialog
-                //旁边的
+               
                 MissionCommandDialog {
                     vehicle:                    masterController.controllerVehicle
                     missionItem:                _root.missionItem
@@ -193,7 +196,7 @@ Rectangle {
 //            color:                  _outerTextColor
 //        }
      // 2022 9.26修改增加显示经纬度高度编号等航点信息
-        //缩略的航点信息
+     //缩略的航点信息
         Rectangle{
             id :commandLabel
             width:                  commandPicker.width
@@ -204,47 +207,48 @@ Rectangle {
             RowLayout{
                 spacing :10
                 anchors.fill:parent
-                //航点类型
-                QGCLabel {
-                    Layout.fillHeight: true
-                    Layout.alignment : Qt.AlignVCenter
-                    text:              missionItem.commandName
-                    color:"white"
-                }
-                //航点标号
-                QGCLabel {
-                    Layout.fillHeight: true
-                    Layout.alignment : Qt.AlignVCenter
-                    text:            String(missionItem.sequenceNumber)
-                    color:"white"
-
-                }
+                anchors.verticalCenter: parent.verticalCenter
+//                //航点类型
+//                QGCLabel {
+//                    Layout.fillHeight: true
+//                    Layout.alignment : Qt.AlignVCenter
+//                    text:              missionItem.commandName
+//                    color:"white"
+//                }
+//                //航点标号
+//                QGCLabel {
+//                    Layout.fillHeight: true
+//                    Layout.alignment : Qt.AlignVCenter
+//                    text:            String(missionItem.sequenceNumber)
+//                    color:"white"
+//                }
                 //航点纬度
-                QGCLabel {
-                    Layout.fillHeight: true
-                    Layout.alignment : Qt.AlignVCenter
-                    text:              "纬度:"+missionItem.coordinate.latitude
-                    color:"white"
-                }
-                //航点经度
-                QGCLabel {
-                    Layout.fillHeight: true
-                    Layout.alignment : Qt.AlignVCenter
-                    text:              "经度:"+missionItem.coordinate.longitude
-                    color:"white"
-                }
+//                QGCLabel {
+//                    Layout.fillHeight: true
+//                    Layout.alignment : Qt.AlignVCenter
+//                    text:              "纬度:"+missionItem.coordinate.latitude
+//                    color:"white"
+//                }
+//                //航点经度
+//                QGCLabel {
+//                    Layout.fillHeight: true
+//                    Layout.alignment : Qt.AlignVCenter
+//                    text:              "经度:"+missionItem.coordinate.longitude
+//                    color:"white"
+//                }
                 //航点高度
-                QGCLabel {
-                    Layout.fillHeight: true
-                    Layout.alignment : Qt.AlignVCenter
-                    text:              "高度:"+missionItem.altitude.rawValue+"m"
-                    color:"white"
-                }
+//                QGCLabel {
+//                    Layout.fillHeight: true
+//                    Layout.alignment : Qt.AlignVCenter
+//                    text:              "高度:"+missionItem.altitude.rawValue+"m"
+//                    color:"white"
+//                }
             }
         }//Rectangle CommandLabel
     }
 
     //更多选项
+    //2022 10.14 修改不显示
    QGCColoredImage {
         id:                     hamburger
         anchors.margins:        _margin
@@ -254,49 +258,43 @@ Rectangle {
         height:                 _hamburgerSize
         sourceSize.height:      _hamburgerSize
         source:                 "qrc:/qmlimages/Hamburger.svg"
-        visible:                missionItem.isCurrentItem && missionItem.sequenceNumber !== 0
+        visible:                false// missionItem.isCurrentItem && missionItem.sequenceNumber !== 0
         color:                  qgcPal.text
-
         QGCMouseArea {
             fillItem:   hamburger
             onClicked: {
                 currentItemScope.focus = true
                 hamburgerMenu.popup()
             }
-
             QGCMenu {
                 id: hamburgerMenu
-
                 QGCMenuItem {
                     text:           qsTr("Move to vehicle position")
                     visible:        missionItem.specifiesCoordinate
                     enabled:        _activeVehicle
                     onTriggered:    missionItem.coordinate = _activeVehicle.coordinate
-                    property var    _activeVehicle:      QGroundControl.multiVehicleManager.activeVehicle
+                    property var    _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
                 }
-
                 QGCMenuItem {
                     text:           qsTr("Move to previous item position")
                     visible:        _missionController.previousCoordinate.isValid
                     onTriggered:    missionItem.coordinate = _missionController.previousCoordinate
                 }
-
                 QGCMenuItem {
                     text:           qsTr("Edit position...")
                     visible:        missionItem.specifiesCoordinate
                     onTriggered:    editPositionDialog.createObject(mainWindow).open()
                 }
-
                 QGCMenuSeparator {
                     visible: missionItem.isSimpleItem && !_waypointsOnlyMode
                 }
 
-                //显示所有值
+                //显示所有值//取消
                 QGCMenuItem {
                     text:       qsTr("Show all values")
                     checkable:  true
                     checked:    missionItem.isSimpleItem ? missionItem.rawEdit : false
-                    visible:    true//missionItem.isSimpleItem && !_waypointsOnlyMode
+                    visible:     false// missionItem.isSimpleItem && !_waypointsOnlyMode
 
                     onTriggered:    {
                         if (missionItem.rawEdit) {
@@ -336,7 +334,6 @@ Rectangle {
         color:                  qgcPal.warningText
     }
 */
-
 //"qrc:/qml/MissionSettingsEditor.qml";
     Loader {
         id:                 editorLoader
@@ -344,7 +341,7 @@ Rectangle {
         anchors.left:       parent.left
         anchors.top:        topRowLayout.bottom
         source:             missionItem.editorQml
-        visible:            _currentItem
+        visible:           true/* _currentItem*/
         property var    masterController:   _masterController
         property real   availableWidth:     _root.width - (anchors.margins * 2) ///< How wide the editor should be
         property var    editorRoot:         _root

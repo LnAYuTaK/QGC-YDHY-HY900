@@ -2379,7 +2379,6 @@ bool MissionController::_isROICancelItem(SimpleMissionItem* simpleItem)
 void MissionController::setCurrentPlanViewSeqNum(int sequenceNumber, bool force)
 {
     if (_visualItems && (force || sequenceNumber != _currentPlanViewSeqNum)) {
-        qDebug() << "setCurrentPlanViewSeqNum";
         bool    foundLand =             false;
         int     takeoffSeqNum =         -1;
         int     landSeqNum =            -1;
@@ -2477,7 +2476,6 @@ void MissionController::setCurrentPlanViewSeqNum(int sequenceNumber, bool force)
                 _currentPlanViewSeqNum = sequenceNumber;
                 _currentPlanViewVIIndex = viIndex;
 
-                //这里有bug错误//TUDO
                 if (pVI->specifiesCoordinate()) {
                     if (!pVI->isStandaloneCoordinate()) {
                         // Determine split segment used to display line split editing ui.

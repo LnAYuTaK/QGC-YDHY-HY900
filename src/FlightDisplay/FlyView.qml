@@ -155,9 +155,10 @@ Item {
     //比例尺
     MapScale {
         id:                 mapScale
-        anchors.margins:    _toolsMargin
         anchors.left:       _pipOverlay.right
+        anchors.leftMargin: _toolsMargin*3
         anchors.bottom :    parent.bottom
+        anchors.bottomMargin:_toolsMargin
         mapControl:         _mapControl
         buttonsOnLeft:      false
         visible:            !ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale && mapControl.pipState.state === mapControl.pipState.fullState

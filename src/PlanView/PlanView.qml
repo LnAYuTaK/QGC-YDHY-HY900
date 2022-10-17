@@ -254,7 +254,6 @@ Item {
         }
 
         function saveToSelectedFile() {
-
             if (!checkReadyForSaveUpload(true /* save */)) {
                 return
             }
@@ -284,7 +283,6 @@ Item {
 
     Connections {
         target: _missionController
-
         function onNewItemsFromVehicle() {
             if (_visualItems && _visualItems.count !== 1) {
                 mapFitFunctions.fitMapViewportToMissionItems()
@@ -295,8 +293,6 @@ Item {
     //添加航点
     function insertSimpleItemAfterCurrent(coordinate) {
         var nextIndex = _missionController.currentPlanViewVIIndex + 1
-
-        console.log(nextIndex)
         _missionController.insertSimpleMissionItem(coordinate, nextIndex, true /* makeCurrentItem */)
 
     }
@@ -342,8 +338,6 @@ Item {
         folder:         _appSettings ? _appSettings.missionSavePath : ""
 
         property bool planFiles: true    ///< true: working with plan files, false: working with kml file
-
-
         //保存
         onAcceptedForSave: {
             if (planFiles) {
@@ -400,8 +394,6 @@ Item {
                 QGroundControl.flightMapPosition = center
                 updateAirspace(false)
             }
-
-            //这里创建航点入口
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
@@ -411,29 +403,15 @@ Item {
                     coordinate.latitude = coordinate.latitude.toFixed(_decimalPlaces)
                     coordinate.longitude = coordinate.longitude.toFixed(_decimalPlaces)
                     coordinate.altitude = coordinate.altitude.toFixed(_decimalPlaces)
-//2022 9.24修改不需要选取航点就可以创建//但是默认选取为航点
-                    insertSimpleItemAfterCurrent(coordinate)
-//                    switch (_editingLayer) {
-//                    case _layerMission:
-//                        if (addWaypointRallyPointAction.checked) {
-//                            //航点入口
-//                            insertSimpleItemAfterCurrent(coordinate)
-//                        } else if (_addROIOnClick) {
-//                            insertROIAfterCurrent(coordinate)
-//                            _addROIOnClick = false
-//                        }
-
-//                        break
-//                    case _layerRallyPoints:
-//                        if (_rallyPointController.supported && addWaypointRallyPointAction.checked) {
-//                            _rallyPointController.addPoint(coordinate)
-//                        }
-
-//                        break
-//                    }
+                    //2022 10.17修改
+                    switch (_editingLayer) {
+                    case _layerMission:{
+                            insertSimpleItemAfterCurrent(coordinate)
+                        }
+                        break
+                    }
                 }
             }
-            // Add the mission item visuals to the map
             Repeater {
                 model: _missionController.visualItems
                 delegate: MissionItemMapVisual {
@@ -486,7 +464,6 @@ Item {
                                                                            _missionController.currentPlanViewVIIndex,
                                                                            true /* makeCurrentItem */)
                 }
-
                 function _updateSplitCoord() {
                     if (_missionController.splitSegment) {
                         var distance = _missionController.splitSegment.coordinate1.distanceTo(_missionController.splitSegment.coordinate2)
@@ -582,7 +559,6 @@ Item {
                 onClicked:mainWindow.showFlyView()
             }
         }
-
         //-----------------------------------------------------------
          // Left tool strip
         ToolStrip {
@@ -594,7 +570,6 @@ Item {
             maxHeight:          parent.height - toolStrip.y
             title:              qsTr("Plan")
             visible:false
-
             readonly property int flyButtonIndex:       0
             readonly property int fileButtonIndex:      1
             readonly property int takeoffButtonIndex:   2
@@ -839,7 +814,6 @@ Item {
                     highlightMoveDuration: 250
                     visible:            _editingLayer == _layerMission && !planControlColapsed
                     //航点列表
-                    //
                     delegate: MissionItemEditor {
                         map:            editorMap
                         masterController:  _planMasterController
@@ -847,12 +821,11 @@ Item {
                         width:          missionItemEditorListView.width
                         readOnly:       false
                         //被点击设置焦点
-                        onClicked:      {
+                        onClicked: {
                             _missionController.setCurrentPlanViewSeqNum(object.sequenceNumber, false)
                         }
                         onRemove: {
                             var removeVIIndex = index
-                            console.log(removeVIIndex)
                             _missionController.removeVisualItem(removeVIIndex)
                             if (removeVIIndex >= _missionController.visualItems.count) {
                                 removeVIIndex--
@@ -916,7 +889,6 @@ Item {
                 _planViewSettings.showMissionItemStatus.rawValue = _internalVisible
             }
         }
-
         MapScale {
             id:                     mapScale
             anchors.margins:        _toolsMargin
