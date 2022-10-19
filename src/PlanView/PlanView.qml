@@ -341,7 +341,6 @@ Item {
         //保存
         onAcceptedForSave: {
             if (planFiles) {
-
                 _planMasterController.saveToFile(file)
             } else {
                 _planMasterController.saveToKml(file)
@@ -360,8 +359,6 @@ Item {
     Item {
         id:             panel
         anchors.fill:   parent
-
-
         //飞行地图
         FlightMap {
             id:                         editorMap
@@ -406,7 +403,12 @@ Item {
                     //2022 10.17修改
                     switch (_editingLayer) {
                     case _layerMission:{
-                            insertSimpleItemAfterCurrent(coordinate)
+                        if(_missionController.currentPlanViewVIIndex==0){
+                            toolStrip.allAddClickBoolsOff()
+                            insertTakeItemAfterCurrent()
+                            return
+                        }
+                          insertSimpleItemAfterCurrent(coordinate)
                         }
                         break
                     }
@@ -609,9 +611,9 @@ Item {
                         visible:    toolStrip._isMissionLayer && !_planMasterController.controllerVehicle.rover
                         onTriggered: {
                             //使能可以添加后续航点
-                            toolStrip.allAddClickBoolsOff()
+//                            toolStrip.allAddClickBoolsOff()
                             //添加起飞点
-                            insertTakeItemAfterCurrent()
+                            //insertTakeItemAfterCurrent()
                         }
                     },
                     ToolStripAction {
@@ -687,7 +689,7 @@ Item {
         Rectangle {
                  id:                 rightPanel
                  height:             parent.height
-                 width:              _rightPanelWidth*1.5
+                 width:              _rightPanelWidth*1.85
                  //color:              qgcPal.window
                  color :"transparent"
                  anchors.bottom:     parent.bottom

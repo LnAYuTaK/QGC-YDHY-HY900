@@ -55,7 +55,6 @@ Rectangle {
             }
         }
     }
-
     ColumnLayout {
         id:                 valuesColumn
         anchors.margins:    _margin
@@ -121,7 +120,7 @@ Rectangle {
                     mainWindow._planView._planMasterController.saveToSelectedFile()
                 }
             }
-          }
+        }
         //清空航点------读取航点------写入航点
         RowLayout{
             Layout.preferredWidth:  childrenRect.width
@@ -200,11 +199,57 @@ Rectangle {
                 QGCTextField {
                     Layout.fillWidth:   true
                     text:String(_missionController.missionDistance)
-                    visible:            true
                     enabled:            false
+                    clip:true
                 }
               }
             }
+            //参数类别
+            RowLayout{
+                Layout.fillWidth: parent
+//                Layout.preferredWidth:  childrenRect.width
+                spacing :ScreenTools.comboBoxPadding*2
+                RowLayout{
+                    spacing:0
+                    QGCLabel {
+                        text:           qsTr("序号")
+                        Layout.preferredWidth:ScreenTools.defaultFontPixelWidth *7
+                        color:"white"
+                        font.weight:Font.DemiBold
+                    }
+                    QGCLabel {
+                        text:           qsTr("类型")
+                        Layout.preferredWidth:ScreenTools.defaultFontPixelWidth *7
+                        color:"white"
+                        font.weight:Font.DemiBold
+                    }
+                }
+                QGCLabel {
+                    text:           qsTr("经度")
+                    Layout.preferredWidth:ScreenTools.defaultFontPixelWidth *7
+                    color:"white"
+                    font.weight:Font.DemiBold
+                }
+                QGCLabel {
+                    text:           qsTr("纬度")
+                    Layout.preferredWidth:ScreenTools.defaultFontPixelWidth *7
+                    color:"white"
+                    font.weight:Font.DemiBold
+                }
+                QGCLabel {
+                    text:           qsTr("高度")
+                    Layout.preferredWidth:ScreenTools.defaultFontPixelWidth *7
+                    color:"white"
+                    font.weight:Font.DemiBold
+                }
+                QGCLabel {
+                    text:           qsTr("参数1")
+                    Layout.preferredWidth:ScreenTools.defaultFontPixelWidth *7
+                    color:"white"
+                    font.weight:Font.DemiBold
+                }
+            }
+
 //                QGCCheckBox {
 //                    id:         flightSpeedCheckBox
 //                    text:       qsTr("Flight speed")
@@ -240,10 +285,12 @@ Rectangle {
 //            }
 //        }
 
+
+     //下面的是除了MissionStart之外的
       Column {
             Layout.fillWidth:   true
             spacing:            _margin
-            visible:            !_simpleMissionStart
+            visible:           false /*!_simpleMissionStart*/
             CameraSection {
                 id:         cameraSection
                 checked:    !_waypointsOnlyMode && missionItem.cameraSection.settingsSpecified
@@ -349,7 +396,6 @@ Rectangle {
                 anchors.right:  parent.right
                 spacing:        _margin
                 visible:        false// plannedHomePositionSection.checked && !_vehicleHasHomePosition
-
                 GridLayout {
                     anchors.left:   parent.left
                     anchors.right:  parent.right

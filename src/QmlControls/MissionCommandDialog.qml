@@ -20,7 +20,7 @@ import QGroundControl.Palette       1.0
 
 QGCPopupDialog {
     id:         root
-    title:      qsTr("Select Mission Command")
+    title:      qsTr("选择航点类型")
     buttons:    StandardButton.Cancel
 
     property var    vehicle

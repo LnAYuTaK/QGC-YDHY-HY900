@@ -365,9 +365,11 @@ VisualMissionItem* MissionController::insertSimpleMissionItem(QGeoCoordinate coo
     //MAV_CMD_NAV_WAYPOINT默认为航点类型
     return _insertSimpleMissionItemWorker(coordinate, MAV_CMD_NAV_WAYPOINT, visualItemIndex, makeCurrentItem);
 }
-
+//增加takoffItem
 VisualMissionItem* MissionController::insertTakeoffItem(QGeoCoordinate /*coordinate*/, int visualItemIndex, bool makeCurrentItem)
 {
+
+    qDebug()<<"Insert Takeoff";
     int sequenceNumber = _nextSequenceNumber();
     _takeoffMissionItem = new TakeoffMissionItem(_controllerVehicle->vtol() ? MAV_CMD_NAV_VTOL_TAKEOFF : MAV_CMD_NAV_TAKEOFF, _masterController, _flyView, _settingsItem, false /* forLoad */);
     _takeoffMissionItem->setSequenceNumber(sequenceNumber);

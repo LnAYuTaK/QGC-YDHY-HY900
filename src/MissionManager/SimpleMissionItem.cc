@@ -67,9 +67,7 @@ SimpleMissionItem::SimpleMissionItem(PlanMasterController* masterController, boo
     , _param7MetaData                   (FactMetaData::valueTypeDouble)
 {
     _editorQml = QStringLiteral("qrc:/qml/SimpleItemEditor.qml");
-
     _setupMetaData();
-
     if (!forLoad) {
         // We are are going to load the SimpleItem right after this then don't connnect up signalling until after load is done
         _connectSignals();
@@ -404,7 +402,6 @@ QString SimpleMissionItem::abbreviation() const
 {
     if (homePosition())
         return tr("L");
-
     switch(command()) {
     case MAV_CMD_NAV_TAKEOFF:
         return tr("Takeoff");
@@ -433,9 +430,7 @@ void SimpleMissionItem::_rebuildTextFieldFacts(void)
     
     if (rawEdit()) {
 //2022 10.17屏蔽更多参数
-//        _missionItem._param1Fact._setName("Param1");
-//        _missionItem._param1Fact.setMetaData(_defaultParamMetaData);
-//        _textFieldFacts.append(&_missionItem._param1Fact);
+        //保留参数一 |经度|纬度
 //        _missionItem._param2Fact._setName("Param2");
 //        _missionItem._param2Fact.setMetaData(_defaultParamMetaData);
 //        _textFieldFacts.append(&_missionItem._param2Fact);
@@ -445,15 +440,18 @@ void SimpleMissionItem::_rebuildTextFieldFacts(void)
 //        _missionItem._param4Fact._setName("Param4");
 //        _missionItem._param4Fact.setMetaData(_defaultParamMetaData);
 //        _textFieldFacts.append(&_missionItem._param4Fact);
-//        _missionItem._param5Fact._setName("Lat/X");
-//        _missionItem._param5Fact.setMetaData(_defaultParamMetaData);
-//        _textFieldFacts.append(&_missionItem._param5Fact);
-//        _missionItem._param6Fact._setName("Lon/Y");
-//        _missionItem._param6Fact.setMetaData(_defaultParamMetaData);
-//        _textFieldFacts.append(&_missionItem._param6Fact);
-//        _missionItem._param7Fact._setName("Alt/Z");
-//        _missionItem._param7Fact.setMetaData(_defaultParamMetaData);
-//        _textFieldFacts.append(&_missionItem._param7Fact);
+        _missionItem._param5Fact._setName("Lat/X");
+        _missionItem._param5Fact.setMetaData(_defaultParamMetaData);
+        _textFieldFacts.append(&_missionItem._param5Fact);
+        _missionItem._param6Fact._setName("Lon/Y");
+        _missionItem._param6Fact.setMetaData(_defaultParamMetaData);
+        _textFieldFacts.append(&_missionItem._param6Fact);
+        _missionItem._param7Fact._setName("Alt/Z");
+        _missionItem._param7Fact.setMetaData(_defaultParamMetaData);
+        _textFieldFacts.append(&_missionItem._param7Fact);
+        _missionItem._param1Fact._setName("Param1");
+        _missionItem._param1Fact.setMetaData(_defaultParamMetaData);
+        _textFieldFacts.append(&_missionItem._param1Fact);
     } else {
         _ignoreDirtyChangeSignals = true;
 
@@ -573,9 +571,8 @@ void SimpleMissionItem::_rebuildComboBoxFacts(void)
 
     if (rawEdit()) {
 
-        //_comboboxFacts.append(&_missionItem._commandFact);
-        //2022 9.27消除
-//      _comboboxFacts.append(&_missionItem._frameFact);
+      _comboboxFacts.append(&_missionItem._commandFact);
+      _comboboxFacts.append(&_missionItem._frameFact);
     } else {
         Fact*           rgParamFacts[7] =       { &_missionItem._param1Fact, &_missionItem._param2Fact, &_missionItem._param3Fact, &_missionItem._param4Fact, &_missionItem._param5Fact, &_missionItem._param6Fact, &_missionItem._param7Fact };
         FactMetaData*   rgParamMetaData[7] =    { &_param1MetaData, &_param2MetaData, &_param3MetaData, &_param4MetaData, &_param5MetaData, &_param6MetaData, &_param7MetaData };

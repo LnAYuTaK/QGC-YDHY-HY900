@@ -17,7 +17,6 @@ Rectangle {
     height: editorColumn.height + (_margin * 2)
     color:  qgcPal.windowShadeDark
     radius: _radius
-
     property bool _specifiesAltitude:       missionItem.specifiesAltitude
     property real _margin:                  ScreenTools.defaultFontPixelHeight / 2
     property real _altRectMargin:           ScreenTools.defaultFontPixelWidth / 2
@@ -60,16 +59,15 @@ Rectangle {
         anchors.top:        parent.top
         spacing:            _margin
 
-        QGCLabel {
-            width:          parent.width
-            wrapMode:       Text.WordWrap
-            visible :       false
-            font.pointSize: ScreenTools.smallFontPointSize
-            text:           missionItem.rawEdit ?
-                                qsTr("Provides advanced access to all commands/parameters. Be very careful!") :
-                                missionItem.commandDescription
-        }
-
+//        QGCLabel {
+//            width:          parent.width
+//            wrapMode:       Text.WordWrap
+//            visible :       false
+//            font.pointSize: ScreenTools.smallFontPointSize
+//            text:           missionItem.rawEdit ?
+//                                qsTr("Provides advanced access to all commands/parameters. Be very careful!") :
+//                                missionItem.commandDescription
+//        }
         ColumnLayout {
             anchors.left:       parent.left
             anchors.right:      parent.right
@@ -86,7 +84,6 @@ Rectangle {
                 wrapMode:           Text.WordWrap
                 visible:            !initialClickLabel.visible
             }
-
             QGCLabel {
                 text:               qsTr("Ensure clear of obstacles and into the wind.")
                 Layout.fillWidth:   true
@@ -133,7 +130,6 @@ Rectangle {
                     text:               qsTr("Altitude below specifies the approximate altitude of the ground. Normally 0 for landing back at original launch location.")
                     visible:            missionItem.isLandCommand
                 }
-
                 MouseArea {
                     Layout.preferredWidth:  childrenRect.width
                     Layout.preferredHeight: childrenRect.height
@@ -155,11 +151,11 @@ Rectangle {
 
                     RowLayout {
                         spacing: _altRectMargin
-                        QGCLabel {
-                            Layout.alignment:   Qt.AlignBaseline
-                            text:               qsTr("Altitude")
-                            font.pointSize:     ScreenTools.smallFontPointSize
-                        }
+//                        QGCLabel {
+//                            Layout.alignment:   Qt.AlignBaseline
+//                            text:               qsTr("Altitude")
+//                            font.pointSize:     ScreenTools.smallFontPointSize
+//                        }
                         QGCLabel {
                             id:                 altModeLabel
                             Layout.alignment:   Qt.AlignBaseline
@@ -174,12 +170,11 @@ Rectangle {
                         }
                     }
                 }
-
-                FactTextField {
-                    id:                 altField
-                    Layout.fillWidth:   true
-                    fact:               missionItem.altitude
-                }
+//                FactTextField {
+//                    id:                 altField
+//                    Layout.fillWidth:   true
+//                    fact:               missionItem.altitude
+//                }
 
                 QGCLabel {
                     font.pointSize:     ScreenTools.smallFontPointSize
@@ -192,10 +187,9 @@ Rectangle {
                 anchors.left:   parent.left
                 anchors.right:  parent.right
                 spacing:        _margin
-
+                visible :false
                 Repeater {
                     model: missionItem.comboboxFacts
-
                     ColumnLayout {
                         Layout.fillWidth:   true
                         spacing:            0
@@ -224,9 +218,9 @@ Rectangle {
                                 missionItem.nanFacts.count +
                                 (missionItem.speedSection.available ? 1 : 0)
                 columns:        2
+                visible :false
                 Repeater {
                     model: missionItem.textFieldFacts
-
                     QGCLabel { text: object.name }
                 }
 
@@ -246,28 +240,27 @@ Rectangle {
 //                    onClicked:  missionItem.speedSection.specifyFlightSpeed = checked
 //                    visible:    missionItem.speedSection.available
 //                }
+//                Repeater {
+//                    model: missionItem.textFieldFacts
 
-                Repeater {
-                    model: missionItem.textFieldFacts
+//                    FactTextField {
+//                        showUnits:          true
+//                        fact:               object
+//                        Layout.fillWidth:   true
+//                        enabled:            !object.readOnly
+//                    }
+//                }
 
-                    FactTextField {
-                        showUnits:          true
-                        fact:               object
-                        Layout.fillWidth:   true
-                        enabled:            !object.readOnly
-                    }
-                }
+//                Repeater {
+//                    model: missionItem.nanFacts
 
-                Repeater {
-                    model: missionItem.nanFacts
-
-                    FactTextField {
-                        showUnits:          true
-                        fact:               object
-                        Layout.fillWidth:   true
-                        enabled:            !isNaN(object.rawValue)
-                    }
-                }
+//                    FactTextField {
+//                        showUnits:          true
+//                        fact:               object
+//                        Layout.fillWidth:   true
+//                        enabled:            !isNaN(object.rawValue)
+//                    }
+//                }
 
 //                FactTextField {
 //                    fact:               missionItem.speedSection.flightSpeed

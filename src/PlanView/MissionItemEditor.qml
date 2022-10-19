@@ -122,60 +122,49 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             height:                 ScreenTools.implicitComboBoxHeight
             width:                  innerLayout.width
-            visible:                missionItem.sequenceNumber!==0// !commandLabel.visible
+            visible:                missionItem.sequenceNumber!==0||missionItem.isTakeoffItem// !commandLabel.visible
             RowLayout {
                 id: innerLayout
                 anchors.verticalCenter: parent.verticalCenter
-                spacing:                _padding
+               // spacing:                _padding
                 property real _padding: ScreenTools.comboBoxPadding
-                QGCLabel {
-                    text: missionItem.commandName+String(missionItem.sequenceNumber)
-                    color:"white"
+                RowLayout{
+                    spacing:ScreenTools.comboBoxPadding*2
+                    QGCLabel {
+                        text: String(missionItem.sequenceNumber)
+                        color:"white"
+                    }
+                    QGCLabel {
+                        text: missionItem.commandName
+                        color:"white"
+                        clip:true
+                        QGCMouseArea {
+                            fillItem:   parent
+                            onClicked: {
+                                commandDialog.createObject(mainWindow).open()
+                            }
+                        }
+                     }
                 }
-                //航点纬度
-                QGCLabel {
-                    Layout.preferredWidth:ScreenTools.defaultFontPixelWidth * 12
-                    Layout.fillHeight: true
-                    Layout.alignment : Qt.AlignVCenter
-                    text:              "纬度:"+missionItem.coordinate.latitude
-                    color:"white"
+                Repeater {
+                    model: missionItem.textFieldFacts
+                    FactTextField {
+                        Layout.preferredWidth:ScreenTools.defaultFontPixelWidth * 10
+                        showUnits:          false
+                        fact:               object
+                        enabled:            !object.readOnly
+                    }
                 }
-                //航点纬度
-                QGCLabel {
-                    Layout.fillHeight: true
-                    Layout.preferredWidth:ScreenTools.defaultFontPixelWidth * 12
-                    Layout.alignment : Qt.AlignVCenter
-                    text:              "纬度:"+missionItem.coordinate.latitude
-                    color:"white"
-                }
-                QGCLabel {
-                    Layout.fillHeight: true
-                    Layout.preferredWidth:ScreenTools.defaultFontPixelWidth *12
-                    Layout.alignment : Qt.AlignVCenter
-                    text:              "高度:"+missionItem.altitude.rawValue+"m"
-                    color:"white"
-                }
-//                QGCColoredImage {
-//                    height:             ScreenTools.defaultFontPixelWidth
-//                    width:              height
-//                    fillMode:           Image.PreserveAspectFit
-//                    smooth:             true
-//                    antialiasing:       true
-//                    color:              qgcPal.text
-//                    source:             "/qmlimages/arrow-down.png"
+//                FactTextField {
+//                    id:                 altField
+//                    Layout.preferredWidth:ScreenTools.defaultFontPixelWidth * 10
+//                    Layout.fillWidth:   true
+//                    showUnits:          false
+//                    fact:               missionItem.altitude
 //                }
             }
-
-            QGCMouseArea {
-                fillItem:   parent
-                onClicked: {
-                    commandDialog.createObject(mainWindow).open()
-                }
-            }
-
             Component {
                 id: commandDialog
-               
                 MissionCommandDialog {
                     vehicle:                    masterController.controllerVehicle
                     missionItem:                _root.missionItem
@@ -208,41 +197,6 @@ Rectangle {
                 spacing :10
                 anchors.fill:parent
                 anchors.verticalCenter: parent.verticalCenter
-//                //航点类型
-//                QGCLabel {
-//                    Layout.fillHeight: true
-//                    Layout.alignment : Qt.AlignVCenter
-//                    text:              missionItem.commandName
-//                    color:"white"
-//                }
-//                //航点标号
-//                QGCLabel {
-//                    Layout.fillHeight: true
-//                    Layout.alignment : Qt.AlignVCenter
-//                    text:            String(missionItem.sequenceNumber)
-//                    color:"white"
-//                }
-                //航点纬度
-//                QGCLabel {
-//                    Layout.fillHeight: true
-//                    Layout.alignment : Qt.AlignVCenter
-//                    text:              "纬度:"+missionItem.coordinate.latitude
-//                    color:"white"
-//                }
-//                //航点经度
-//                QGCLabel {
-//                    Layout.fillHeight: true
-//                    Layout.alignment : Qt.AlignVCenter
-//                    text:              "经度:"+missionItem.coordinate.longitude
-//                    color:"white"
-//                }
-                //航点高度
-//                QGCLabel {
-//                    Layout.fillHeight: true
-//                    Layout.alignment : Qt.AlignVCenter
-//                    text:              "高度:"+missionItem.altitude.rawValue+"m"
-//                    color:"white"
-//                }
             }
         }//Rectangle CommandLabel
     }
@@ -318,14 +272,14 @@ Rectangle {
         }
     }
 
-    /*
+
     QGCLabel {
         id:                     notReadyForSaveLabel
         anchors.margins:        _margin
         anchors.left:           notReadyForSaveIndicator.right
         anchors.right:          parent.right
         anchors.top:            commandPicker.bottom
-        visible:                _currentItem && !_readyForSave
+        visible:                false//_currentItem && !_readyForSave
         text:                   missionItem.readyForSaveState === VisualMissionItem.NotReadyForSaveTerrain ?
                                     qsTr("Incomplete: Waiting on terrain data.") :
                                     qsTr("Incomplete: Item not fully specified.")
@@ -333,7 +287,7 @@ Rectangle {
         horizontalAlignment:    Text.AlignHCenter
         color:                  qgcPal.warningText
     }
-*/
+
 //"qrc:/qml/MissionSettingsEditor.qml";
     Loader {
         id:                 editorLoader
@@ -341,7 +295,7 @@ Rectangle {
         anchors.left:       parent.left
         anchors.top:        topRowLayout.bottom
         source:             missionItem.editorQml
-        visible:           true/* _currentItem*/
+        visible:           missionItem.sequenceNumber==0
         property var    masterController:   _masterController
         property real   availableWidth:     _root.width - (anchors.margins * 2) ///< How wide the editor should be
         property var    editorRoot:         _root
