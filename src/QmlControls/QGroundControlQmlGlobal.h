@@ -108,6 +108,8 @@ public:
     Q_PROPERTY(bool     hasAPMSupport           READ hasAPMSupport              CONSTANT)
     Q_PROPERTY(bool     hasMAVLinkInspector     READ hasMAVLinkInspector        CONSTANT)
 
+    //_httpServerManager // 2022 10.25
+    Q_PROPERTY(HttpServer* httpServerManager      READ httpServerManager    CONSTANT)
 
 #if defined(QGC_ENABLE_PAIRING)
     Q_PROPERTY(PairingManager*      pairingManager          READ pairingManager         CONSTANT)
@@ -162,6 +164,11 @@ public:
     AirspaceManager*        airspaceManager     ()  { return _airspaceManager; }
     ADSBVehicleManager*     adsbVehicleManager  ()  { return _adsbVehicleManager; }
     QmlUnitsConversion*     unitsConversion     ()  { return &_unitsConversion; }
+    HttpServer *            httpServerManager   ()  { return _httpServerManager;}
+
+
+
+
 #if defined(QGC_ENABLE_PAIRING)
     bool                    supportsPairing     ()  { return true; }
     PairingManager*         pairingManager      ()  { return _pairingManager; }
@@ -261,6 +268,10 @@ private:
     ADSBVehicleManager*     _adsbVehicleManager     = nullptr;
     QGCPalette*             _globalPalette          = nullptr;
     QmlUnitsConversion      _unitsConversion;
+    HttpServer *            _httpServerManager      = nullptr;
+
+
+
 #if defined(QGC_ENABLE_PAIRING)
     PairingManager*         _pairingManager         = nullptr;
 #endif

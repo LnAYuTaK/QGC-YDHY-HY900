@@ -81,7 +81,6 @@ ApplicationWindow {
     //全局单例
     QtObject {
         id: globals
-
         readonly property var       activeVehicle:                  QGroundControl.multiVehicleManager.activeVehicle
         readonly property real      defaultTextHeight:              ScreenTools.defaultFontPixelHeight
         readonly property real      defaultTextWidth:               ScreenTools.defaultFontPixelWidth
@@ -93,7 +92,6 @@ ApplicationWindow {
 
     /// Default color palette used throughout the UI
     QGCPalette { id: qgcPal; colorGroupEnabled: true }
-
     //-------------------------------------------------------------------------
     //-- Actions
 
@@ -430,24 +428,12 @@ ApplicationWindow {
         }
     }
 
-
+    //飞行界面
     FlyView {
         id:             flightView
         anchors.fill:   parent
     }
-
-//    function showDrawerpage() {
-//     toolDrawerSelect.visible = true
-//        //showToolSelectDialog()
-//    }
-
-//    //移动抽屉  //包括界面->   连接 | 参数 | 版本说明
-//    // LinkSettingsPage.qml | ParameterEditor.qml | VertsionView.qml
-//    DrawerPage{
-//       id: toolDrawerSelect
-//       visible:  false
-//    }
-
+    //任务规划界面
     PlanView {
         id:             planView
         anchors.fill:   parent

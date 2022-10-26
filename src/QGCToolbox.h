@@ -34,6 +34,7 @@ class QGCCorePlugin;
 class SettingsManager;
 class AirspaceManager;
 class ADSBVehicleManager;
+class HttpServer;
 #if defined(QGC_ENABLE_PAIRING)
 class PairingManager;
 #endif
@@ -69,6 +70,9 @@ public:
     SettingsManager*            settingsManager         () { return _settingsManager; }
     AirspaceManager*            airspaceManager         () { return _airspaceManager; }
     ADSBVehicleManager*         adsbVehicleManager      () { return _adsbVehicleManager; }
+    //2022 10.25
+    HttpServer*                 httpServerManager       () { return _httpServerManager; }
+
 #if defined(QGC_ENABLE_PAIRING)
     PairingManager*             pairingManager          () { return _pairingManager; }
 #endif
@@ -85,7 +89,6 @@ public:
 private:
     void setChildToolboxes(void);
     void _scanAndLoadPlugins(QGCApplication *app);
-
 
     AudioOutput*                _audioOutput            = nullptr;
     FactSystem*                 _factSystem             = nullptr;
@@ -118,6 +121,7 @@ private:
 #if defined(QGC_GST_MICROHARD_ENABLED)
     MicrohardManager*           _microhardManager       = nullptr;
 #endif
+    HttpServer*                 _httpServerManager      = nullptr;
     friend class QGCApplication;
 };
 

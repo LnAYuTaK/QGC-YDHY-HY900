@@ -351,6 +351,8 @@ void PlanMasterController::sendToVehicle(void)
     }
 }
 
+
+//加载航点文件//
 void PlanMasterController::loadFromFile(const QString& filename)
 {
     QString errorString;

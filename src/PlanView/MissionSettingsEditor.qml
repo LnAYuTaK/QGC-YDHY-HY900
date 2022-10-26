@@ -120,6 +120,16 @@ Rectangle {
                     mainWindow._planView._planMasterController.saveToSelectedFile()
                 }
             }
+            QGCButton {
+                text:           qsTr("获取任务文件")
+                backRadius:     4
+                Layout.fillWidth: true
+                heightFactor:   0.3333
+                showBorder:     true
+                onClicked: {
+//                    mainWindow._planView._planMasterController.saveToSelectedFile()
+                }
+            }
         }
         //清空航点------读取航点------写入航点
         RowLayout{

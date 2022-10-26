@@ -404,7 +404,6 @@ Item {
                     switch (_editingLayer) {
                     case _layerMission:{
                         if(_missionController.currentPlanViewVIIndex==0){
-                            toolStrip.allAddClickBoolsOff()
                             insertTakeItemAfterCurrent()
                             return
                         }
@@ -611,9 +610,9 @@ Item {
                         visible:    toolStrip._isMissionLayer && !_planMasterController.controllerVehicle.rover
                         onTriggered: {
                             //使能可以添加后续航点
-//                            toolStrip.allAddClickBoolsOff()
+                            toolStrip.allAddClickBoolsOff()
                             //添加起飞点
-                            //insertTakeItemAfterCurrent()
+                            insertTakeItemAfterCurrent()
                         }
                     },
                     ToolStripAction {

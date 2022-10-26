@@ -20,7 +20,7 @@ Rectangle {
     //color:          _currentItem ? qgcPal.missionItemEditor : qgcPal.windowShade
     color:"#3a4055"
     radius:         _radius
-    opacity:         0.80
+    opacity:        (_currentItem || missionItem.sequenceNumber==0) ? 1.0 : 0.7
     border.width:   /*_readyForSave ? 0 : */1
     border.color:   "white"
 
@@ -29,8 +29,12 @@ Rectangle {
     property var    missionItem         ///< MissionItem associated with this editor
     property bool   readOnly            ///< true: read only view, false: full editing view
 
+
+    //点击信号
     signal clicked
+    //remove信号
     signal remove
+
     signal selectNextNotReadyItem
 
     property var    _masterController:          masterController
@@ -122,7 +126,7 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             height:                 ScreenTools.implicitComboBoxHeight
             width:                  innerLayout.width
-            visible:                missionItem.sequenceNumber!==0||missionItem.isTakeoffItem// !commandLabel.visible
+            visible:                missionItem.sequenceNumber!==0//*&&missionItem.isTakeoffItem// !commandLabel.visible*/
             RowLayout {
                 id: innerLayout
                 anchors.verticalCenter: parent.verticalCenter
@@ -137,7 +141,6 @@ Rectangle {
                     QGCLabel {
                         text: missionItem.commandName
                         color:"white"
-                        clip:true
                         QGCMouseArea {
                             fillItem:   parent
                             onClicked: {
@@ -155,14 +158,8 @@ Rectangle {
                         enabled:            !object.readOnly
                     }
                 }
-//                FactTextField {
-//                    id:                 altField
-//                    Layout.preferredWidth:ScreenTools.defaultFontPixelWidth * 10
-//                    Layout.fillWidth:   true
-//                    showUnits:          false
-//                    fact:               missionItem.altitude
-//                }
             }
+            //选择航点类型组件
             Component {
                 id: commandDialog
                 MissionCommandDialog {
@@ -170,7 +167,7 @@ Rectangle {
                     missionItem:                _root.missionItem
                     map:                        _root.map
                     // FIXME: Disabling fly through commands doesn't work since you may need to change from an RTL to something else
-                    flyThroughCommandsAllowed:  true //_missionController.flyThroughCommandsAllowed
+                    flyThroughCommandsAllowed: _missionController.flyThroughCommandsAllowed  //true
                 }
             }
         }
@@ -184,23 +181,7 @@ Rectangle {
 //            text:                   missionItem.commandName
 //            color:                  _outerTextColor
 //        }
-     // 2022 9.26修改增加显示经纬度高度编号等航点信息
-     //缩略的航点信息
-        Rectangle{
-            id :commandLabel
-            width:                  commandPicker.width
-            height:                 commandPicker.height
-            anchors.verticalCenter: parent.verticalCenter
-            color:                  "transparent"
-            visible:               (missionItem.sequenceNumber!==0)&&(!missionItem.isCurrentItem || !missionItem.isSimpleItem || _waypointsOnlyMode || missionItem.isTakeoffItem)
-            RowLayout{
-                spacing :10
-                anchors.fill:parent
-                anchors.verticalCenter: parent.verticalCenter
-            }
-        }//Rectangle CommandLabel
     }
-
     //更多选项
     //2022 10.14 修改不显示
    QGCColoredImage {
@@ -272,21 +253,20 @@ Rectangle {
         }
     }
 
-
-    QGCLabel {
-        id:                     notReadyForSaveLabel
-        anchors.margins:        _margin
-        anchors.left:           notReadyForSaveIndicator.right
-        anchors.right:          parent.right
-        anchors.top:            commandPicker.bottom
-        visible:                false//_currentItem && !_readyForSave
-        text:                   missionItem.readyForSaveState === VisualMissionItem.NotReadyForSaveTerrain ?
-                                    qsTr("Incomplete: Waiting on terrain data.") :
-                                    qsTr("Incomplete: Item not fully specified.")
-        wrapMode:               Text.WordWrap
-        horizontalAlignment:    Text.AlignHCenter
-        color:                  qgcPal.warningText
-    }
+//    QGCLabel {
+//        id:                     notReadyForSaveLabel
+//        anchors.margins:        _margin
+//        anchors.left:           notReadyForSaveIndicator.right
+//        anchors.right:          parent.right
+//        anchors.top:            commandPicker.bottom
+//        visible:                false//_currentItem && !_readyForSave
+//        text:                   missionItem.readyForSaveState === VisualMissionItem.NotReadyForSaveTerrain ?
+//                                    qsTr("Incomplete: Waiting on terrain data.") :
+//                                    qsTr("Incomplete: Item not fully specified.")
+//        wrapMode:               Text.WordWrap
+//        horizontalAlignment:    Text.AlignHCenter
+//        color:                  qgcPal.warningText
+//    }
 
 //"qrc:/qml/MissionSettingsEditor.qml";
     Loader {

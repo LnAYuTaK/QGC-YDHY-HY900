@@ -435,6 +435,9 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
 #
 
 HEADERS += \
+    src/HttpServerLayer/HttpServer.h \
+    src/HttpServerLayer/HttpServerWorker.h \
+    src/HttpServerLayer/HttpTaskData.h \
     src/QmlControls/QmlUnitsConversion.h \
     src/Vehicle/VehicleEscStatusFactGroup.h \
     src/api/QGCCorePlugin.h \
@@ -449,6 +452,9 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
 }
 
 SOURCES += \
+    src/HttpServerLayer/HttpServer.cc \
+    src/HttpServerLayer/HttpServerWorker.cpp \
+    src/HttpServerLayer/HttpTaskData.cpp \
     src/Vehicle/VehicleEscStatusFactGroup.cc \
     src/api/QGCCorePlugin.cc \
     src/api/QGCOptions.cc \

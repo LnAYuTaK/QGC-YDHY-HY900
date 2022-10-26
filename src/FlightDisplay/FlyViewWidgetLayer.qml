@@ -100,7 +100,6 @@ Item {
             checked:        true
             textColor:      mapPal.text
         }
-
         QGCRadioButton {
             text:           qsTr("Multi-Vehicle")
             textColor:      mapPal.text
@@ -201,7 +200,6 @@ Item {
 //        property bool _verticalCenter: !QGroundControl.settingsManager.flyViewSettings.alternateInstrumentPanel.rawValue
 //    }
 
-
     TelemetryValuesBar {
         id:                 telemetryPanel
         x:                  recalcXPosition()
@@ -269,7 +267,6 @@ Item {
             }
         }
     }
-
 //虚拟摇杆屏蔽
 //-- Virtual Joystick
 //    Loader {
@@ -289,34 +286,6 @@ Item {
 //        property bool _virtualJoystickEnabled: QGroundControl.settingsManager.appSettings.virtualJoystick.rawValue
 //    }
 
-    //设置悬浮控制栏//包括打开飞行规划模式和总体控件
-//    Rectangle
-//    {
-//        color:"#1b2538"
-//        opacity:  0.7
-//        radius:     5
-//        border.width:   /*_readyForSave ? 0 : */1
-//        border.color:   "black"
-//        width:ScreenTools.defaultFontPixelWidth*8
-//        height:ScreenTools.defaultFontPixelWidth*20
-//        anchors.topMargin: _margins
-//        anchors.leftMargin: _margins
-//        anchors.top:parent.top
-//        anchors.left:parent.left
-//        Image {
-//                id :menuButton
-//                Layout.alignment: Qt.AlignHCenter
-//                width:parent.width*0.7
-//                height:menuButton.width
-//                sourceSize.height:  height
-//                source:             "qrc:/qmlimages/resources/ImageRes/shenglve.svg"
-//                fillMode:           Image.PreserveAspectFit
-//                MouseArea {
-//                    anchors.fill:   parent
-//                    onClicked:mainWindow.showSetupTool()
-//                }
-//            }
-
         QGCToolBarButton {
             id:                     menuToolBarButton
             width:ScreenTools.defaultFontPixelWidth*4
@@ -331,7 +300,6 @@ Item {
             onClicked:  menuToolStrip.visible ==true ?(menuToolStrip.visible=false): (menuToolStrip.visible=true)
                 /*mainWindow.showMenuToolStrip()*/
         }
-
 //        MenuToolStrip{
 //            id:menuToolStrip
 //            anchors.left:       parent.left
@@ -351,6 +319,7 @@ Item {
                 height:ScreenTools.defaultFontPixelWidth*15
                 z:   QGroundControl.zOrderWidgets
                 color:"#3a4055"
+                visible:false
                 ColumnLayout{
                     anchors.fill: parent
                     Layout.margins: _margins

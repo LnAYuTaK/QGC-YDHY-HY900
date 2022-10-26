@@ -31,6 +31,10 @@
 #include "SettingsManager.h"
 #include "QGCApplication.h"
 #include "ADSBVehicleManager.h"
+
+//后台服务模块
+#include "HttpServerLayer/HttpServer.h"
+
 #if defined(QGC_ENABLE_PAIRING)
 #include "PairingManager.h"
 #endif
@@ -92,6 +96,9 @@ QGCToolbox::QGCToolbox(QGCApplication* app)
 #if defined(QGC_GST_MICROHARD_ENABLED)
     _microhardManager       = new MicrohardManager          (app, this);
 #endif
+    //后台服务模块
+   _httpServerManager       = new HttpServer                (app,this);
+
 }
 
 void QGCToolbox::setChildToolboxes(void)
@@ -129,6 +136,8 @@ void QGCToolbox::setChildToolboxes(void)
 #if defined(QGC_ENABLE_PAIRING)
     _pairingManager->setToolbox(this);
 #endif
+    _httpServerManager->setToolbox(this);
+
 }
 
 void QGCToolbox::_scanAndLoadPlugins(QGCApplication* app)

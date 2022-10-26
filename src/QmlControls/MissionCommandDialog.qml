@@ -22,7 +22,6 @@ QGCPopupDialog {
     id:         root
     title:      qsTr("选择航点类型")
     buttons:    StandardButton.Cancel
-
     property var    vehicle
     property var    missionItem
     property var    map
@@ -64,7 +63,6 @@ QGCPopupDialog {
                     currentIndex = find(category)
                     categorySelected(category)
                 }
-
                 onActivated: categorySelected(textAt(index))
             }
         }

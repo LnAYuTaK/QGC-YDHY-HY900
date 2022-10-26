@@ -10,9 +10,12 @@
 #include "QGroundControlQmlGlobal.h"
 #include "LinkManager.h"
 
+#include "HttpServerLayer/HttpServer.h"
+
 #include <QSettings>
 #include <QLineF>
 #include <QPointF>
+
 
 static const char* kQmlGlobalKeyName = "QGCQml";
 
@@ -80,6 +83,9 @@ void QGroundControlQmlGlobal::setToolbox(QGCToolbox* toolbox)
     _airspaceManager        = toolbox->airspaceManager();
     _adsbVehicleManager     = toolbox->adsbVehicleManager();
     _globalPalette          = new QGCPalette(this);
+    //2022 10.25
+    _httpServerManager      = toolbox->httpServerManager();
+
 #if defined(QGC_ENABLE_PAIRING)
     _pairingManager         = toolbox->pairingManager();
 #endif

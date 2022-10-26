@@ -55,7 +55,6 @@ private slots:
 
 private:
     void        _runTask                (QGCMapTask* task);
-
     void        _saveTile               (QGCMapTask* mtask);
     void        _getTile                (QGCMapTask* mtask);
     void        _getTileSets            (QGCMapTask* mtask);

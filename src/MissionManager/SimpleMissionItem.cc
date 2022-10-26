@@ -430,7 +430,7 @@ void SimpleMissionItem::_rebuildTextFieldFacts(void)
     
     if (rawEdit()) {
 //2022 10.17屏蔽更多参数
-        //保留参数一 |经度|纬度
+        // 经度 | 纬度 | 高度 | 参数一|
 //        _missionItem._param2Fact._setName("Param2");
 //        _missionItem._param2Fact.setMetaData(_defaultParamMetaData);
 //        _textFieldFacts.append(&_missionItem._param2Fact);
